@@ -3,8 +3,6 @@
 !README.md
 .env
 .env.local
-__create
-plugins
 
 # Build artifacts
 build
