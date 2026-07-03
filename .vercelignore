@@ -1,0 +1,12 @@
+# Development files
+*.md
+!README.md
+.env
+.env.local
+__create
+plugins
+
+# Build artifacts
+build
+.react-router
+node_modules
