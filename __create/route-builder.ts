@@ -16,6 +16,14 @@ if (globalThis.fetch) {
 
 // Recursively find all route.js files
 async function findRouteFiles(dir: string): Promise<string[]> {
+  // Check if directory exists first
+  try {
+    await stat(dir);
+  } catch (error) {
+    // Directory doesn't exist, return empty array
+    return [];
+  }
+
   const files = await readdir(dir);
   let routes: string[] = [];
 
