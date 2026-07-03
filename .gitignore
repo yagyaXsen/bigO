@@ -4,3 +4,11 @@
 # React Router
 /.react-router/
 /build/
+
+# Planning & Documentation (development only)
+BIGO-MASTER-DOCUMENT.md
+BIGO-MASTER-DOCUMENT.docx
+EXPANDED-SERVICES-PLAN.md
+FOUNDER-BACKGROUNDS-PLAN.md
+RESTAURANT-CASE-STUDY-PLAN.md
+*.docx
