@@ -18,6 +18,9 @@ export default defineConfig({
   envPrefix: 'NEXT_PUBLIC_',
   build: {
     target: 'esnext',
+    rollupOptions: {
+      external: ['hono', 'hono/context-storage', 'hono/cors', 'hono/proxy', 'hono/body-limit', 'hono/request-id'],
+    },
   },
   optimizeDeps: {
     // Explicitly include fast-glob, since it gets dynamically imported and we
