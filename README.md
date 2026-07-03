@@ -2,7 +2,7 @@
 
 Official website for bigO - a digital studio that builds, runs, and grows businesses online.
 
-## 🌟 About
+## About
 
 bigO provides complete digital solutions for growing businesses:
 - **Website Design & Build** - Custom, fast, mobile-first websites
@@ -13,7 +13,7 @@ bigO provides complete digital solutions for growing businesses:
 - **Branding & Design** - Logos, brand guidelines, marketing materials
 - **Consulting & Strategy** - Technical planning, growth roadmaps, audits
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - **Framework:** React Router 7 with SSR
 - **Server:** Hono (Node.js)
@@ -22,7 +22,7 @@ bigO provides complete digital solutions for growing businesses:
 - **Language:** JavaScript/TypeScript
 - **Deployment:** Vercel (recommended)
 
-## 📦 Features
+## Features
 
 - ✅ Server-Side Rendering (SSR)
 - ✅ Static Prerendering
@@ -34,7 +34,7 @@ bigO provides complete digital solutions for growing businesses:
 - ✅ Contact forms with WhatsApp integration
 - ✅ Dark theme optimized
 
-## 🛠️ Setup
+## Setup
 
 ```bash
 # Install dependencies
@@ -50,7 +50,7 @@ npm run build
 npm start
 ```
 
-## 📝 Configuration
+## Configuration
 
 Edit `src/app/site.js` to customize:
 - Contact email and WhatsApp number
@@ -60,7 +60,7 @@ Edit `src/app/site.js` to customize:
 - Domain URL
 - OG image for social sharing
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 src/app/
@@ -75,7 +75,7 @@ src/app/
 └── site.js               # Site configuration
 ```
 
-## 🌐 Deployment
+## Deployment
 
 ### Vercel (Recommended)
 ```bash
@@ -85,16 +85,16 @@ vercel
 
 Or connect your GitHub repository to Vercel for automatic deployments.
 
-## 📧 Contact
+## Contact
 
 - **Email:** aarongangwar@gmail.com
 - **WhatsApp:** +91 8875326549
 - **Website:** https://bigo.studio
 
-## 📄 License
+## License
 
 Private - © 2025 bigO Digital Agency
 
 ---
 
-Built with ❤️ by bigO
+by bigO
