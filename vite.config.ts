@@ -52,7 +52,12 @@ export default defineConfig({
         configFile: false,
         presets: [
           '@babel/preset-typescript',
-          '@babel/preset-react',
+          [
+            '@babel/preset-react',
+            {
+              runtime: 'automatic', // Use automatic JSX runtime
+            },
+          ],
         ],
         plugins: ['styled-jsx/babel'],
       },
