@@ -4,8 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "react-router dev",
-		"build": "vite build --config vite.spa.config.ts",
-		"build:react-router": "react-router build",
+		"build": "react-router build",
 		"start": "react-router-serve ./build/server/index.js",
 		"typecheck": "react-router typegen && tsc --noEmit"
 	},
