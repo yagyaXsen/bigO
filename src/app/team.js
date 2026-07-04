@@ -20,7 +20,7 @@ export const TEAM = [
   },
   {
     name: "Piyush",
-    role: "Co-Founder & Design Lead",
+    role: "Founder & Design Lead",
     bio: "Piyush leads all design at bigO. He creates brand identities and designs that convert visitors into customers.",
     fullBio: "Piyush makes sure everything looks professional and works beautifully. He designs in Figma with a mobile-first, conversion-focused approach.",
     skills: [
