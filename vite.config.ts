@@ -19,7 +19,7 @@ export default defineConfig({
   build: {
     target: 'esnext',
     rollupOptions: {
-      external: ['hono', 'hono/context-storage', 'hono/cors', 'hono/proxy', 'hono/body-limit', 'hono/request-id'],
+      external: [/^hono/],
     },
   },
   optimizeDeps: {
