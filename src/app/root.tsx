@@ -434,11 +434,87 @@ export function Layout({ children }: { children: ReactNode }) {
       );
     }
   }, [pathname]);
+  // Structured data for Organization
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'bigO',
+    url: 'https://bigo.studio',
+    logo: 'https://bigo.studio/favicon.svg',
+    description: 'Digital studio offering websites, AI automation, marketing, branding, and custom software for growing businesses.',
+    email: 'aarongangwar@gmail.com',
+    telephone: '+918875326549',
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'IN',
+      addressLocality: 'India',
+    },
+    sameAs: [],
+    founder: [
+      {
+        '@type': 'Person',
+        name: 'Yagya Sen',
+        jobTitle: 'Founder & Lead Developer',
+      },
+      {
+        '@type': 'Person',
+        name: 'Piyush',
+        jobTitle: 'Founder & Design Lead',
+      },
+      {
+        '@type': 'Person',
+        name: 'Bineet Keshari',
+        jobTitle: 'Co-Founder & Operations Lead',
+      },
+    ],
+    areaServed: 'IN',
+    offers: {
+      '@type': 'AggregateOffer',
+      offerCount: 7,
+      offers: [
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Website Design & Development',
+            description: 'Custom website design and development for businesses',
+          },
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'AI & Smart Automation',
+            description: 'AI chatbots and business automation solutions',
+          },
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Digital Marketing',
+            description: 'SEO, social media, paid ads, and email marketing',
+          },
+        },
+      ],
+    },
+  };
+
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {/* Canonical URL */}
+        <link rel="canonical" href={`https://bigo.studio${pathname || ''}`} />
+
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+
         <Meta />
         <Links />
         <script type="module" src="/src/__create/dev-error-overlay.js"></script>

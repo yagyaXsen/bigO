@@ -7,21 +7,26 @@ import { TESTIMONIALS } from "./testimonials";
 import SiteFooter from "./components/SiteFooter";
 
 export function meta() {
-  const title = "bigO - Websites, AI automation, marketing & web apps for growing businesses";
+  const title = "bigO - Professional Website Design, AI Automation & Digital Marketing in India";
   const description =
-    "bigO is a small digital studio that handles everything online for your business. Websites, AI automation, digital marketing, branding, care plans, and custom software. One team, complete solution.";
+    "Expert website development, AI automation, digital marketing & custom software solutions for Indian businesses. Fast, secure, SEO-optimized. Free consultation. Based in India.";
   return [
     { title },
     { name: "description", content: description },
+    { name: "keywords", content: "website design India, web development India, digital marketing India, AI automation, custom software development, SEO services India, web apps India, website maintenance" },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
     { property: "og:type", content: "website" },
     { property: "og:image", content: SITE.ogImage },
     { property: "og:url", content: SITE.url },
+    { property: "og:locale", content: "en_IN" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: SITE.ogImage },
+    { name: "geo.region", content: "IN" },
+    { name: "geo.placename", content: "India" },
+    { name: "author", content: "bigO Digital Studio" },
   ];
 }
 
