@@ -500,7 +500,7 @@ function TwoToneLine({ head, tail, className = "" }) {
     >
       <span className="text-[var(--tBright)] font-semibold">{head} </span>
       {tail.split(" ").map((w, i) => (
-        <motion.span key={i} variants={wordReveal} className="inline-block mr-[0.22em] text-[var(--t-medium)] font-light">
+        <motion.span key={i} variants={wordReveal} className="inline-block mr-[0.22em] text-[var(--t-muted)] font-normal">
           {w}
         </motion.span>
       ))}
@@ -535,36 +535,36 @@ function CapabilityRow({ c, reduced }) {
   return (
     <div
       ref={rowRef}
-      className="cap-row relative grid grid-cols-12 gap-[2vw] items-center py-[4vw] border-b border-black/10 group"
+      className="cap-row relative grid grid-cols-12 gap-[2vw] items-center py-[5vw] border-b border-black/10 group"
     >
       {/* Left — index + big blurred title bottom-left */}
-      <div className="col-span-12 lg:col-span-4 relative min-h-[16vw] flex flex-col">
+      <div className="col-span-12 lg:col-span-4 relative min-h-[18vw] flex flex-col justify-between">
         <span className="font-mono text-[11px] font-normal tracking-wider opacity-40 block">{c.n}</span>
         <motion.h3
-          className="cap-title mt-auto text-[clamp(24px,2.4vw,40px)] font-bold font-sans text-[var(--tBright)] tracking-tight leading-[1.05] whitespace-pre-line"
+          className="cap-title mt-auto text-[clamp(28px,2.8vw,48px)] font-bold font-sans text-[var(--tBright)] tracking-tight leading-[1.05] whitespace-pre-line"
           style={on ? { filter: titleFilter, opacity: titleOpacity } : undefined}
         >
           {formatTitle(c.title)}
         </motion.h3>
       </div>
 
-      {/* Center — product image */}
+      {/* Center — product image (aspect-square with sharp corners) */}
       <div className="col-span-12 lg:col-span-4 flex justify-center">
-        <div className="w-full max-w-[26vw] aspect-[4/3] overflow-hidden rounded-[0.6vw] bg-[#eeeae8]">
+        <div className="w-full max-w-[20vw] aspect-square overflow-hidden rounded-none bg-[#eeeae8]">
           <motion.img
             src={img(c.img)}
             alt={c.title}
-            className="w-full h-full object-cover transition-transform duration-[1400ms] group-hover:scale-105"
+            className="w-full h-full object-cover rounded-none transition-transform duration-[1400ms] group-hover:scale-105"
             style={on ? { scale: imgScale, opacity: imgOpacity } : undefined}
           />
         </div>
       </div>
 
       {/* Right — two-tone one-liner + 2-col mono tag grid inking in */}
-      <div className="col-span-12 lg:col-span-4 flex flex-col justify-between min-h-[14vw] py-1">
-        <TwoToneLine head={c.head} tail={c.tail} className="fs-desc leading-[1.4] max-w-[360px]" />
+      <div className="col-span-12 lg:col-span-4 flex flex-col justify-between min-h-[18vw] py-1 pl-[2vw]">
+        <TwoToneLine head={c.head} tail={c.tail} className="text-[clamp(15px,1.1vw,18px)] font-sans leading-[1.5] max-w-[340px]" />
         <motion.div
-          className="flex gap-[3vw] mt-[2vw]"
+          className="flex gap-[4vw] mt-[2vw]"
           style={on ? { opacity: tagsOpacity, y: tagsY } : undefined}
         >
           {c.cols.map((col, ci) => (
@@ -2641,7 +2641,7 @@ const CSS = `
   --st-medium: #949291;
   --st-bright: #0f0f0f;
 
-  --font-default: 'Manrope', sans-serif;
+  --font-default: 'Inter Variable', 'Inter', sans-serif;
   --font-accent: 'JetBrains Mono', monospace;
 
   --animspeed-fast: 0.1s;
