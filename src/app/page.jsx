@@ -1401,19 +1401,19 @@ export default function BigOHomepage() {
         <section id="capabilities-section" className="section-pad bg-[var(--base)] overflow-hidden" data-stack-over>
           <div className="container-custom">
 
-            {/* Header: C/02 left · title center */}
-            <div className="grid grid-cols-12 items-end mb-[5vw]">
-              <div className="col-span-3">
+            {/* Header: C/02 left · title aligned with center/right columns */}
+            <div className="grid grid-cols-12 gap-[2vw] items-end mb-[4vw]">
+              <div className="col-span-12 lg:col-span-4">
                 <OverflowReveal
                   lines="C/02"
-                  className="font-accent fs-index font-bold text-[var(--tBright)] opacity-[0.12] leading-none"
+                  className="font-accent text-[clamp(28px,2.8vw,48px)] font-bold text-[var(--tBright)] opacity-30 leading-none text-left"
                   lineClassName="block"
                 />
               </div>
-              <div className="col-span-6 flex justify-center">
+              <div className="col-span-12 lg:col-span-8">
                 <OverflowReveal
-                  lines="Our capabilities"
-                  className="fs-h3 font-bold text-[var(--tBright)] leading-[1.1] text-center tracking-tight whitespace-nowrap"
+                  lines={["Our", "capabilities"]}
+                  className="text-[clamp(42px,4.5vw,72px)] font-bold font-sans text-[var(--tBright)] tracking-tight leading-[1.05] text-left"
                   lineClassName="block"
                 />
               </div>
