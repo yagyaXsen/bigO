@@ -518,20 +518,17 @@ function CapabilityRow({ c, reduced }) {
   const rowRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: rowRef,
-    offset: ["start end", "end start"],
+    offset: ["start 0.9", "center 0.5"],
   });
   const p = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.4 });
 
-  // focus: 0 at bottom/top edges, peaks at 1 in the center of the viewport
-  const focus = useTransform(p, [0, 0.25, 0.5, 0.75, 1], [0, 0, 1, 0, 0]);
-
-  const blur = useTransform(focus, [0, 1], [10, 0]);
+  const blur = useTransform(p, [0, 1], [10, 0]);
   const titleFilter = useTransform(blur, (b) => `blur(${b}px)`);
-  const titleOpacity = useTransform(focus, [0, 1], [0.28, 1]);
-  const imgScale = useTransform(focus, [0, 1], [1.12, 1]);
-  const imgOpacity = useTransform(focus, [0, 1], [0.5, 1]);
-  const tagsOpacity = useTransform(focus, [0.35, 1], [0, 1]);
-  const tagsY = useTransform(focus, [0.35, 1], [18, 0]);
+  const titleOpacity = useTransform(p, [0, 1], [0.28, 1]);
+  const imgScale = useTransform(p, [0, 1], [1.12, 1]);
+  const imgOpacity = useTransform(p, [0, 0.6], [0.5, 1]);
+  const tagsOpacity = useTransform(p, [0.35, 1], [0, 1]);
+  const tagsY = useTransform(p, [0.35, 1], [18, 0]);
 
   const on = !reduced;
 
@@ -541,35 +538,37 @@ function CapabilityRow({ c, reduced }) {
       className="cap-row relative grid grid-cols-12 gap-[2vw] items-center py-[5vw] border-b border-black/10 group"
     >
       {/* Left — index + big blurred title bottom-left */}
-      <div className="col-span-12 lg:col-span-4 relative min-h-[18vw] flex flex-col justify-between">
+      <motion.div
+        className="col-span-12 lg:col-span-4 relative min-h-[18vw] flex flex-col justify-between"
+        style={on ? { filter: titleFilter, opacity: titleOpacity } : undefined}
+      >
         <span className="font-mono text-[11px] font-normal tracking-wider opacity-40 block">{c.n}</span>
-        <motion.h3
-          className="cap-title mt-auto text-[clamp(28px,2.8vw,48px)] font-bold font-sans text-[var(--tBright)] tracking-tight leading-[1.05] whitespace-pre-line"
-          style={on ? { filter: titleFilter, opacity: titleOpacity } : undefined}
-        >
+        <h3 className="cap-title mt-auto text-[clamp(28px,2.8vw,48px)] font-bold font-sans text-[var(--tBright)] tracking-tight leading-[1.05] whitespace-pre-line">
           {formatTitle(c.title)}
-        </motion.h3>
-      </div>
+        </h3>
+      </motion.div>
 
-      {/* Center — product image (aspect-square with sharp corners) */}
+      {/* Center — product image (aspect-square with sharp corners, blurs and scales symmetrically) */}
       <div className="col-span-12 lg:col-span-4 flex justify-center">
-        <div className="w-full max-w-[20vw] aspect-square overflow-hidden rounded-none bg-[#eeeae8]">
-          <motion.img
+        <motion.div
+          className="w-full max-w-[20vw] aspect-square overflow-hidden rounded-none bg-[#eeeae8]"
+          style={on ? { filter: titleFilter, opacity: imgOpacity, scale: imgScale } : undefined}
+        >
+          <img
             src={img(c.img)}
             alt={c.title}
             className="w-full h-full object-cover rounded-none transition-transform duration-[1400ms] group-hover:scale-105"
-            style={on ? { scale: imgScale, opacity: imgOpacity } : undefined}
           />
-        </div>
+        </motion.div>
       </div>
 
-      {/* Right — two-tone one-liner + 2-col mono tag grid inking in */}
-      <div className="col-span-12 lg:col-span-4 flex flex-col justify-between min-h-[18vw] py-1 pl-[2vw]">
+      {/* Right — two-tone one-liner + 2-col mono tag grid (blurs and fades in sync) */}
+      <motion.div
+        className="col-span-12 lg:col-span-4 flex flex-col justify-between min-h-[18vw] py-1 pl-[2vw]"
+        style={on ? { filter: titleFilter, opacity: titleOpacity } : undefined}
+      >
         <TwoToneLine head={c.head} tail={c.tail} className="text-[clamp(15px,1.1vw,18px)] font-sans leading-[1.5] max-w-[340px]" />
-        <motion.div
-          className="flex gap-[4vw] mt-[2vw]"
-          style={on ? { opacity: tagsOpacity, y: tagsY } : undefined}
-        >
+        <div className="flex gap-[4vw] mt-[2vw]">
           {c.cols.map((col, ci) => (
             <div key={ci} className="flex flex-col gap-1.5">
               {col.map((t) => (
@@ -581,8 +580,8 @@ function CapabilityRow({ c, reduced }) {
               ))}
             </div>
           ))}
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     </div>
   );
 }
@@ -951,135 +950,135 @@ export default function BigOHomepage() {
               <motion.div
                 key="fs-menu"
                 className="menu-overlay fixed inset-0 z-[104] overflow-hidden"
-              initial="hidden"
-              animate="show"
-              exit="exit"
-            >
-              {/* Backdrop panels — two-tone reveal that clips down from the top. */}
-              <motion.div
-                className="absolute inset-0 bg-[#0a0b0e]"
-                variants={{
-                  hidden: { clipPath: "inset(0 0 100% 0)" },
-                  show: { clipPath: "inset(0 0 0% 0)", transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1] } },
-                  exit: { clipPath: "inset(100% 0 0 0)", transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } },
-                }}
-              />
-
-              {/* Ambient depth inside the menu. */}
-              <div className="menu-glow menu-glow-a" />
-              <div className="menu-glow menu-glow-b" />
-              <div className="menu-grid pointer-events-none absolute inset-0" />
-
-              {/* Content — sits above backdrop; fades slightly after panel opens. */}
-              <motion.div
-                className="relative z-10 h-full w-full flex flex-col"
-                variants={{
-                  hidden: { opacity: 0 },
-                  show: { opacity: 1, transition: { delay: 0.25, duration: 0.4 } },
-                  exit: { opacity: 0, transition: { duration: 0.2 } },
-                }}
+                initial="hidden"
+                animate="show"
+                exit="exit"
               >
-                {/* Top bar */}
-                <div className="container-custom flex items-center justify-between pt-[clamp(20px,2.4vw,34px)]">
-                  <span className="font-accent text-[clamp(11px,0.9vw,13px)] tracking-[0.28em] uppercase text-white/50">
-                    {SITE.name} — Menu
-                  </span>
-                  <button
-                    onClick={() => setMenuOpen(false)}
-                    aria-label="Close menu"
-                    data-cursor="CLOSE"
-                    className="menu-close group flex items-center gap-3 font-accent text-[clamp(10px,0.8vw,12px)] tracking-[0.28em] uppercase text-white/60 hover:text-white transition-colors"
-                  >
-                    <span>Close</span>
-                    <span className="relative block w-8 h-8 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
-                      <span className="absolute left-1/2 top-1/2 w-[14px] h-px bg-current -translate-x-1/2 -translate-y-1/2 rotate-45" />
-                      <span className="absolute left-1/2 top-1/2 w-[14px] h-px bg-current -translate-x-1/2 -translate-y-1/2 -rotate-45" />
-                    </span>
-                  </button>
-                </div>
-
-                {/* Body */}
-                <div className="container-custom flex-1 grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] items-center gap-[clamp(32px,5vw,80px)] py-[clamp(24px,4vw,48px)]">
-                  {/* Left — brand statement + chrome orb */}
-                  <div className="hidden lg:flex flex-col justify-center h-full gap-10">
-                    <div className="menu-orb">
-                      <span className="menu-orb-core" />
-                    </div>
-                    <div className="flex flex-col gap-4 max-w-[34ch]">
-                      <span className="font-accent text-[11px] tracking-[0.28em] uppercase text-[var(--highlight)]/80">
-                        {"( Studio )"}
-                      </span>
-                      <p className="text-white/70 text-[clamp(15px,1.15vw,19px)] leading-[1.5] font-light">
-                        We build, run, and grow digital products that move at the speed of ambition.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Right — numbered nav */}
-                  <nav className="flex flex-col">
-                    {MENU_LINKS.map((item, i) => (
-                      <div key={item.href} className="menu-item-mask">
-                        <motion.a
-                          href={item.href}
-                          onClick={() => setMenuOpen(false)}
-                          data-cursor="GO"
-                          className="menu-item group"
-                          variants={{
-                            hidden: { y: "110%" },
-                            show: {
-                              y: "0%",
-                              transition: { delay: 0.35 + i * 0.06, duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-                            },
-                            exit: { y: "110%", transition: { duration: 0.25 } },
-                          }}
-                        >
-                          <span className="menu-item-num">{item.n}</span>
-                          <span className="menu-item-label" data-text={item.label}>
-                            {item.label}
-                          </span>
-                          <span className="menu-item-arrow" aria-hidden>
-                            ↗
-                          </span>
-                        </motion.a>
-                      </div>
-                    ))}
-                  </nav>
-                </div>
-
-                {/* Footer */}
+                {/* Backdrop panels — two-tone reveal that clips down from the top. */}
                 <motion.div
-                  className="container-custom flex flex-col md:flex-row md:items-end md:justify-between gap-6 pb-[clamp(24px,3vw,44px)] pt-[clamp(20px,2.4vw,32px)] border-t border-white/10"
+                  className="absolute inset-0 bg-[#0a0b0e]"
                   variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    show: { opacity: 1, y: 0, transition: { delay: 0.7, duration: 0.5 } },
+                    hidden: { clipPath: "inset(0 0 100% 0)" },
+                    show: { clipPath: "inset(0 0 0% 0)", transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1] } },
+                    exit: { clipPath: "inset(100% 0 0 0)", transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } },
+                  }}
+                />
+
+                {/* Ambient depth inside the menu. */}
+                <div className="menu-glow menu-glow-a" />
+                <div className="menu-glow menu-glow-b" />
+                <div className="menu-grid pointer-events-none absolute inset-0" />
+
+                {/* Content — sits above backdrop; fades slightly after panel opens. */}
+                <motion.div
+                  className="relative z-10 h-full w-full flex flex-col"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    show: { opacity: 1, transition: { delay: 0.25, duration: 0.4 } },
                     exit: { opacity: 0, transition: { duration: 0.2 } },
                   }}
                 >
-                  <div className="flex flex-col gap-1.5">
-                    <span className="font-accent text-[10px] tracking-[0.28em] uppercase text-white/40">Get in touch</span>
-                    <a href={`mailto:${CONTACT.email}`} className="text-white/85 hover:text-white text-[clamp(15px,1.2vw,20px)] no-underline transition-colors">
-                      {CONTACT.email}
-                    </a>
+                  {/* Top bar */}
+                  <div className="container-custom flex items-center justify-between pt-[clamp(20px,2.4vw,34px)]">
+                    <span className="font-accent text-[clamp(11px,0.9vw,13px)] tracking-[0.28em] uppercase text-white/50">
+                      {SITE.name} — Menu
+                    </span>
+                    <button
+                      onClick={() => setMenuOpen(false)}
+                      aria-label="Close menu"
+                      data-cursor="CLOSE"
+                      className="menu-close group flex items-center gap-3 font-accent text-[clamp(10px,0.8vw,12px)] tracking-[0.28em] uppercase text-white/60 hover:text-white transition-colors"
+                    >
+                      <span>Close</span>
+                      <span className="relative block w-8 h-8 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
+                        <span className="absolute left-1/2 top-1/2 w-[14px] h-px bg-current -translate-x-1/2 -translate-y-1/2 rotate-45" />
+                        <span className="absolute left-1/2 top-1/2 w-[14px] h-px bg-current -translate-x-1/2 -translate-y-1/2 -rotate-45" />
+                      </span>
+                    </button>
                   </div>
 
-                  <div className="flex flex-col gap-1.5 md:items-end">
-                    <span className="font-accent text-[10px] tracking-[0.28em] uppercase text-white/40">Based in</span>
-                    <span className="text-white/85 text-[clamp(15px,1.2vw,20px)]">{CONTACT.city}</span>
+                  {/* Body */}
+                  <div className="container-custom flex-1 grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] items-center gap-[clamp(32px,5vw,80px)] py-[clamp(24px,4vw,48px)]">
+                    {/* Left — brand statement + chrome orb */}
+                    <div className="hidden lg:flex flex-col justify-center h-full gap-10">
+                      <div className="menu-orb">
+                        <span className="menu-orb-core" />
+                      </div>
+                      <div className="flex flex-col gap-4 max-w-[34ch]">
+                        <span className="font-accent text-[11px] tracking-[0.28em] uppercase text-[var(--highlight)]/80">
+                          {"( Studio )"}
+                        </span>
+                        <p className="text-white/70 text-[clamp(15px,1.15vw,19px)] leading-[1.5] font-light">
+                          We build, run, and grow digital products that move at the speed of ambition.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Right — numbered nav */}
+                    <nav className="flex flex-col">
+                      {MENU_LINKS.map((item, i) => (
+                        <div key={item.href} className="menu-item-mask">
+                          <motion.a
+                            href={item.href}
+                            onClick={() => setMenuOpen(false)}
+                            data-cursor="GO"
+                            className="menu-item group"
+                            variants={{
+                              hidden: { y: "110%" },
+                              show: {
+                                y: "0%",
+                                transition: { delay: 0.35 + i * 0.06, duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+                              },
+                              exit: { y: "110%", transition: { duration: 0.25 } },
+                            }}
+                          >
+                            <span className="menu-item-num">{item.n}</span>
+                            <span className="menu-item-label" data-text={item.label}>
+                              {item.label}
+                            </span>
+                            <span className="menu-item-arrow" aria-hidden>
+                              ↗
+                            </span>
+                          </motion.a>
+                        </div>
+                      ))}
+                    </nav>
                   </div>
 
-                  <div className="flex gap-6 font-accent text-[11px] tracking-[0.2em] uppercase md:items-end">
-                    {SOCIALS.instagram && (
-                      <a href={SOCIALS.instagram} target="_blank" rel="noreferrer" className="menu-social text-white/60 hover:text-white no-underline">Instagram</a>
-                    )}
-                    {SOCIALS.linkedin && (
-                      <a href={SOCIALS.linkedin} target="_blank" rel="noreferrer" className="menu-social text-white/60 hover:text-white no-underline">LinkedIn</a>
-                    )}
-                    <a href={waLink("Hi bigO, I'd like to chat.")} target="_blank" rel="noreferrer" className="menu-social text-white/60 hover:text-white no-underline">WhatsApp</a>
-                  </div>
+                  {/* Footer */}
+                  <motion.div
+                    className="container-custom flex flex-col md:flex-row md:items-end md:justify-between gap-6 pb-[clamp(24px,3vw,44px)] pt-[clamp(20px,2.4vw,32px)] border-t border-white/10"
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      show: { opacity: 1, y: 0, transition: { delay: 0.7, duration: 0.5 } },
+                      exit: { opacity: 0, transition: { duration: 0.2 } },
+                    }}
+                  >
+                    <div className="flex flex-col gap-1.5">
+                      <span className="font-accent text-[10px] tracking-[0.28em] uppercase text-white/40">Get in touch</span>
+                      <a href={`mailto:${CONTACT.email}`} className="text-white/85 hover:text-white text-[clamp(15px,1.2vw,20px)] no-underline transition-colors">
+                        {CONTACT.email}
+                      </a>
+                    </div>
+
+                    <div className="flex flex-col gap-1.5 md:items-end">
+                      <span className="font-accent text-[10px] tracking-[0.28em] uppercase text-white/40">Based in</span>
+                      <span className="text-white/85 text-[clamp(15px,1.2vw,20px)]">{CONTACT.city}</span>
+                    </div>
+
+                    <div className="flex gap-6 font-accent text-[11px] tracking-[0.2em] uppercase md:items-end">
+                      {SOCIALS.instagram && (
+                        <a href={SOCIALS.instagram} target="_blank" rel="noreferrer" className="menu-social text-white/60 hover:text-white no-underline">Instagram</a>
+                      )}
+                      {SOCIALS.linkedin && (
+                        <a href={SOCIALS.linkedin} target="_blank" rel="noreferrer" className="menu-social text-white/60 hover:text-white no-underline">LinkedIn</a>
+                      )}
+                      <a href={waLink("Hi bigO, I'd like to chat.")} target="_blank" rel="noreferrer" className="menu-social text-white/60 hover:text-white no-underline">WhatsApp</a>
+                    </div>
+                  </motion.div>
                 </motion.div>
               </motion.div>
-            </motion.div>
-          )}
+            )}
           </AnimatePresence>,
           document.body
         )}
@@ -2129,8 +2128,8 @@ export default function BigOHomepage() {
                             }));
                           }}
                           className={`px-4 py-2.5 rounded-full border text-sm font-semibold transition-all cursor-pointer ${isChecked
-                              ? "bg-[var(--accent)] border-[var(--accent)] text-white shadow-sm"
-                              : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
+                            ? "bg-[var(--accent)] border-[var(--accent)] text-white shadow-sm"
+                            : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
                             }`}
                         >
                           {service}
@@ -2156,8 +2155,8 @@ export default function BigOHomepage() {
                             setFormState((prev) => ({ ...prev, budget }));
                           }}
                           className={`px-4 py-2.5 rounded-full border text-sm font-semibold transition-all cursor-pointer ${isSelected
-                              ? "bg-[var(--accent)] border-[var(--accent)] text-white shadow-sm"
-                              : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
+                            ? "bg-[var(--accent)] border-[var(--accent)] text-white shadow-sm"
+                            : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
                             }`}
                         >
                           {budget}
