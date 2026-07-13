@@ -566,7 +566,7 @@ function CapabilityRow({ c, reduced }) {
       {/* Center — product image (aspect-square with sharp corners, blurs and scales symmetrically) */}
       <div className="col-span-12 lg:col-span-4 flex justify-center">
         <motion.div
-          className="w-full max-w-[20vw] aspect-square overflow-hidden rounded-none bg-[#eeeae8]"
+          className="w-full max-w-[25vw] aspect-square overflow-hidden rounded-none bg-[#eeeae8]"
           style={on ? { filter: titleFilter, opacity: rowOpacity, scale: rowScale, y: yOffset, rotateX: rotateXVal } : undefined}
         >
           <motion.img
