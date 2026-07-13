@@ -500,7 +500,7 @@ function TwoToneLine({ head, tail, className = "" }) {
     >
       <span className="text-[var(--tBright)] font-semibold">{head} </span>
       {tail.split(" ").map((w, i) => (
-        <motion.span key={i} variants={wordReveal} className="inline-block mr-[0.22em]">
+        <motion.span key={i} variants={wordReveal} className="inline-block mr-[0.22em] text-[var(--t-medium)] font-light">
           {w}
         </motion.span>
       ))}
@@ -509,7 +509,7 @@ function TwoToneLine({ head, tail, className = "" }) {
 }
 
 /* Capabilities signature row — scroll-scrubbed. As the row travels
-   through the viewport the big italic title sharpens (blur→0), the
+   through the viewport the big title sharpens (blur→0), the
    product image scales + brightens, and the mono tag grid inks in.
    Uses the row's own scroll progress so the reveal feels deliberate
    and scrubbed rather than one-shot. Falls back to a static reveal
@@ -539,9 +539,9 @@ function CapabilityRow({ c, reduced }) {
     >
       {/* Left — index + big blurred title bottom-left */}
       <div className="col-span-12 lg:col-span-4 relative min-h-[16vw] flex flex-col">
-        <span className="font-accent fs-micro font-bold opacity-40 block">{c.n}</span>
+        <span className="font-mono text-[11px] font-normal tracking-wider opacity-40 block">{c.n}</span>
         <motion.h3
-          className="cap-title mt-auto fs-cap-title font-extrabold italic text-[var(--tBright)] tracking-tight leading-[0.95] whitespace-pre-line"
+          className="cap-title mt-auto text-[clamp(24px,2.4vw,40px)] font-bold font-sans text-[var(--tBright)] tracking-tight leading-[1.05] whitespace-pre-line"
           style={on ? { filter: titleFilter, opacity: titleOpacity } : undefined}
         >
           {formatTitle(c.title)}
@@ -572,7 +572,7 @@ function CapabilityRow({ c, reduced }) {
               {col.map((t) => (
                 <span
                   key={t}
-                  className="font-accent fs-micro font-bold uppercase tracking-[0.2em] text-[var(--t-muted)]"
+                  className="font-accent text-[10px] md:text-[11px] font-medium uppercase tracking-[0.22em] text-[var(--t-muted)]"
                 >
                   {t}
                 </span>
