@@ -523,7 +523,7 @@ function CapabilityRow({ c, reduced }) {
   const p = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.4 });
 
   // focus: 0 at bottom/top edges, peaks at 1 with a wide sharp focus plateau in the center of the viewport
-  const focus = useTransform(p, [0, 0.2, 0.4, 0.6, 0.8, 1], [0, 0, 1, 1, 0, 0]);
+  const focus = useTransform(p, [0, 0.05, 0.2, 0.6, 0.8, 1], [0, 0, 1, 1, 0, 0]);
 
   // yOffset: creates a smooth "falling/hanging" parallax shift as elements scroll through the viewport
   const yOffset = useTransform(p, [0, 0.5, 1], [-30, 0, 30]);
