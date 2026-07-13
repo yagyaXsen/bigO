@@ -522,13 +522,13 @@ function CapabilityRow({ c, reduced }) {
   });
   const p = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.4 });
 
-  // focus: 0 at bottom/top edges, peaks at 1 in the center of the viewport
-  const focus = useTransform(p, [0, 0.25, 0.5, 0.75, 1], [0, 0, 1, 0, 0]);
+  // focus: 0 at bottom/top edges, peaks at 1 with a wide sharp focus plateau in the center of the viewport
+  const focus = useTransform(p, [0, 0.2, 0.4, 0.6, 0.8, 1], [0, 0, 1, 1, 0, 0]);
 
   // yOffset: creates a smooth "falling/hanging" parallax shift as elements scroll through the viewport
-  const yOffset = useTransform(p, [0, 0.5, 1], [-60, 0, 60]);
+  const yOffset = useTransform(p, [0, 0.5, 1], [-30, 0, 30]);
 
-  const blur = useTransform(focus, [0, 1], [10, 0]);
+  const blur = useTransform(focus, [0, 1], [6, 0]);
   const titleFilter = useTransform(blur, (b) => `blur(${b}px)`);
   const titleOpacity = useTransform(focus, [0, 1], [0.28, 1]);
   const imgScale = useTransform(focus, [0, 1], [1.12, 1]);
