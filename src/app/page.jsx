@@ -943,11 +943,12 @@ export default function BigOHomepage() {
         </header>
 
         {/* ===================== FULLSCREEN MENU OVERLAY ===================== */}
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div
-              key="fs-menu"
-              className="menu-overlay fixed inset-0 z-[104] overflow-hidden"
+        {createPortal(
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                key="fs-menu"
+                className="menu-overlay fixed inset-0 z-[104] overflow-hidden"
               initial="hidden"
               animate="show"
               exit="exit"
@@ -1077,7 +1078,9 @@ export default function BigOHomepage() {
               </motion.div>
             </motion.div>
           )}
-        </AnimatePresence>
+          </AnimatePresence>,
+          document.body
+        )}
 
         {/* ===================== HERO ===================== */}
         <section
