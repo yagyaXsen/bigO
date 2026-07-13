@@ -525,14 +525,24 @@ function CapabilityRow({ c, reduced }) {
   // focus: 0 at bottom/top edges, peaks at 1 with a wide sharp focus plateau in the center of the viewport
   const focus = useTransform(p, [0, 0.05, 0.2, 0.8, 0.95, 1], [0, 0, 1, 1, 0, 0]);
 
-  // yOffset: creates a smooth "falling/hanging" parallax shift as elements scroll through the viewport
-  const yOffset = useTransform(p, [0, 0.5, 1], [-30, 0, 30]);
+  // yOffset: scroll-linked translateY (-100px at top, 100px at bottom)
+  const yOffset = useTransform(p, [0, 0.5, 1], [100, 0, -100]);
 
-  const blur = useTransform(focus, [0, 1], [6, 0]);
+  // rowScale: scale down to 0.94 when inactive
+  const rowScale = useTransform(focus, [0, 1], [0.94, 1]);
+
+  // rotateXVal: slight 3D perspective tilt
+  const rotateXVal = useTransform(p, [0, 0.5, 1], [8, 0, -8]);
+
+  // blur: max 8px Gaussian blur
+  const blur = useTransform(focus, [0, 1], [8, 0]);
   const titleFilter = useTransform(blur, (b) => `blur(${b}px)`);
-  const titleOpacity = useTransform(focus, [0, 1], [0.28, 1]);
-  const imgScale = useTransform(focus, [0, 1], [1.12, 1]);
-  const imgOpacity = useTransform(focus, [0, 1], [0.5, 1]);
+
+  // opacity: 0.25 when inactive
+  const rowOpacity = useTransform(focus, [0, 1], [0.25, 1]);
+
+  // inner image micro-parallax
+  const imgInnerScale = useTransform(focus, [0, 1], [1.12, 1]);
 
   const on = !reduced;
 
@@ -540,11 +550,12 @@ function CapabilityRow({ c, reduced }) {
     <div
       ref={rowRef}
       className="cap-row relative grid grid-cols-12 gap-[2vw] items-center py-[5vw] border-b border-black/10 group"
+      style={{ perspective: "1200px" }}
     >
       {/* Left — index + big blurred title bottom-left */}
       <motion.div
         className="col-span-12 lg:col-span-4 relative min-h-[18vw] flex flex-col justify-between"
-        style={on ? { filter: titleFilter, opacity: titleOpacity, y: yOffset } : undefined}
+        style={on ? { filter: titleFilter, opacity: rowOpacity, y: yOffset, scale: rowScale, rotateX: rotateXVal } : undefined}
       >
         <span className="font-mono text-[11px] font-normal tracking-wider opacity-40 block">{c.n}</span>
         <h3 className="cap-title mt-auto text-[clamp(28px,2.8vw,48px)] font-bold font-sans text-[var(--tBright)] tracking-tight leading-[1.05] whitespace-pre-line">
@@ -556,12 +567,13 @@ function CapabilityRow({ c, reduced }) {
       <div className="col-span-12 lg:col-span-4 flex justify-center">
         <motion.div
           className="w-full max-w-[20vw] aspect-square overflow-hidden rounded-none bg-[#eeeae8]"
-          style={on ? { filter: titleFilter, opacity: imgOpacity, scale: imgScale, y: yOffset } : undefined}
+          style={on ? { filter: titleFilter, opacity: rowOpacity, scale: rowScale, y: yOffset, rotateX: rotateXVal } : undefined}
         >
-          <img
+          <motion.img
             src={img(c.img)}
             alt={c.title}
             className="w-full h-full object-cover rounded-none transition-transform duration-[1400ms] group-hover:scale-105"
+            style={on ? { scale: imgInnerScale } : undefined}
           />
         </motion.div>
       </div>
@@ -569,7 +581,7 @@ function CapabilityRow({ c, reduced }) {
       {/* Right — two-tone one-liner + 2-col mono tag grid (blurs and fades in sync) */}
       <motion.div
         className="col-span-12 lg:col-span-4 flex flex-col justify-between min-h-[18vw] py-1 pl-[2vw]"
-        style={on ? { filter: titleFilter, opacity: titleOpacity, y: yOffset } : undefined}
+        style={on ? { filter: titleFilter, opacity: rowOpacity, y: yOffset, scale: rowScale, rotateX: rotateXVal } : undefined}
       >
         <TwoToneLine head={c.head} tail={c.tail} className="text-[clamp(15px,1.1vw,18px)] font-sans leading-[1.5] max-w-[340px]" />
         <div className="flex gap-[4vw] mt-[2vw]">
