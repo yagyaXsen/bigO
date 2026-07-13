@@ -573,7 +573,7 @@ function CapabilityRow({ c, reduced }) {
                 <ScrambleText
                   key={t}
                   text={t}
-                  className="text-[14px] leading-[22px] font-semibold uppercase tracking-[0.22em] text-[rgb(87,89,96)] cursor-pointer"
+                  className="text-[14px] leading-[22px] font-medium uppercase tracking-[0.22em] text-[rgb(87,89,96)] cursor-pointer"
                 />
               ))}
             </div>
