@@ -464,7 +464,7 @@ const CSS = `
 .mn-hero-stage{ position:relative; display:grid; place-items:center; }
 .mn-chrome{
   position:relative;
-  width:clamp(200px,20vw,340px); aspect-ratio:1; border-radius:50%;
+  width:clamp(160px,16vw,260px); aspect-ratio:1; border-radius:50%;
   background:
     radial-gradient(circle at 34% 24%, #ffffff 0%, rgba(255,255,255,0) 34%),
     conic-gradient(from 205deg,
@@ -531,7 +531,7 @@ const CSS = `
 }
 .mn-item{
   position:relative; display:flex; align-items:center; gap:clamp(16px,2vw,30px);
-  padding:clamp(12px,1.5vw,22px) 0;
+  padding:clamp(10px,1.1vw,16px) 0;
   text-decoration:none; color:#f4f4f5;
   transition:transform .3s ${cubic()};
 }
@@ -547,7 +547,7 @@ const CSS = `
   color:rgba(255,255,255,0.18);
 }
 .mn-item-label{
-  font-size:clamp(34px,4.5vw,64px); line-height:1.0; font-weight:700; letter-spacing:-0.02em;
+  font-size:clamp(24px,2.6vw,42px); line-height:1.0; font-weight:700; letter-spacing:-0.02em;
   color:inherit; transition:color .3s ${cubic()};
 }
 .mn-item-arrow-wrap{
@@ -609,7 +609,7 @@ a.mn-contact-val:hover{ color:${ACCENT}; }
   .mn-contact{ border-left:none; padding-left:0; border-top:1px solid rgba(255,255,255,0.06); padding-top:32px; height:auto; }
 }
 @media (max-width:640px){
-  .mn-item-label{ font-size:clamp(30px,9vw,44px); }
+  .mn-item-label{ font-size:clamp(24px,8vw,34px); }
   .mn-item-arrow-wrap svg{ width:18px; height:18px; }
 }
 
