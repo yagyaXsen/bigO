@@ -133,7 +133,6 @@ export default function ServicesPage() {
               textDecoration: "none",
             }}
           >
-            <LogoMark />
             bigO
           </Link>
           <div className="svc-nav" style={{ display: "flex", alignItems: "center", gap: "28px" }}>

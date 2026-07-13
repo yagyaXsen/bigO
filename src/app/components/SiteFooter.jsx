@@ -77,7 +77,6 @@ export default function SiteFooter() {
                 marginBottom: "16px",
               }}
             >
-              <LogoMark />
               bigO
             </Link>
             <p

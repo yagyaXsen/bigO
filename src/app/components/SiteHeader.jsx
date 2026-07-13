@@ -65,7 +65,6 @@ export default function SiteHeader() {
             textDecoration: "none",
           }}
         >
-          <LogoMark />
           bigO
         </Link>
         <div className="hdr-nav" style={{ display: "flex", alignItems: "center", gap: "28px" }}>
