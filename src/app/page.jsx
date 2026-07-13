@@ -570,12 +570,11 @@ function CapabilityRow({ c, reduced }) {
           {c.cols.map((col, ci) => (
             <div key={ci} className="flex flex-col gap-1.5">
               {col.map((t) => (
-                <span
+                <ScrambleText
                   key={t}
-                  className="font-accent text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--t-medium)]"
-                >
-                  {t}
-                </span>
+                  text={t}
+                  className="text-[14px] leading-[22px] font-semibold uppercase tracking-[0.22em] text-[rgb(87,89,96)] cursor-pointer"
+                />
               ))}
             </div>
           ))}
