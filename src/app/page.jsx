@@ -63,7 +63,7 @@ function ScrambleLink({ href, children, className = "", ...rest }) {
   return (
     <a
       href={href}
-      className={className}
+      className={`${className} font-mono`}
       onMouseEnter={scramble}
       {...rest}
     >
@@ -77,7 +77,7 @@ function ScrambleText({ text, className = "", triggerOnHover = true, ...rest }) 
   const [displayText, scramble] = useTextScramble(text);
   return (
     <span
-      className={className}
+      className={`${className} font-mono`}
       onMouseEnter={triggerOnHover ? scramble : undefined}
       {...rest}
     >
@@ -572,7 +572,7 @@ function CapabilityRow({ c, reduced }) {
               {col.map((t) => (
                 <span
                   key={t}
-                  className="font-accent text-[10px] md:text-[11px] font-medium uppercase tracking-[0.22em] text-[var(--t-muted)]"
+                  className="font-accent text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--t-medium)]"
                 >
                   {t}
                 </span>
