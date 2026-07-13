@@ -1466,12 +1466,12 @@ export default function BigOHomepage() {
               <div>
                 <OverflowReveal
                   lines="W/03"
-                  className="font-accent fs-index font-bold text-[var(--tBright)] opacity-[0.12] mb-[0.4vw] leading-none"
+                  className="font-accent text-[clamp(28px,2.8vw,48px)] font-bold text-[var(--tBright)] opacity-30 mb-[1vw] leading-none text-left"
                   lineClassName="block"
                 />
                 <OverflowReveal
                   lines="Featured case studies"
-                  className="fs-h3 font-sans font-bold text-[var(--tBright)] leading-[1.1] tracking-tight whitespace-nowrap"
+                  className="text-[clamp(42px,4.5vw,72px)] font-bold font-sans text-[var(--tBright)] tracking-tight leading-[1.05] text-left"
                   lineClassName="block"
                 />
               </div>
