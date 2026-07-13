@@ -518,17 +518,20 @@ function CapabilityRow({ c, reduced }) {
   const rowRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: rowRef,
-    offset: ["start 0.9", "center 0.5"],
+    offset: ["start end", "end start"],
   });
   const p = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.4 });
 
-  const blur = useTransform(p, [0, 1], [10, 0]);
+  // focus: 0 at bottom/top edges, peaks at 1 in the center of the viewport
+  const focus = useTransform(p, [0, 0.25, 0.5, 0.75, 1], [0, 0, 1, 0, 0]);
+
+  const blur = useTransform(focus, [0, 1], [10, 0]);
   const titleFilter = useTransform(blur, (b) => `blur(${b}px)`);
-  const titleOpacity = useTransform(p, [0, 1], [0.28, 1]);
-  const imgScale = useTransform(p, [0, 1], [1.12, 1]);
-  const imgOpacity = useTransform(p, [0, 0.6], [0.5, 1]);
-  const tagsOpacity = useTransform(p, [0.35, 1], [0, 1]);
-  const tagsY = useTransform(p, [0.35, 1], [18, 0]);
+  const titleOpacity = useTransform(focus, [0, 1], [0.28, 1]);
+  const imgScale = useTransform(focus, [0, 1], [1.12, 1]);
+  const imgOpacity = useTransform(focus, [0, 1], [0.5, 1]);
+  const tagsOpacity = useTransform(focus, [0.35, 1], [0, 1]);
+  const tagsY = useTransform(focus, [0.35, 1], [18, 0]);
 
   const on = !reduced;
 
