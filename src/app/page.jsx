@@ -783,10 +783,10 @@ export default function BigOHomepage() {
           scrollTrigger: {
             trigger: "#hero",
             start: "top top",
-            end: "+=140%",
+            end: "+=100%",
             scrub: 1,
             pin: "#hero",
-            pinSpacing: true,
+            pinSpacing: false,
             invalidateOnRefresh: true,
             onRefreshInit: snapshotHeroBox,
           },
@@ -1157,7 +1157,7 @@ export default function BigOHomepage() {
           </div>
         </section>
 
-        <section className="py-20 md:py-32 bg-[var(--base)] overflow-hidden">
+        <section className="slide-over py-20 md:py-32 bg-[var(--base)] overflow-hidden">
           {/* Eyebrow */}
           <div
             className="container-custom flex items-center justify-center gap-4"
@@ -2647,6 +2647,7 @@ const CSS = `
 /* Section stack slide-over effect */
 [data-stack-pin] { position: relative; z-index: 1; will-change: transform; }
 [data-stack-over] { position: relative; z-index: 10; will-change: transform; background: var(--base-bg, #eeeae8); }
+.slide-over { position: relative; z-index: 40; background: var(--base-bg, #eeeae8); box-shadow: 0 -12px 60px rgba(0,0,0,0.12); }
 
 .page-wrapper .container-custom {
   max-width: 1680px;
