@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import { Link } from "react-router";
 import {
   motion,
@@ -11,6 +10,17 @@ import {
   animate,
 } from "framer-motion";
 import { CONTACT, waLink, SITE, SOCIALS } from "./site";
+import Menu from "./components/Menu";
+
+/* Format a raw digits-only number (e.g. "918875326549") for display. */
+function formatPhone(raw) {
+  if (!raw) return "";
+  const d = String(raw).replace(/\D/g, "");
+  if (d.length === 12 && d.startsWith("91")) {
+    return `+91 ${d.slice(2, 7)} ${d.slice(7)}`;
+  }
+  return `+${d}`;
+}
 
 /* ============================================================
    PREMIUM PRIMITIVES — small, self-contained, guarded.
@@ -605,21 +615,32 @@ function CapabilityRow({ c, reduced }) {
 export default function BigOHomepage() {
   const rootRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("#hero");
 
-  // Lock body scroll + ESC-to-close while the fullscreen menu is open.
+  // Track which section is in view so the menu can highlight the current page.
   useEffect(() => {
-    if (!menuOpen) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const onKey = (e) => {
-      if (e.key === "Escape") setMenuOpen(false);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [menuOpen]);
+    const ids = [
+      "hero",
+      "stats-section",
+      "capabilities-section",
+      "works-section",
+      "insights-section",
+      "cta-section",
+    ];
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActiveSection("#" + e.target.id);
+        });
+      },
+      { rootMargin: "-45% 0px -45% 0px" }
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
+    return () => obs.disconnect();
+  }, []);
 
   const [scrolled, setScrolled] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -850,6 +871,54 @@ export default function BigOHomepage() {
           });
         });
 
+        // 6. Immersive window reveal image scroll (clip-path)
+        gsap.utils.toArray(".reveal-section").forEach((section) => {
+          const windowEl = section.querySelector(".reveal-window");
+          const imgEl = section.querySelector(".reveal-img");
+          const contentEl = section.querySelector(".reveal-content");
+
+          if (!windowEl) return;
+
+          const revealTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: section,
+              start: "top top",
+              end: "+=100%",
+              scrub: true,
+              pin: true,
+              pinSpacing: true,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          // Animate clip-path mask from rounded window card to full bleed
+          revealTl.fromTo(
+            windowEl,
+            { clipPath: "inset(12% 20% 12% 20% rounded 24px)" },
+            { clipPath: "inset(0% 0% 0% 0% rounded 0px)", ease: "none" }
+          );
+
+          // Zoom out image parallax effect
+          if (imgEl) {
+            revealTl.fromTo(
+              imgEl,
+              { scale: 1.15 },
+              { scale: 1.0, ease: "none" },
+              0
+            );
+          }
+
+          // Content reveal fade-in
+          if (contentEl) {
+            revealTl.fromTo(
+              contentEl,
+              { opacity: 0, y: 30 },
+              { opacity: 1, y: 0, ease: "power2.out" },
+              0.25
+            );
+          }
+        });
+
         ScrollTrigger.refresh();
 
       }, rootRef);
@@ -959,145 +1028,23 @@ export default function BigOHomepage() {
           </div>
         </header>
 
-        {/* ===================== FULLSCREEN MENU OVERLAY ===================== */}
-        {createPortal(
-          <AnimatePresence>
-            {menuOpen && (
-              <motion.div
-                key="fs-menu"
-                className="menu-overlay fixed inset-0 z-[104] overflow-hidden"
-                initial="hidden"
-                animate="show"
-                exit="exit"
-              >
-                {/* Backdrop panels — two-tone reveal that clips down from the top. */}
-                <motion.div
-                  className="absolute inset-0 bg-[#0a0b0e]"
-                  variants={{
-                    hidden: { clipPath: "inset(0 0 100% 0)" },
-                    show: { clipPath: "inset(0 0 0% 0)", transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1] } },
-                    exit: { clipPath: "inset(100% 0 0 0)", transition: { duration: 0.6, ease: [0.76, 0, 0.24, 1] } },
-                  }}
-                />
-
-                {/* Ambient depth inside the menu. */}
-                <div className="menu-glow menu-glow-a" />
-                <div className="menu-glow menu-glow-b" />
-                <div className="menu-grid pointer-events-none absolute inset-0" />
-
-                {/* Content — sits above backdrop; fades slightly after panel opens. */}
-                <motion.div
-                  className="relative z-10 h-full w-full flex flex-col"
-                  variants={{
-                    hidden: { opacity: 0 },
-                    show: { opacity: 1, transition: { delay: 0.25, duration: 0.4 } },
-                    exit: { opacity: 0, transition: { duration: 0.2 } },
-                  }}
-                >
-                  {/* Top bar */}
-                  <div className="container-custom flex items-center justify-between pt-[clamp(20px,2.4vw,34px)]">
-                    <span className="font-accent text-[clamp(11px,0.9vw,13px)] tracking-[0.28em] uppercase text-white/50">
-                      {SITE.name} — Menu
-                    </span>
-                    <button
-                      onClick={() => setMenuOpen(false)}
-                      aria-label="Close menu"
-                      data-cursor="CLOSE"
-                      className="menu-close group flex items-center gap-3 font-accent text-[clamp(10px,0.8vw,12px)] tracking-[0.28em] uppercase text-white/60 hover:text-white transition-colors"
-                    >
-                      <span>Close</span>
-                      <span className="relative block w-8 h-8 rounded-full border border-white/20 group-hover:border-white/60 transition-colors">
-                        <span className="absolute left-1/2 top-1/2 w-[14px] h-px bg-current -translate-x-1/2 -translate-y-1/2 rotate-45" />
-                        <span className="absolute left-1/2 top-1/2 w-[14px] h-px bg-current -translate-x-1/2 -translate-y-1/2 -rotate-45" />
-                      </span>
-                    </button>
-                  </div>
-
-                  {/* Body */}
-                  <div className="container-custom flex-1 grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] items-center gap-[clamp(32px,5vw,80px)] py-[clamp(24px,4vw,48px)]">
-                    {/* Left — brand statement + chrome orb */}
-                    <div className="hidden lg:flex flex-col justify-center h-full gap-10">
-                      <div className="menu-orb">
-                        <span className="menu-orb-core" />
-                      </div>
-                      <div className="flex flex-col gap-4 max-w-[34ch]">
-                        <span className="font-accent text-[11px] tracking-[0.28em] uppercase text-[var(--highlight)]/80">
-                          {"( Studio )"}
-                        </span>
-                        <p className="text-white/70 text-[clamp(15px,1.15vw,19px)] leading-[1.5] font-light">
-                          We build, run, and grow digital products that move at the speed of ambition.
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Right — numbered nav */}
-                    <nav className="flex flex-col">
-                      {MENU_LINKS.map((item, i) => (
-                        <div key={item.href} className="menu-item-mask">
-                          <motion.a
-                            href={item.href}
-                            onClick={() => setMenuOpen(false)}
-                            data-cursor="GO"
-                            className="menu-item group"
-                            variants={{
-                              hidden: { y: "110%" },
-                              show: {
-                                y: "0%",
-                                transition: { delay: 0.35 + i * 0.06, duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-                              },
-                              exit: { y: "110%", transition: { duration: 0.25 } },
-                            }}
-                          >
-                            <span className="menu-item-num">{item.n}</span>
-                            <span className="menu-item-label" data-text={item.label}>
-                              {item.label}
-                            </span>
-                            <span className="menu-item-arrow" aria-hidden>
-                              ↗
-                            </span>
-                          </motion.a>
-                        </div>
-                      ))}
-                    </nav>
-                  </div>
-
-                  {/* Footer */}
-                  <motion.div
-                    className="container-custom flex flex-col md:flex-row md:items-end md:justify-between gap-6 pb-[clamp(24px,3vw,44px)] pt-[clamp(20px,2.4vw,32px)] border-t border-white/10"
-                    variants={{
-                      hidden: { opacity: 0, y: 20 },
-                      show: { opacity: 1, y: 0, transition: { delay: 0.7, duration: 0.5 } },
-                      exit: { opacity: 0, transition: { duration: 0.2 } },
-                    }}
-                  >
-                    <div className="flex flex-col gap-1.5">
-                      <span className="font-accent text-[10px] tracking-[0.28em] uppercase text-white/40">Get in touch</span>
-                      <a href={`mailto:${CONTACT.email}`} className="text-white/85 hover:text-white text-[clamp(15px,1.2vw,20px)] no-underline transition-colors">
-                        {CONTACT.email}
-                      </a>
-                    </div>
-
-                    <div className="flex flex-col gap-1.5 md:items-end">
-                      <span className="font-accent text-[10px] tracking-[0.28em] uppercase text-white/40">Based in</span>
-                      <span className="text-white/85 text-[clamp(15px,1.2vw,20px)]">{CONTACT.city}</span>
-                    </div>
-
-                    <div className="flex gap-6 font-accent text-[11px] tracking-[0.2em] uppercase md:items-end">
-                      {SOCIALS.instagram && (
-                        <a href={SOCIALS.instagram} target="_blank" rel="noreferrer" className="menu-social text-white/60 hover:text-white no-underline">Instagram</a>
-                      )}
-                      {SOCIALS.linkedin && (
-                        <a href={SOCIALS.linkedin} target="_blank" rel="noreferrer" className="menu-social text-white/60 hover:text-white no-underline">LinkedIn</a>
-                      )}
-                      <a href={waLink("Hi bigO, I'd like to chat.")} target="_blank" rel="noreferrer" className="menu-social text-white/60 hover:text-white no-underline">WhatsApp</a>
-                    </div>
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>,
-          document.body
-        )}
+        {/* ===================== FULLSCREEN MENU ===================== */}
+        <Menu
+          open={menuOpen}
+          onClose={() => setMenuOpen(false)}
+          activeHref={activeSection}
+          tagline="Designing digital experiences through AI & modern technology"
+          contact={{
+            email: CONTACT.email,
+            phone: formatPhone(CONTACT.whatsapp),
+            phoneRaw: `+${CONTACT.whatsapp}`,
+            location: CONTACT.city,
+            github: "https://github.com",
+            linkedin: SOCIALS.linkedin || "https://linkedin.com",
+            twitter: "https://twitter.com",
+            dribbble: "https://dribbble.com",
+          }}
+        />
 
         {/* ===================== HERO ===================== */}
         <section
@@ -1435,27 +1382,26 @@ export default function BigOHomepage() {
 
 
         {/* ===================== CINEMATIC 1 ===================== */}
-        <section className="relative w-full h-[32vw] max-h-[480px] overflow-hidden bg-[#08090c]">
-          <img
-            src="/cinematic-tunnel.png"
-            alt="Cinematic"
-            className="absolute -bottom-[12%] left-0 w-full h-[124%] object-cover object-bottom parallax-bg brightness-[0.72] contrast-[1.08] saturate-[0.85]"
-          />
-          {/* Cohesive dark grade — vignette + subtle accent wash. */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#050608]/60 via-transparent to-[#050608]/70 pointer-events-none" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(0,43,186,0.14),transparent_60%)] pointer-events-none" />
+        <section className="reveal-section relative w-full h-[60vh] lg:h-screen overflow-hidden bg-black">
+          <div className="reveal-window w-full h-full overflow-hidden relative">
+            <img
+              src="/cinematic-tunnel.png"
+              alt="Cinematic"
+              className="absolute inset-0 w-full h-full object-cover reveal-img brightness-[0.72] contrast-[1.08] saturate-[0.85]"
+            />
+            {/* Cohesive dark grade — vignette + subtle accent wash. */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#050608]/60 via-transparent to-[#050608]/70 pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(0,43,186,0.14),transparent_60%)] pointer-events-none" />
 
-          {/* Minimal premium caption. */}
-          <div className="absolute inset-y-0 right-0 z-10 flex flex-col justify-center items-end text-right pr-[clamp(48px,11vw,200px)] pl-6 max-w-[90%] pointer-events-none">
-            <OverflowReveal
-              lines="The Path Forward"
-              lineClassName="font-mono text-[clamp(9px,0.8vw,11px)] tracking-[0.4em] uppercase text-white/45"
-            />
-            <OverflowReveal
-              lines="Clarity at the end of every build."
-              className="mt-4 max-w-[16ch]"
-              lineClassName="font-light text-white text-[clamp(20px,3.4vw,44px)] leading-[1.15] tracking-[-0.01em]"
-            />
+            {/* Minimal premium caption. */}
+            <div className="reveal-content absolute inset-0 z-10 flex flex-col justify-center items-end text-right pr-[clamp(48px,11vw,200px)] pl-6 pointer-events-none">
+              <span className="font-mono text-[clamp(9px,0.8vw,11px)] tracking-[0.4em] uppercase text-white/45 mb-4 block">
+                The Path Forward
+              </span>
+              <p className="font-light text-white text-[clamp(20px,3.4vw,44px)] leading-[1.15] tracking-[-0.01em] max-w-[16ch]">
+                Clarity at the end of every build.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -1602,35 +1548,34 @@ export default function BigOHomepage() {
 
 
         {/* ===================== SMALL BUT POWERFUL ===================== */}
-        <section className="relative w-full h-[47vw] flex items-center justify-center overflow-hidden">
-          <img
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&w=1600&q=80&fit=crop"
-            alt="Team"
-            className="absolute inset-0 w-full h-[130%] object-cover brightness-[0.45] parallax-bg"
-          />
-          <div className="relative z-10 text-center px-10 flex flex-col items-center">
-            <div className="font-accent inline-block px-6 py-2.5 border border-white/20 bg-white/5 backdrop-blur-md rounded-full fs-label font-bold tracking-[0.3em] mb-[2.5vw] uppercase text-white">
-              [ LET'S MEET ]
-            </div>
-            <MaskReveal
-              as="h2"
-              className="fs-h2 font-bold leading-[0.85] tracking-tight text-white mb-[3vw] drop-shadow-2xl"
-            >
-              Small but
-              <br />
-              powerful team
-            </MaskReveal>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              transition={{ type: "spring", stiffness: 300, damping: 18 }}
-              className="w-[9vw] h-[9vw] min-w-[110px] min-h-[110px] bg-white text-black font-accent font-bold fs-label uppercase tracking-widest rounded-full hover:bg-[var(--accent)] hover:text-white cursor-pointer shadow-2xl flex items-center justify-center text-center"
-            >
-              <span>
-                ALL
+        <section className="reveal-section relative w-full h-[60vh] lg:h-screen overflow-hidden bg-black">
+          <div className="reveal-window w-full h-full overflow-hidden relative">
+            <img
+              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&w=1600&q=80&fit=crop"
+              alt="Team"
+              className="absolute inset-0 w-full h-full object-cover reveal-img brightness-[0.45]"
+            />
+            <div className="reveal-content absolute inset-0 z-10 flex flex-col justify-center items-center text-center px-10">
+              <div className="font-accent inline-block px-6 py-2.5 border border-white/20 bg-white/5 backdrop-blur-md rounded-full fs-label font-bold tracking-[0.3em] mb-[2.5vw] uppercase text-white">
+                [ LET'S MEET ]
+              </div>
+              <h2 className="text-[clamp(36px,5vw,80px)] font-bold font-sans leading-[0.85] tracking-tight text-white mb-[3vw] drop-shadow-2xl">
+                Small but
                 <br />
-                WORKS
-              </span>
-            </motion.button>
+                powerful team
+              </h2>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 18 }}
+                className="w-[9vw] h-[9vw] min-w-[110px] min-h-[110px] bg-white text-black font-accent font-bold fs-label uppercase tracking-widest rounded-full hover:bg-[var(--accent)] hover:text-white cursor-pointer shadow-2xl flex items-center justify-center text-center"
+              >
+                <span>
+                  ALL
+                  <br />
+                  WORKS
+                </span>
+              </motion.button>
+            </div>
           </div>
         </section>
 
@@ -1808,61 +1753,46 @@ export default function BigOHomepage() {
         </section>
 
         {/* ===================== CINEMATIC 2 ===================== */}
-        <section className="relative w-full h-[56vw] max-h-[780px] overflow-hidden bg-[#08090c]">
-          <img
-            src="/cinematic-robot.png"
-            alt="Cinematic product macro"
-            className="absolute -top-[12%] left-0 w-full h-[124%] object-cover object-center parallax-bg brightness-[0.72] contrast-[1.08] saturate-[0.85]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#050608]/60 via-transparent to-[#050608]/70 pointer-events-none" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_60%,rgba(0,43,186,0.14),transparent_60%)] pointer-events-none" />
+        <section className="reveal-section relative w-full h-[60vh] lg:h-screen overflow-hidden bg-black">
+          <div className="reveal-window w-full h-full overflow-hidden relative">
+            <img
+              src="/cinematic-robot.png"
+              alt="Cinematic product macro"
+              className="absolute inset-0 w-full h-full object-cover reveal-img brightness-[0.72] contrast-[1.08] saturate-[0.85]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#050608]/60 via-transparent to-[#050608]/70 pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_60%,rgba(0,43,186,0.14),transparent_60%)] pointer-events-none" />
 
-          {/* Premium text overlay */}
-          {/* Top-left eyebrow */}
-          <motion.div
-            className="absolute top-[8%] left-[4%] flex items-center gap-3"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
-          >
-            <span className="w-8 h-px bg-white/40 block" />
-            <span className="font-accent text-[10px] font-semibold uppercase tracking-[0.35em] text-white/50">
-              Intelligence by design
-            </span>
-          </motion.div>
+            <div className="reveal-content absolute inset-0 z-10 flex flex-col justify-between p-[6%] pointer-events-none">
+              {/* Top-left eyebrow */}
+              <div className="flex items-center gap-3">
+                <span className="w-8 h-px bg-white/40 block" />
+                <span className="font-accent text-[10px] font-semibold uppercase tracking-[0.35em] text-white/50">
+                  Intelligence by design
+                </span>
+              </div>
 
-          {/* Centre quote — left aligned with requested text */}
-          <motion.div
-            className="absolute inset-0 flex flex-col items-start justify-center pl-[10%] pr-[4%] pointer-events-none"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.1, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
-          >
-            <p className="text-white/85 text-[clamp(16px,2.2vw,30px)] leading-[1.3] max-w-[550px] tracking-tight text-left">
-              <span className="font-playfair-display font-medium italic text-white text-[clamp(22px,3vw,44px)] block mb-3">
-                Keep your site healthy
-              </span>
-              <span className="font-sans font-light opacity-90">
-                with constant monitoring, daily backups, updates, and direct support.
-              </span>
-            </p>
-          </motion.div>
+              {/* Centre quote */}
+              <div className="pl-[4%] pr-[4%] my-auto">
+                <p className="text-white/85 text-[clamp(16px,2.2vw,30px)] leading-[1.3] max-w-[550px] tracking-tight text-left">
+                  <span className="font-playfair-display font-medium italic text-white text-[clamp(22px,3vw,44px)] block mb-3">
+                    Keep your site healthy
+                  </span>
+                  <span className="font-sans font-light opacity-90">
+                    with constant monitoring, daily backups, updates, and direct support.
+                  </span>
+                </p>
+              </div>
 
-          {/* Bottom-right label */}
-          <motion.div
-            className="absolute bottom-[8%] right-[4%] flex items-center gap-3"
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.35, ease: [0.25, 1, 0.5, 1] }}
-          >
-            <span className="font-accent text-[10px] font-semibold uppercase tracking-[0.35em] text-white/40">
-              bigO Studio — 2025
-            </span>
-            <span className="w-8 h-px bg-white/30 block" />
-          </motion.div>
+              {/* Bottom-right label */}
+              <div className="flex items-center gap-3 self-end">
+                <span className="font-accent text-[10px] font-semibold uppercase tracking-[0.35em] text-white/40">
+                  bigO Studio — 2025
+                </span>
+                <span className="w-8 h-px bg-white/30 block" />
+              </div>
+            </div>
+          </div>
         </section>
 
 
@@ -2394,15 +2324,6 @@ const PARTNERS = [
   "VERTIGO",
 ];
 
-const MENU_LINKS = [
-  { n: "01", label: "About", href: "#stats-section" },
-  { n: "02", label: "Services", href: "#capabilities-section" },
-  { n: "03", label: "Work", href: "#works-section" },
-  { n: "04", label: "Tech", href: "#tech-section" },
-  { n: "05", label: "Insights", href: "#insights-section" },
-  { n: "06", label: "Contact", href: "#cta-section" },
-];
-
 const NICHES = [
   {
     title: "E-commerce",
@@ -2858,189 +2779,6 @@ html.lenis { height: auto; }
 .page-wrapper .marquee-logo:hover .marquee-dot {
   opacity: 1;
   transform: rotate(45deg) scale(1.35);
-}
-
-/* ============================================================
-   FULLSCREEN MENU — premium two-panel overlay with a liquid
-   chrome orb, numbered nav, ambient glows and a grid wash.
-   ============================================================ */
-.menu-overlay {
-  color: #fff;
-  background: transparent;
-}
-.menu-overlay .menu-glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
-  pointer-events: none;
-  z-index: 1;
-}
-.menu-overlay .menu-glow-a {
-  width: 46vw;
-  height: 46vw;
-  top: -14vw;
-  left: -10vw;
-  background: radial-gradient(circle, rgba(0, 43, 186, 0.32), transparent 68%);
-  animation: menuGlowDrift 16s ease-in-out infinite;
-}
-.menu-overlay .menu-glow-b {
-  width: 40vw;
-  height: 40vw;
-  bottom: -16vw;
-  right: -8vw;
-  background: radial-gradient(circle, rgba(129, 159, 254, 0.18), transparent 68%);
-  animation: menuGlowDrift 20s ease-in-out infinite reverse;
-}
-@keyframes menuGlowDrift {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(3vw, -2vw) scale(1.08); }
-}
-.menu-overlay .menu-grid {
-  z-index: 1;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-  background-size: 68px 68px;
-  -webkit-mask-image: radial-gradient(circle at 46% 42%, #000, transparent 72%);
-  mask-image: radial-gradient(circle at 46% 42%, #000, transparent 72%);
-  opacity: 0.55;
-}
-
-/* Liquid chrome orb */
-.menu-overlay .menu-orb {
-  position: relative;
-  width: clamp(190px, 17vw, 280px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 40%),
-    conic-gradient(
-      from 210deg,
-      #e9edf6, #9aa6c0, #464e63, #aab4cc, #222734,
-      #cfd6e6, #5b647a, #e9edf6
-    );
-  box-shadow:
-    inset 0 -28px 60px rgba(0, 0, 0, 0.68),
-    inset 0 22px 52px rgba(255, 255, 255, 0.3),
-    inset -20px 0 52px rgba(129, 159, 254, 0.2),
-    0 50px 120px rgba(0, 0, 0, 0.6);
-  filter: saturate(1.06) contrast(1.08);
-  overflow: hidden;
-  animation: menuOrbFloat 9s ease-in-out infinite;
-}
-.menu-overlay .menu-orb-core {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: conic-gradient(
-    from 0deg,
-    transparent,
-    rgba(129, 159, 254, 0.4),
-    transparent 38%,
-    rgba(255, 255, 255, 0.45),
-    transparent 70%,
-    rgba(0, 43, 186, 0.3),
-    transparent
-  );
-  mix-blend-mode: screen;
-  animation: menuOrbSpin 14s linear infinite;
-}
-@keyframes menuOrbSpin { to { transform: rotate(360deg); } }
-@keyframes menuOrbFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-16px); }
-}
-
-/* Numbered nav */
-.menu-overlay .menu-item-mask {
-  overflow: hidden;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-.menu-overlay nav .menu-item-mask:last-child {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-.menu-overlay .menu-item {
-  display: flex;
-  align-items: baseline;
-  gap: clamp(16px, 1.8vw, 30px);
-  padding: clamp(12px, 1.5vw, 24px) clamp(4px, 0.6vw, 12px);
-  text-decoration: none;
-  position: relative;
-}
-.menu-overlay .menu-item::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(129, 159, 254, 0.1), transparent 60%);
-  opacity: 0;
-  transition: opacity 0.5s var(--animbezier);
-}
-.menu-overlay .menu-item:hover::before { opacity: 1; }
-.menu-overlay .menu-item-num {
-  font-family: var(--font-accent);
-  font-size: clamp(11px, 0.85vw, 13px);
-  color: rgba(255, 255, 255, 0.34);
-  letter-spacing: 0.14em;
-  width: 2.6ch;
-  flex: 0 0 auto;
-  transition: color 0.4s var(--animbezier);
-  position: relative;
-  z-index: 1;
-}
-.menu-overlay .menu-item-num::before { content: "/ "; }
-.menu-overlay .menu-item-label {
-  font-family: var(--font-default);
-  font-size: clamp(36px, 5.2vw, 82px);
-  line-height: 0.98;
-  font-weight: 300;
-  letter-spacing: -0.025em;
-  color: rgba(255, 255, 255, 0.9);
-  transition: transform 0.55s var(--animbezier), color 0.4s var(--animbezier);
-  position: relative;
-  z-index: 1;
-}
-.menu-overlay .menu-item-arrow {
-  margin-left: auto;
-  font-size: clamp(20px, 2vw, 34px);
-  color: rgba(255, 255, 255, 0.4);
-  opacity: 0;
-  transform: translate(-16px, 8px);
-  transition: opacity 0.45s var(--animbezier), transform 0.45s var(--animbezier), color 0.4s;
-  position: relative;
-  z-index: 1;
-}
-.menu-overlay .menu-item:hover .menu-item-label {
-  transform: translateX(clamp(10px, 1.4vw, 28px));
-  color: #fff;
-}
-.menu-overlay .menu-item:hover .menu-item-num { color: var(--highlight); }
-.menu-overlay .menu-item:hover .menu-item-arrow {
-  opacity: 1;
-  transform: translate(0, 0);
-  color: var(--highlight);
-}
-
-/* Footer socials underline */
-.menu-overlay .menu-social { position: relative; }
-.menu-overlay .menu-social::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -3px;
-  width: 100%;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s var(--animbezier);
-}
-.menu-overlay .menu-social:hover::after { transform: scaleX(1); }
-
-@media (prefers-reduced-motion: reduce) {
-  .menu-overlay .menu-orb,
-  .menu-overlay .menu-orb-core,
-  .menu-overlay .menu-glow-a,
-  .menu-overlay .menu-glow-b { animation: none; }
 }
 
 /* Premium Glint & Scale Hover Effect */
