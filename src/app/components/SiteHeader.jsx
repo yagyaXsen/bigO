@@ -68,10 +68,9 @@ export default function SiteHeader() {
           bigO
         </Link>
         <div className="hdr-nav" style={{ display: "flex", alignItems: "center", gap: "28px" }}>
-          <Link to="/services" style={navLink}>Services</Link>
-          <Link to="/work" style={navLink}>Work</Link>
-          <Link to="/about" style={navLink}>About</Link>
-          <Link to="/#contact" style={navLink}>Contact</Link>
+          <a href="/#capabilities-section" style={navLink}>Services</a>
+          <a href="/#works-section" style={navLink}>Work</a>
+          <a href="/#cta-section" style={navLink}>Contact</a>
           <a
             href={chat}
             target="_blank"

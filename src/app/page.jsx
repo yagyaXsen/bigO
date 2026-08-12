@@ -70,11 +70,25 @@ function useTextScramble(originalText) {
 function ScrambleLink({ href, children, className = "", ...rest }) {
   const originalText = String(children);
   const [text, scramble] = useTextScramble(originalText);
+
+  const handleClick = (e) => {
+    if (href && href.startsWith("#")) {
+      e.preventDefault();
+      if (window.lenis) {
+        window.lenis.scrollTo(href);
+      } else {
+        const el = document.querySelector(href);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
   return (
     <a
       href={href}
       className={`${className} font-mono`}
       onMouseEnter={scramble}
+      onClick={handleClick}
       {...rest}
     >
       {text}
@@ -621,7 +635,6 @@ export default function BigOHomepage() {
   useEffect(() => {
     const ids = [
       "hero",
-      "stats-section",
       "capabilities-section",
       "works-section",
       "insights-section",
@@ -729,10 +742,10 @@ export default function BigOHomepage() {
       gsap.registerPlugin(ScrollTrigger);
 
       lenis = new Lenis({
-        duration: 1.5,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        lerp: 0.1,
         smoothWheel: true,
       });
+      window.lenis = lenis;
       const raf = (time) => {
         lenis.raf(time);
         rafId = requestAnimationFrame(raf);
@@ -850,26 +863,7 @@ export default function BigOHomepage() {
           });
         });
 
-        // 5. Section stack — each [data-stack-over] slides over the pinned [data-stack-pin] section
-        const pinSections = gsap.utils.toArray("[data-stack-pin]");
-        const overSections = gsap.utils.toArray("[data-stack-over]");
 
-        pinSections.forEach((pinEl) => {
-          // Give the sections that slide over a lifted card look
-          overSections.forEach((overEl) => {
-            gsap.set(overEl, { borderRadius: "24px 24px 0 0", boxShadow: "0 -12px 60px rgba(0,0,0,0.12)" });
-          });
-
-          // Pin the section underneath while the next one scrolls over it
-          ScrollTrigger.create({
-            trigger: pinEl,
-            start: "top top",
-            endTrigger: overSections[overSections.length - 1] || pinEl,
-            end: "bottom bottom",
-            pin: true,
-            pinSpacing: false,
-          });
-        });
 
         // 6. Immersive window reveal image scroll (clip-path)
         gsap.utils.toArray(".reveal-section").forEach((section) => {
@@ -927,7 +921,10 @@ export default function BigOHomepage() {
     return () => {
       cancelled = true;
       if (rafId) cancelAnimationFrame(rafId);
-      if (lenis) lenis.destroy();
+      if (lenis) {
+        lenis.destroy();
+        window.lenis = null;
+      }
       if (ctx) ctx.revert();
     };
   }, []);
@@ -974,9 +971,6 @@ export default function BigOHomepage() {
 
             {/* Desktop Navigation Links */}
             <nav className="hidden md:flex items-center gap-[2.5vw] font-accent text-[14px] leading-[22px] font-semibold uppercase tracking-[0.15em]">
-              <ScrambleLink href="#stats-section" className="link-underline text-[var(--t-medium)] hover:text-[var(--accent)] transition-all no-underline">
-                About
-              </ScrambleLink>
               <ScrambleLink href="#capabilities-section" className="link-underline text-[var(--t-medium)] hover:text-[var(--accent)] transition-all no-underline">
                 Services
               </ScrambleLink>
@@ -1002,6 +996,15 @@ export default function BigOHomepage() {
                 enabled={fine && !reduced}
                 data-cursor="LET'S GO"
                 onMouseEnter={scrambleBtn}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (window.lenis) {
+                    window.lenis.scrollTo("#cta-section");
+                  } else {
+                    const el = document.querySelector("#cta-section");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
                 className="hidden md:inline-block font-accent text-[14px] leading-[22px] font-semibold uppercase tracking-[0.2em] bg-[var(--base-opp)] text-white px-[1.8vw] py-[0.7vw] rounded-full transition-all no-underline premium-btn"
               >
                 {btnText}
@@ -1186,82 +1189,10 @@ export default function BigOHomepage() {
           </div>
         </section>
 
-        {/* ===================== STATS A/01 ===================== */}
-        <section className="section-pad" id="stats-section" data-stack-pin>
-          <div className="container-custom">
-            <div className="flex flex-col lg:flex-row gap-[4vw]">
-              <div className="lg:w-[26%]">
-                <OverflowReveal
-                  lines="A/01"
-                  className="font-accent fs-index font-bold text-[var(--tBright)] opacity-[0.12] leading-none"
-                  lineClassName="block"
-                />
-              </div>
-              <div className="lg:w-[74%] flex flex-col gap-[4.5vw]">
-                <motion.h2
-                  className="fs-lead font-medium leading-[1.2] tracking-tight max-w-[95%]"
-                  variants={staggerParent}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={VIEWPORT}
-                >
-                  {"From pixel-perfect designs to flawless code, every aspect of our projects is crafted with care to ensure the highest standards."
-                    .split(" ")
-                    .map((word, idx) => (
-                      <motion.span key={idx} variants={wordReveal} className="inline-block mr-[0.25em]">
-                        {word}
-                      </motion.span>
-                    ))}
-                </motion.h2>
 
-                <motion.div
-                  className="grid grid-cols-1 sm:grid-cols-2 gap-y-[5vw] gap-x-[4vw]"
-                  variants={staggerParent}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={VIEWPORT}
-                >
-                  {[
-                    { n: 50, suffix: "+", sub: "Happy clients who trust our work" },
-                    { n: 86, suffix: "%", sub: "Clients come back for a new projects" },
-                    { n: 5, suffix: "+", sub: "Years of professional experience" },
-                    { n: 70, suffix: "+", sub: "Successfully completed projects" },
-                  ].map((s, idx) => (
-                    <motion.div
-                      key={idx}
-                      variants={cardReveal}
-                      className="border-t border-black/10 pt-[1.6vw] flex flex-col gap-3"
-                    >
-                      <div className="overflow-hidden">
-                        <motion.div
-                          variants={{
-                            hidden: { y: "115%" },
-                            show: { y: "0%", transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } }
-                          }}
-                          className="flex items-baseline font-accent fs-counter font-bold text-[var(--tBright)] leading-[1.05] tracking-tight"
-                        >
-                          <span className="counter" data-target={s.n}>
-                            0
-                          </span>
-                          <span>{s.suffix}</span>
-                        </motion.div>
-                      </div>
-                      <SplitText
-                        text={s.sub}
-                        className="font-accent fs-micro font-bold tracking-[0.12em] uppercase text-[var(--t-muted)] leading-relaxed max-w-[280px]"
-                        stagger={0.03}
-                        delay={0.08}
-                      />
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* ===================== NICHES ===================== */}
-        <section className="section-pad" id="niches-section" data-stack-over>
+        <section className="section-pad" id="niches-section">
           <div className="container-custom">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-[1.2vw]">
 
@@ -1345,7 +1276,7 @@ export default function BigOHomepage() {
 
 
         {/* ===================== CAPABILITIES C/02 ===================== */}
-        <section id="capabilities-section" className="section-pad bg-[var(--base)] overflow-hidden" data-stack-over>
+        <section id="capabilities-section" className="section-pad bg-[var(--base)] overflow-hidden">
           <div className="container-custom">
 
             {/* Header: C/02 left · title aligned with center/right columns */}
@@ -1634,123 +1565,7 @@ export default function BigOHomepage() {
           </div>
         </section>
 
-        {/* ===================== WHY CHOOSE US ===================== */}
-        <section className="section-pad bg-[var(--base)]" id="why-choose-us">
-          <div className="container-custom">
-            <div className="grid grid-cols-12 items-end mb-[4vw]">
-              <div className="col-span-3">
-                <OverflowReveal
-                  lines="W/04"
-                  className="font-accent fs-index font-bold text-[var(--tBright)] opacity-[0.12] leading-none"
-                  lineClassName="block"
-                />
-              </div>
-              <div className="col-span-6 flex justify-center">
-                <OverflowReveal
-                  lines="Why choose bigO"
-                  className="fs-h3 font-bold text-[var(--tBright)] leading-[1.1] text-center tracking-tight"
-                  lineClassName="block"
-                />
-              </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-[1.5vw] mt-8 items-stretch">
-              {/* Freelancers */}
-              <Reveal
-                delay={0}
-                className="p-[clamp(16px,2vw,32px)] rounded-2xl border border-black/5 bg-[var(--base-tint)] flex flex-col justify-between"
-              >
-                <div>
-                  <span className="font-accent fs-micro font-bold uppercase tracking-[0.15em] text-[var(--t-muted)] block mb-4">
-                    Freelance Marketplaces
-                  </span>
-                  <h3 className="text-[15px] font-semibold text-[var(--tBright)] mb-4 tracking-tight">
-                    Low cost, high risk
-                  </h3>
-                  <ul className="flex flex-col gap-3 pl-0 list-none text-left text-[13px] text-[var(--t-medium)]">
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-red-500 font-bold">✕</span>
-                      <span>Inconsistent quality & template copycats</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-red-500 font-bold">✕</span>
-                      <span>Communication gap & slow support</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-red-500 font-bold">✕</span>
-                      <span>High risk of project abandonment</span>
-                    </li>
-                  </ul>
-                </div>
-              </Reveal>
-
-              {/* bigO */}
-              <Reveal
-                delay={0.15}
-                className="p-[clamp(16px,2vw,32px)] rounded-2xl border-2 border-[var(--accent)] bg-[var(--base-bright)] flex flex-col justify-between relative shadow-lg"
-              >
-                <div className="absolute top-0 right-8 -translate-y-1/2 bg-[var(--accent)] text-white font-accent fs-micro font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full">
-                  Recommended
-                </div>
-                <div>
-                  <span className="font-accent fs-micro font-bold uppercase tracking-[0.15em] text-[var(--accent)] block mb-4">
-                    bigO Studio
-                  </span>
-                  <h3 className="text-[15px] font-semibold text-[var(--tBright)] mb-4 tracking-tight">
-                    Professional, direct access
-                  </h3>
-                  <ul className="flex flex-col gap-3 pl-0 list-none text-left text-[13px] text-[var(--t-medium)]">
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-green-600 font-bold">✓</span>
-                      <span className="text-[var(--tBright)] font-medium">Direct WhatsApp access to co-founders</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-green-600 font-bold">✓</span>
-                      <span className="text-[var(--tBright)] font-medium">Bespoke code & full ownership</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-green-600 font-bold">✓</span>
-                      <span className="text-[var(--tBright)] font-medium">Clear milestones & fixed pricing</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-green-600 font-bold">✓</span>
-                      <span className="text-[var(--tBright)] font-medium">Continuous maintenance & support</span>
-                    </li>
-                  </ul>
-                </div>
-              </Reveal>
-
-              {/* Agencies */}
-              <Reveal
-                delay={0.3}
-                className="p-[clamp(16px,2vw,32px)] rounded-2xl border border-black/5 bg-[var(--base-tint)] flex flex-col justify-between"
-              >
-                <div>
-                  <span className="font-accent fs-micro font-bold uppercase tracking-[0.15em] text-[var(--t-muted)] block mb-4">
-                    Traditional Agencies
-                  </span>
-                  <h3 className="text-[15px] font-semibold text-[var(--tBright)] mb-4 tracking-tight">
-                    High cost, slow speed
-                  </h3>
-                  <ul className="flex flex-col gap-3 pl-0 list-none text-left text-[13px] text-[var(--t-medium)]">
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-red-500 font-bold">✕</span>
-                      <span>Heavy overhead & bloated agency pricing</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-red-500 font-bold">✕</span>
-                      <span>Account managers & "telephone games"</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-red-500 font-bold">✕</span>
-                      <span>Rigid processes and slow turnaround</span>
-                    </li>
-                  </ul>
-                </div>
-              </Reveal>
-            </div>
-          </div>
-        </section>
 
         {/* ===================== CINEMATIC 2 ===================== */}
         <section className="reveal-section relative w-full h-[60vh] lg:h-screen overflow-hidden bg-black">
@@ -1998,7 +1813,7 @@ export default function BigOHomepage() {
                 <div>
                   <h3 className="fs-h3 font-extrabold tracking-tight mb-2">Thank you!</h3>
                   <p className="fs-desc text-gray-600 leading-relaxed">
-                    Your inquiry has been structured. We have also opened your email client to send details directly to <span className="font-semibold">{CONTACT.email}</span>.
+                    Your inquiry has been structured. We have also opened WhatsApp to send details directly to <span className="font-semibold">+{CONTACT.whatsapp}</span>.
                   </p>
                 </div>
                 <button
@@ -2039,10 +1854,11 @@ export default function BigOHomepage() {
                     `Project Details:\n${formState.message || 'No additional details provided.'}\n\n` +
                     `Best regards,\n${formState.name}`;
 
-                  const mailtoUrl = `mailto:${CONTACT.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                  const fullMessage = `${subject}\n\n${body}`;
+                  const whatsappUrl = waLink(fullMessage);
 
-                  // Open mail client
-                  window.location.href = mailtoUrl;
+                  // Open WhatsApp
+                  window.open(whatsappUrl, "_blank");
                   setFormStatus("success");
                 }}
                 className="bg-white text-black p-8 sm:p-12 rounded-3xl shadow-2xl flex flex-col gap-8 text-left"
@@ -2225,16 +2041,7 @@ export default function BigOHomepage() {
                     </a>
                   </li>
                 </ul>
-                <h4 className="font-accent fs-micro font-bold uppercase tracking-[0.3em] text-[var(--t-muted)] mt-[3vw] mb-[2.5vw]">
-                  / Info
-                </h4>
-                <ul className="flex flex-col gap-4 fs-foot font-extrabold text-[var(--tBright)] list-none pl-0">
-                  <li>
-                    <a href="#" className="hover:text-[var(--accent)] transition-all no-underline">
-                      Pricing
-                    </a>
-                  </li>
-                </ul>
+
               </div>
               <div className="col-span-2">
                 <h4 className="font-accent fs-micro font-bold uppercase tracking-[0.3em] text-[var(--t-muted)] mb-[2.5vw]">

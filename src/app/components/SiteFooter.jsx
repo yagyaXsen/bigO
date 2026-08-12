@@ -95,19 +95,18 @@ export default function SiteFooter() {
           {/* Explore */}
           <div>
             <p style={colTitle}>Explore</p>
-            <Link to="/services" style={linkStyle}>Services</Link>
-            <Link to="/work" style={linkStyle}>Work</Link>
-            <Link to="/about" style={linkStyle}>About</Link>
-            <Link to="/#contact" style={linkStyle}>Contact</Link>
+            <a href="/#capabilities-section" style={linkStyle}>Services</a>
+            <a href="/#works-section" style={linkStyle}>Work</a>
+            <a href="/#cta-section" style={linkStyle}>Contact</a>
           </div>
 
           {/* Services */}
           <div>
             <p style={colTitle}>Services</p>
-            <Link to="/services#website-design" style={linkStyle}>Website Design</Link>
-            <Link to="/services#care-maintenance" style={linkStyle}>Care & Maintenance</Link>
-            <Link to="/services#digital-marketing" style={linkStyle}>Digital Marketing</Link>
-            <Link to="/services#web-apps" style={linkStyle}>Web Apps & PWA</Link>
+            <a href="/#capabilities-section" style={linkStyle}>Website Design</a>
+            <a href="/#capabilities-section" style={linkStyle}>Care & Maintenance</a>
+            <a href="/#capabilities-section" style={linkStyle}>Digital Marketing</a>
+            <a href="/#capabilities-section" style={linkStyle}>Web Apps & PWA</a>
           </div>
 
           {/* Contact */}

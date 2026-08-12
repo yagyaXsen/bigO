@@ -24,11 +24,10 @@ const EASE = [0.22, 1, 0.36, 1];
 /* ---------- data ---------- */
 const NAV_ITEMS = [
   { n: "01", label: "Home", href: "#hero" },
-  { n: "02", label: "About", href: "#stats-section" },
-  { n: "03", label: "Services", href: "#capabilities-section" },
-  { n: "04", label: "Work", href: "#works-section" },
-  { n: "05", label: "Insights", href: "#insights-section" },
-  { n: "06", label: "Contact", href: "#cta-section" },
+  { n: "02", label: "Services", href: "#capabilities-section" },
+  { n: "03", label: "Work", href: "#works-section" },
+  { n: "04", label: "Insights", href: "#insights-section" },
+  { n: "05", label: "Contact", href: "#cta-section" },
 ];
 
 /* ============================================================
@@ -253,9 +252,13 @@ function MenuOverlay({ open, onClose, activeHref, contact, tagline }) {
       if (href.startsWith("#")) {
         e.preventDefault();
         onClose();
-        const target = document.querySelector(href);
-        if (target) {
-          setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 500);
+        if (window.lenis) {
+          setTimeout(() => window.lenis.scrollTo(href), 500);
+        } else {
+          const target = document.querySelector(href);
+          if (target) {
+            setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 500);
+          }
         }
       } else {
         onClose();
