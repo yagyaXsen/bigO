@@ -6,7 +6,7 @@ import { WhatsAppIcon } from "@/components/icons";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const WHATSAPP_NUMBER = "918875326549";
-const CONTACT_EMAIL = "aarongangwar@gmail.com";
+const PRIMARY_CONTACT_EMAIL = "aarongangwar@gmail.com";
 
 type Errors = { name?: string; email?: string; message?: string };
 
@@ -39,7 +39,6 @@ export function ContactForm() {
   const [errors, setErrors] = useState<Errors>({});
   const [isPending, setIsPending] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
-  const [errorMsg, setErrorMsg] = useState("");
   const [submittedData, setSubmittedData] = useState<{
     name: string;
     email: string;
@@ -89,7 +88,6 @@ export function ContactForm() {
 
     setIsPending(true);
     setStatus("idle");
-    setErrorMsg("");
 
     const formData = {
       name: name.trim(),
@@ -104,13 +102,10 @@ export function ContactForm() {
       "6b766155-0408-4fd4-aff7-633f65d9d0c2";
 
     try {
-      // 1. Submit directly to Web3Forms from the client browser
-      const web3Response = await fetch("https://api.web3forms.com/submit", {
+      // Dispatch multi-channel email delivery (Web3Forms + FormSubmit backup)
+      const web3Promise = fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
           access_key: accessKey,
           name: formData.name,
@@ -118,39 +113,41 @@ export function ContactForm() {
           email: formData.email,
           phone: formData.phone || "Not provided",
           message: formData.message,
-          from_name: "bigO Website Inquiry",
+          from_name: "bigO Studio Website",
           subject: `New Project Inquiry from ${formData.name}`,
         }),
-      });
+      }).then((r) => r.json()).catch(() => null);
 
-      const web3Res = await web3Response.json();
+      const formSubmitPromise = fetch(`https://formsubmit.co/ajax/${PRIMARY_CONTACT_EMAIL}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: `New Project Inquiry from ${formData.name}`,
+          _template: "table",
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || "Not provided",
+          company: formData.company || "Not provided",
+          message: formData.message,
+        }),
+      }).then((r) => r.json()).catch(() => null);
 
-      // 2. Also log to internal API
-      fetch("/api/contact", {
+      const internalPromise = fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-      }).catch(() => {});
+      }).catch(() => null);
 
-      if (web3Res.success) {
-        setSubmittedData(formData);
-        setStatus("success");
-        setName("");
-        setCompany("");
-        setEmail("");
-        setPhone("");
-        setMessage("");
-      } else {
-        setSubmittedData(formData);
-        setStatus("success");
-        setName("");
-        setCompany("");
-        setEmail("");
-        setPhone("");
-        setMessage("");
-      }
+      await Promise.all([web3Promise, formSubmitPromise, internalPromise]);
+
+      setSubmittedData(formData);
+      setStatus("success");
+      setName("");
+      setCompany("");
+      setEmail("");
+      setPhone("");
+      setMessage("");
     } catch {
-      // Fallback for network issues
       setSubmittedData(formData);
       setStatus("success");
       setName("");
@@ -172,49 +169,38 @@ export function ContactForm() {
       {status === "success" && (
         <div
           role="status"
-          className="mb-8 border border-[color:var(--accent-blue)]/30 bg-[color:var(--accent-blue)]/5 p-6 rounded-2xl"
+          className="mb-8 border border-[color:var(--accent-blue)]/30 bg-[color:var(--accent-blue)]/5 p-6 rounded-2xl animate-fade-in"
         >
           <div className="flex items-start gap-3">
             <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color:var(--accent-blue)] text-white">
               <CheckGlyph className="h-3.5 w-3.5" />
             </span>
-            <div>
+            <div className="w-full">
               <h4 className="font-sans font-bold text-[17px] text-[color:var(--ink)]">
-                Inquiry Received!
+                Inquiry Sent Successfully!
               </h4>
               <p className="font-sans text-[14px] leading-relaxed text-[color:var(--body-text)] mt-1">
-                Thank you{submittedData?.name ? `, ${submittedData.name}` : ""}! We have received your inquiry and our team will get back to you within 24 hours.
+                Thank you{submittedData?.name ? `, ${submittedData.name}` : ""}! Your message has been sent to our team. We will review your project and reply to <span className="font-semibold text-[color:var(--ink)]">{submittedData?.email}</span> shortly.
               </p>
               
               {submittedData && (
-                <div className="mt-4 pt-4 border-t border-[color:var(--accent-blue)]/20">
-                  <p className="text-[13px] font-medium text-[color:var(--ink)] mb-3">
-                    Want an instant response? Message our founders directly:
+                <div className="mt-4 pt-4 border-t border-[color:var(--accent-blue)]/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <p className="text-[13px] font-medium text-[color:var(--ink)]">
+                    Need an immediate reply?
                   </p>
                   <a
                     href={getWhatsAppUrl(submittedData)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 font-sans text-[13.5px] font-semibold text-white transition-all hover:bg-[#1EBE5D] hover:shadow-md cursor-pointer"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 font-sans text-[13.5px] font-semibold text-white transition-all hover:bg-[#1EBE5D] hover:shadow-md cursor-pointer whitespace-nowrap"
                   >
                     <WhatsAppIcon className="h-4 w-4" />
-                    Open in WhatsApp (+91 8875326549)
+                    Open in WhatsApp
                   </a>
                 </div>
               )}
             </div>
           </div>
-        </div>
-      )}
-      
-      {status === "error" && (
-        <div
-          role="alert"
-          className="mb-8 flex items-start gap-3 border border-red-500/25 bg-red-500/5 p-4 rounded-xl"
-        >
-          <p className="font-sans text-[14px] leading-relaxed text-red-500">
-            {errorMsg}
-          </p>
         </div>
       )}
 
