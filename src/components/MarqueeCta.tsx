@@ -24,13 +24,13 @@ export function MarqueeCta() {
       <div className="mxd-container" ref={ctaRef}>
           <div className="flex flex-col items-center text-center">
             <Link
-              href="/start-project"
+              href="/contact"
               className="inline-flex items-center justify-center rounded-full border border-background/20 px-8 py-3 font-mono text-[18px] font-medium tracking-[0.5px] text-background transition-colors duration-300 hover:bg-background hover:text-[color:var(--ink)]"
             >
               Write a line
             </Link>
             
-            <Link href="/start-project" className="mt-8 group">
+            <Link href="/contact" className="mt-8 group">
               <h2 className="mxd-display text-background text-[clamp(44px,6vw,75px)] font-semibold leading-[1.1] tracking-[-3px] transition-colors duration-300 group-hover:text-[color:var(--accent-blue)]">
                 Let&apos;s talk about your project
               </h2>

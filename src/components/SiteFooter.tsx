@@ -43,7 +43,7 @@ export function SiteFooter() {
             <p className="mxd-eyebrow mb-8">/ DISCOVER</p>
             <ul className="flex flex-col">
               {DISCOVER_LINKS.map((label) => {
-                const href = label === "Home" ? "/" : label === "Contact" ? "/start-project" : "#";
+                const href = label === "Home" ? "/" : label === "Contact" ? "/contact" : "#";
                 return (
                   <li key={label}>
                     <Link

@@ -82,7 +82,7 @@ export function SiteHeader() {
     <div className="flex items-center gap-2 pr-[14px] md:gap-[35px] md:pr-[35px]">
       {/* Start Project — caption md+ only, icon always */}
       <Link
-        href="/start-project"
+        href="/contact"
         aria-label="Start Project"
         className="flex items-center gap-[14px] text-[color:var(--ink)] transition-colors hover:text-[color:var(--accent-blue)]"
       >
@@ -168,13 +168,13 @@ export function SiteHeader() {
                 <ul className="flex flex-col gap-4">
                   {col.links.map((link) => (
                     <li key={link}>
-                      <a
-                        href={link === "Contact" ? "/start-project" : "#"}
+                      <Link
+                        href={link === "Contact" ? "/contact" : "#"}
                         onClick={() => setMenuOpen(false)}
                         className="text-[color:var(--ink)] transition-colors hover:text-muted-foreground text-[clamp(16px,1.2vw,18px)] leading-[1.3] font-medium"
                       >
                         {link}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>

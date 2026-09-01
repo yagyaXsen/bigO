@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useScroll, useTransform, motion } from "framer-motion";
 import { useRevealType } from "@/hooks/useScrollAnimations";
 import { ScrambleText } from "@/components/ui/ScrambleText";
@@ -60,9 +61,8 @@ export function ImageDivider({ src, alt, cta, title, className }: ImageDividerPr
           <div className="absolute left-0 top-1/2 flex w-full -translate-y-1/2 flex-col items-center gap-[21px] overflow-hidden px-[30px] text-center md:gap-[22px] md:px-[60px] xl:gap-[23px] min-[1600px]:gap-[25px] min-[1600px]:px-[100px]">
             {cta && (
               <div className="overflow-hidden">
-                {/* btn-line btn-line-permanent: mono 500 16→18px uppercase, [ ] brackets */}
-                <a
-                  href="#footer"
+                <Link
+                  href="/contact"
                   className={cn(
                     "mxd-mono inline-flex gap-[10px] text-[16px] font-medium uppercase leading-[1.6] tracking-[0.5px] text-white md:text-[18px]",
                     "before:content-['['] after:content-[']']",
@@ -75,7 +75,7 @@ export function ImageDivider({ src, alt, cta, title, className }: ImageDividerPr
                     className="whitespace-nowrap"
                     triggerOn="hover"
                   />
-                </a>
+                </Link>
               </div>
             )}
             {/* __caption h2.permanent: Manrope 600, 44 → 75 → 95px, white;
