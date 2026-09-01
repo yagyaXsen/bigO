@@ -20,7 +20,7 @@ const INFO_LINKS = [
 
 const ECOSYSTEM_LINKS = [
   { num: "01", label: "Community", href: "#", isAvailable: false },
-  { num: "02", label: "Instagram", href: "#", isAvailable: false },
+  { num: "02", label: "Instagram", href: "https://www.instagram.com/thebigoteam/", isAvailable: true },
   { num: "03", label: "WhatsApp", href: "https://wa.me/918875326549", isAvailable: true },
   { num: "04", label: "LinkedIn", href: "#", isAvailable: false },
 ];

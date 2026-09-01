@@ -9,7 +9,7 @@ import { useSplitLines } from "@/hooks/useSplitLines";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 
 const SOCIAL_LINKS: SocialLink[] = [
-  { label: "Instagram", href: "#" },
+  { label: "Instagram", href: "https://www.instagram.com/thebigoteam/" },
   { label: "LinkedIn", href: "#" },
   { label: "WhatsApp", href: "https://wa.me/918875326549" },
   { label: "GitHub", href: "#" },
