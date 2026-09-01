@@ -21,43 +21,48 @@ export function MarqueeCta() {
 
   return (
     <section className="relative overflow-hidden bg-[color:var(--ink)] pt-[140px] pb-0">
-      <div className="mxd-container" ref={ctaRef}>
-          <div className="flex flex-col items-center text-center">
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center rounded-full border border-background/20 px-8 py-3 font-mono text-[18px] font-medium tracking-[0.5px] text-background transition-colors duration-300 hover:bg-background hover:text-[color:var(--ink)]"
-            >
-              Write a line
-            </Link>
-            
-            <Link href="/contact" className="mt-8 group">
-              <h2 className="mxd-display text-background text-[clamp(44px,6vw,75px)] font-semibold leading-[1.1] tracking-[-3px] transition-colors duration-300 group-hover:text-[color:var(--accent-blue)]">
-                Let&apos;s talk about your project
-              </h2>
-            </Link>
-          </div>
+      <div className="mxd-container relative z-20" ref={ctaRef}>
+        <div className="flex flex-col items-center text-center">
+          <Link
+            href="/contact"
+            onClick={() => window.scrollTo(0, 0)}
+            className="inline-flex items-center justify-center rounded-full border border-background/20 px-8 py-3 font-mono text-[18px] font-medium tracking-[0.5px] text-background transition-colors duration-300 hover:bg-background hover:text-[color:var(--ink)] cursor-pointer"
+          >
+            Write a line
+          </Link>
+          
+          <Link
+            href="/contact"
+            onClick={() => window.scrollTo(0, 0)}
+            className="mt-8 group block cursor-pointer"
+          >
+            <h2 className="mxd-display text-background text-[clamp(44px,6vw,75px)] font-semibold leading-[1.1] tracking-[-3px] transition-colors duration-300 group-hover:text-[color:var(--accent-blue)]">
+              Let&apos;s talk about your project
+            </h2>
+          </Link>
         </div>
+      </div>
       <div className="mt-[150px] mb-[80px] flex h-[500px] overflow-hidden md:h-[650px] xl:mt-[200px]">
         <div className="flex h-full w-max animate-marquee items-start space-x-[40px] px-8 md:space-x-[80px]" style={{ animationDuration: '60s' }}>
           {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
-              <div
-                key={i}
-                className={`relative flex shrink-0 flex-col ${item.cls}`}
-              >
-                <span className="mxd-mono mb-4 text-[10px] uppercase tracking-[0.08em] text-muted-foreground md:text-[11px]">
-                  {item.label}
-                </span>
-                <div className="relative h-full w-full overflow-hidden group">
-                  <Image
-                    src={item.img}
-                    alt={item.label}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-black/20 transition-opacity duration-300 group-hover:bg-black/0" />
-                </div>
+            <div
+              key={i}
+              className={`relative flex shrink-0 flex-col ${item.cls}`}
+            >
+              <span className="mxd-mono mb-4 text-[10px] uppercase tracking-[0.08em] text-muted-foreground md:text-[11px]">
+                {item.label}
+              </span>
+              <div className="relative h-full w-full overflow-hidden group">
+                <Image
+                  src={item.img}
+                  alt={item.label}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black/20 transition-opacity duration-300 group-hover:bg-black/0" />
               </div>
-            ))}
+            </div>
+          ))}
         </div>
       </div>
     </section>

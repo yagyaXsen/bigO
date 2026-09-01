@@ -11,6 +11,17 @@ export function Preloader() {
   const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // If already shown in this session, skip immediately
+    if (typeof window !== "undefined" && sessionStorage.getItem("bigo_preloader_shown")) {
+      setHidden(true);
+      return;
+    }
+    try {
+      sessionStorage.setItem("bigo_preloader_shown", "true");
+    } catch {
+      // Ignore storage errors
+    }
+
     // Lock body scroll while preloader is active
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -20,7 +31,7 @@ export function Preloader() {
       win.__lenis.stop();
     }
 
-    const duration = 800; // ms for fast, responsive feel
+    const duration = 750; // ms for fast, responsive feel
     const startTime = performance.now();
     let animId: number;
 
@@ -54,8 +65,8 @@ export function Preloader() {
             }
             window.dispatchEvent(new Event("resize"));
             ScrollTrigger.refresh();
-          }, 600);
-        }, 100);
+          }, 500);
+        }, 50);
       }
     };
 
@@ -77,7 +88,7 @@ export function Preloader() {
     <div
       className={cn(
         "fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0d0d0d] text-white transition-transform duration-700 ease-[cubic-bezier(0.87,0,0.13,1)] will-change-transform",
-        isFinished ? "-translate-y-full" : "translate-y-0"
+        isFinished ? "-translate-y-full pointer-events-none" : "translate-y-0 pointer-events-auto"
       )}
     >
       <div className="flex flex-col items-center justify-center text-center">
