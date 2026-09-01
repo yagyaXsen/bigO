@@ -17,7 +17,10 @@ export async function POST(req: Request) {
     let delivered = false;
 
     // 1. Try Web3Forms if access key is configured
-    const web3Key = process.env.WEB3FORMS_ACCESS_KEY || process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+    const web3Key =
+      process.env.WEB3FORMS_ACCESS_KEY ||
+      process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ||
+      "034fd680-458e-4ee6-ad35-e85d7a454c82";
     if (web3Key) {
       try {
         const web3Res = await fetch("https://api.web3forms.com/submit", {

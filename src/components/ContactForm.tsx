@@ -99,25 +99,28 @@ export function ContactForm() {
 
     const accessKey =
       process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ||
-      "6b766155-0408-4fd4-aff7-633f65d9d0c2";
+      "034fd680-458e-4ee6-ad35-e85d7a454c82";
 
     try {
-      // Dispatch multi-channel email delivery (Web3Forms + FormSubmit backup)
+      // 1. Submit directly to Web3Forms using FormData (recommended by Web3Forms)
+      const web3Body = new FormData();
+      web3Body.append("access_key", accessKey);
+      web3Body.append("name", formData.name);
+      web3Body.append("email", formData.email);
+      web3Body.append("phone", formData.phone || "Not provided");
+      web3Body.append("company", formData.company || "Not provided");
+      web3Body.append("message", formData.message);
+      web3Body.append("from_name", "bigO Studio Website");
+      web3Body.append("subject", `New Project Inquiry from ${formData.name}`);
+
       const web3Promise = fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: accessKey,
-          name: formData.name,
-          company: formData.company || "Not provided",
-          email: formData.email,
-          phone: formData.phone || "Not provided",
-          message: formData.message,
-          from_name: "bigO Studio Website",
-          subject: `New Project Inquiry from ${formData.name}`,
-        }),
-      }).then((r) => r.json()).catch(() => null);
+        body: web3Body,
+      })
+        .then((r) => r.json())
+        .catch(() => null);
 
+      // 2. Submit to FormSubmit.co as secondary backup
       const formSubmitPromise = fetch(`https://formsubmit.co/ajax/${PRIMARY_CONTACT_EMAIL}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
