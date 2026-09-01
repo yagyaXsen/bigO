@@ -1,100 +1,94 @@
-# bigO Digital Agency
+# bigO Digital Studio
 
-Official website for bigO - a digital studio that builds, runs, and grows businesses online.
+Official website for **bigO** — a small, focused digital studio that builds websites, web apps, AI automation, and digital presence.
 
-## About
+---
 
-bigO provides complete digital solutions for growing businesses:
-- **Website Design & Build** - Custom, fast, mobile-first websites
-- **AI & Smart Automation** - Chatbots, workflow automation, intelligent tools
-- **Digital Marketing & Growth** - SEO, social media, paid ads, content
-- **Website Care & Maintenance** - Security, updates, backups, support
-- **Custom Web Apps & PWA** - Dashboards, booking systems, SaaS products
-- **Branding & Design** - Logos, brand guidelines, marketing materials
-- **Consulting & Strategy** - Technical planning, growth roadmaps, audits
+## 🛠 Tech Stack
 
-## Tech Stack
+- **Framework:** Next.js 16 (App Router & Turbopack)
+- **Language:** TypeScript / React 19
+- **Styling:** Tailwind CSS v4, `@tailwindcss/postcss`, shadcn/ui
+- **Motion & Interaction:** GSAP 3.15, ScrollTrigger, Lenis Smooth Scroll, Matter.js
+- **Deployment:** Vercel
 
-- **Framework:** React Router 7 with SSR
-- **Server:** Hono (Node.js)
-- **Styling:** TailwindCSS v4
-- **Build:** Vite 6
-- **Language:** JavaScript/TypeScript
-- **Deployment:** Vercel (recommended)
+---
 
-## Features
+## ✨ Features
 
-- ✅ Server-Side Rendering (SSR)
-- ✅ Static Prerendering
-- ✅ Mobile-first responsive design
-- ✅ SEO optimized
-- ✅ Fast page loads (<3s)
-- ✅ 7 comprehensive services
-- ✅ Portfolio case studies
-- ✅ Contact forms with WhatsApp integration
-- ✅ Dark theme optimized
+- ⚡ **Next.js 16 App Router** with static prerendering & optimization
+- 🎨 **Cinematic Agency UI** with GSAP animations, Preloader, Film Grain overlay, and dynamic Blur Scroll
+- 🌓 **Day / Night Theme** switch with persisted localStorage state
+- 📱 **Mobile-First Responsive Design** across all screen sizes
+- 🎯 **Interactive Showcase Sections**: Hero, About, Niche Cards, Capabilities, Divider Parallax, Case Studies, Tech Stack, Insights, Marquee CTA
+- 📋 **Interactive Project Intake Funnel**: `/start-project` multi-step contact workflow
+- 🔍 **SEO & Performance Optimized**
 
-## Setup
+---
+
+## 🚀 Getting Started
 
 ```bash
 # Install dependencies
 npm install
 
-# Start development server
+# Start development server (Turbopack)
 npm run dev
+
+# Type check
+npm run typecheck
 
 # Build for production
 npm run build
 
 # Start production server
-npm start
+npm run start
 ```
-
-## Configuration
-
-Edit `src/app/site.js` to customize:
-- Contact email and WhatsApp number
-- City/location
-- Social media links
-- Site name and tagline
-- Domain URL
-- OG image for social sharing
-
-## Project Structure
-
-```
-src/app/
-├── page.jsx              # Homepage
-├── services/             # Services page
-├── work/                 # Portfolio/case studies
-├── about/                # About page
-├── components/           # Reusable components
-├── servicesData.js       # Service definitions
-├── caseStudies.js        # Portfolio projects
-├── team.js               # Team member data
-└── site.js               # Site configuration
-```
-
-## Deployment
-
-### Vercel (Recommended)
-```bash
-npm install -g vercel
-vercel
-```
-
-Or connect your GitHub repository to Vercel for automatic deployments.
-
-## Contact
-
-- **Email:** aarongangwar@gmail.com
-- **WhatsApp:** +91 8875326549
-- **Website:** https://bigo.studio
-
-## License
-
-Private - © 2025 bigO Digital Agency
 
 ---
 
-by bigO
+## 📂 Project Structure
+
+```
+bigO/
+├── public/                 # Static assets, images, dividers, videos, seo
+│   ├── images/
+│   │   ├── dividers/       # Parallax divider images
+│   │   ├── illustrations/  # Niche cards graphics
+│   │   ├── services/       # Capability showcase graphics
+│   │   ├── works/          # Portfolio showcase images
+│   │   └── blog/           # Insights preview cards
+│   └── videos/             # Hero background videos
+├── src/
+│   ├── app/                # Next.js App Router
+│   │   ├── layout.tsx      # Root layout (fonts, metadata, theme)
+│   │   ├── page.tsx        # Homepage
+│   │   ├── globals.css     # Tailwind v4 theme & CSS variables
+│   │   └── start-project/  # Project intake page
+│   ├── components/         # Modular UI sections & providers
+│   │   ├── providers/      # SmoothScroll (Lenis), BlurScroll
+│   │   ├── ui/             # Preloader, GrainOverlay, CustomCursor, ScrambleText, Button
+│   │   ├── HeroSection.tsx
+│   │   ├── AboutSection.tsx
+│   │   ├── NicheCards.tsx
+│   │   ├── CapabilitiesSection.tsx
+│   │   ├── CaseStudies.tsx
+│   │   ├── TechStack.tsx
+│   │   ├── InsightsSection.tsx
+│   │   ├── MarqueeCta.tsx
+│   │   ├── SiteHeader.tsx
+│   │   └── SiteFooter.tsx
+│   ├── hooks/              # Scroll & animation hooks (GSAP, SplitText, Scramble)
+│   ├── lib/                # GSAP setup & utility helpers (cn)
+│   └── types/              # Content & UI type definitions
+├── next.config.mjs         # Next.js configuration
+├── postcss.config.mjs      # PostCSS & Tailwind v4 plugin
+├── tsconfig.json           # TypeScript configuration
+└── package.json            # Scripts & dependencies
+```
+
+---
+
+## 📄 License & Ownership
+
+Private — © 2026 bigO Digital Agency. All rights reserved.

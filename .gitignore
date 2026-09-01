@@ -4,9 +4,13 @@
 .env.local
 .env.production
 
-# React Router
-/.react-router/
+# Next.js
+.next/
+/out/
 /build/
+tsconfig.tsbuildinfo
+
+
 
 # Planning & Documentation (development only)
 BIGO-MASTER-DOCUMENT.md

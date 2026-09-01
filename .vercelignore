@@ -5,6 +5,7 @@
 .env.local
 
 # Build artifacts
-build
-.react-router
+.next
+out
 node_modules
+
