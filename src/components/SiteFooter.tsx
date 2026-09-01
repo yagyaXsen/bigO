@@ -22,7 +22,7 @@ const ECOSYSTEM_LINKS = [
   { num: "01", label: "Community", href: "#", isAvailable: false },
   { num: "02", label: "Instagram", href: "https://www.instagram.com/thebigoteam/", isAvailable: true },
   { num: "03", label: "WhatsApp", href: "https://wa.me/918875326549", isAvailable: true },
-  { num: "04", label: "LinkedIn", href: "#", isAvailable: false },
+  { num: "04", label: "LinkedIn", href: "https://www.linkedin.com/in/alok-kumar-40681b323/", isAvailable: true },
 ];
 
 const BOTTOM_ROW = [

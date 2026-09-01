@@ -10,7 +10,7 @@ import { ScrambleText } from "@/components/ui/ScrambleText";
 
 const SOCIAL_LINKS: SocialLink[] = [
   { label: "Instagram", href: "https://www.instagram.com/thebigoteam/" },
-  { label: "LinkedIn", href: "#" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/alok-kumar-40681b323/" },
   { label: "WhatsApp", href: "https://wa.me/918875326549" },
   { label: "GitHub", href: "#" },
 ];

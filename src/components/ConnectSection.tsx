@@ -8,7 +8,7 @@ import { useInUp } from "@/hooks/useScrollAnimations";
 const SOCIALS = [
   { num: "01", label: "Community", href: "#" },
   { num: "02", label: "Instagram", href: "https://www.instagram.com/thebigoteam/" },
-  { num: "03", label: "LinkedIn", href: "#" },
+  { num: "03", label: "LinkedIn", href: "https://www.linkedin.com/in/alok-kumar-40681b323/" },
   { num: "04", label: "WhatsApp", href: "https://wa.me/918875326549" },
 ] as const;
 
