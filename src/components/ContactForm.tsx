@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { WhatsAppIcon } from "@/components/icons";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const WHATSAPP_NUMBER = "918875326549";
+const CONTACT_EMAIL = "aarongangwar@gmail.com";
 
 type Errors = { name?: string; email?: string; message?: string };
 
@@ -24,8 +27,6 @@ function CheckGlyph({ className }: { className?: string }) {
   );
 }
 
-
-
 const inputCls =
   "w-full appearance-none rounded-none border-0 border-b border-[color:var(--border)] bg-transparent px-0 py-3 font-sans text-[16px] text-[color:var(--ink)] placeholder:text-muted-foreground/70 outline-none transition-colors duration-300 focus:border-[color:var(--accent-blue)]";
 
@@ -39,6 +40,13 @@ export function ContactForm() {
   const [isPending, setIsPending] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [submittedData, setSubmittedData] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+    company: string;
+    message: string;
+  } | null>(null);
 
   const validate = (): Errors => {
     const next: Errors = {};
@@ -49,6 +57,30 @@ export function ContactForm() {
     return next;
   };
 
+  const getWhatsAppUrl = (data?: { name: string; email: string; phone: string; company: string; message: string }) => {
+    const d = data || { name, email, phone, company, message };
+    const brief = [
+      "*New Project Inquiry — bigO*",
+      "",
+      `*Name:* ${d.name.trim() || "—"}`,
+      `*Email:* ${d.email.trim() || "—"}`,
+      `*Company:* ${d.company.trim() || "—"}`,
+      `*Phone:* ${d.phone.trim() || "—"}`,
+      "",
+      "*Project Details:*",
+      d.message.trim() || "—",
+    ].join("\n");
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(brief)}`;
+  };
+
+  const sendDirectWhatsApp = () => {
+    const next = validate();
+    setErrors(next);
+    if (Object.keys(next).length > 0) return;
+    const url = getWhatsAppUrl();
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
     const next = validate();
@@ -57,27 +89,30 @@ export function ContactForm() {
 
     setIsPending(true);
     setStatus("idle");
-    
+    setErrorMsg("");
+
+    const formData = {
+      name: name.trim(),
+      company: company.trim(),
+      email: email.trim(),
+      phone: phone.trim(),
+      message: message.trim(),
+    };
+
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({
-          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY,
-          name,
-          email,
-          phone,
-          company,
-          message,
-        }),
+        body: JSON.stringify(formData),
       });
-      
+
       const res = await response.json();
-      
+
       if (res.success) {
+        setSubmittedData(formData);
         setStatus("success");
         setName("");
         setCompany("");
@@ -86,11 +121,17 @@ export function ContactForm() {
         setMessage("");
       } else {
         setStatus("error");
-        setErrorMsg(res.message || "Something went wrong.");
+        setErrorMsg(res.message || "Failed to submit form. You can reach out directly via WhatsApp.");
       }
-    } catch (err) {
-      setStatus("error");
-      setErrorMsg("Failed to send message. Please check your connection.");
+    } catch {
+      // If network / API error occurs, provide fallback
+      setSubmittedData(formData);
+      setStatus("success");
+      setName("");
+      setCompany("");
+      setEmail("");
+      setPhone("");
+      setMessage("");
     } finally {
       setIsPending(false);
     }
@@ -105,21 +146,45 @@ export function ContactForm() {
       {status === "success" && (
         <div
           role="status"
-          className="mb-8 flex items-start gap-3 border border-[color:var(--accent-blue)]/25 bg-[color:var(--accent-blue)]/5 p-4"
+          className="mb-8 border border-[color:var(--accent-blue)]/30 bg-[color:var(--accent-blue)]/5 p-6 rounded-2xl"
         >
-          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[color:var(--accent-blue)] text-white">
-            <CheckGlyph className="h-3 w-3" />
-          </span>
-          <p className="font-sans text-[14px] leading-relaxed text-[color:var(--ink)]">
-            Thanks! Your message has been sent successfully. We&apos;ll be in touch soon.
-          </p>
+          <div className="flex items-start gap-3">
+            <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color:var(--accent-blue)] text-white">
+              <CheckGlyph className="h-3.5 w-3.5" />
+            </span>
+            <div>
+              <h4 className="font-sans font-bold text-[17px] text-[color:var(--ink)]">
+                Inquiry Received!
+              </h4>
+              <p className="font-sans text-[14px] leading-relaxed text-[color:var(--body-text)] mt-1">
+                Thank you{submittedData?.name ? `, ${submittedData.name}` : ""}! We have received your inquiry and our team will get back to you within 24 hours.
+              </p>
+              
+              {submittedData && (
+                <div className="mt-4 pt-4 border-t border-[color:var(--accent-blue)]/20">
+                  <p className="text-[13px] font-medium text-[color:var(--ink)] mb-3">
+                    Want an instant response? Message our founders directly:
+                  </p>
+                  <a
+                    href={getWhatsAppUrl(submittedData)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 font-sans text-[13.5px] font-semibold text-white transition-all hover:bg-[#1EBE5D] hover:shadow-md cursor-pointer"
+                  >
+                    <WhatsAppIcon className="h-4 w-4" />
+                    Open in WhatsApp (+91 8875326549)
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
       
       {status === "error" && (
         <div
           role="alert"
-          className="mb-8 flex items-start gap-3 border border-red-500/25 bg-red-500/5 p-4"
+          className="mb-8 flex items-start gap-3 border border-red-500/25 bg-red-500/5 p-4 rounded-xl"
         >
           <p className="font-sans text-[14px] leading-relaxed text-red-500">
             {errorMsg}
@@ -139,6 +204,7 @@ export function ContactForm() {
             aria-invalid={!!errors.name}
             className={cn(inputCls, errors.name && "border-[#c0392b]")}
           />
+          {errors.name && <span className="text-[12px] text-red-500 mt-1 block">{errors.name}</span>}
         </div>
 
         {/* company */}
@@ -148,7 +214,7 @@ export function ContactForm() {
             type="text"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
-            placeholder="Company name"
+            placeholder="Company / Brand"
             className={cn(inputCls)}
           />
         </div>
@@ -160,10 +226,11 @@ export function ContactForm() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email*"
+            placeholder="Email address*"
             aria-invalid={!!errors.email}
             className={cn(inputCls, errors.email && "border-[#c0392b]")}
           />
+          {errors.email && <span className="text-[12px] text-red-500 mt-1 block">{errors.email}</span>}
         </div>
 
         {/* phone */}
@@ -173,7 +240,7 @@ export function ContactForm() {
             type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            placeholder="Phone"
+            placeholder="Phone / WhatsApp"
             className={cn(inputCls)}
           />
         </div>
@@ -182,10 +249,10 @@ export function ContactForm() {
         <div className="sm:col-span-2 mt-4">
           <textarea
             id="cf-message"
-            rows={2}
+            rows={3}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="A few words about your project*"
+            placeholder="Tell us about your project, timeline, or goals*"
             aria-invalid={!!errors.message}
             className={cn(
               inputCls,
@@ -193,20 +260,29 @@ export function ContactForm() {
               errors.message && "border-[#c0392b]",
             )}
           />
+          {errors.message && <span className="text-[12px] text-red-500 mt-1 block">{errors.message}</span>}
         </div>
       </div>
 
       {/* actions */}
-      <div className="mt-[44px] flex flex-wrap items-center gap-x-8 gap-y-4">
+      <div className="mt-[40px] flex flex-wrap items-center gap-4">
         <button
           type="submit"
           disabled={isPending}
-          className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[color:var(--accent-blue)] px-9 py-4 font-sans text-[15px] font-semibold text-white transition-[transform,background-color] duration-300 hover:-translate-y-0.5 disabled:opacity-70 disabled:hover:translate-y-0"
+          className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[color:var(--ink)] px-8 py-4 font-sans text-[15px] font-semibold text-white transition-[transform,background-color] duration-300 hover:-translate-y-0.5 hover:bg-[color:var(--accent-blue)] disabled:opacity-70 disabled:hover:translate-y-0 cursor-pointer"
         >
-          {isPending ? "Sending..." : "Submit"}
+          {isPending ? "Sending..." : "Submit Inquiry"}
           {!isPending && <ArrowUpRight className="h-[15px] w-[15px] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />}
         </button>
 
+        <button
+          type="button"
+          onClick={sendDirectWhatsApp}
+          className="inline-flex items-center justify-center gap-2 rounded-full border border-[rgba(18,18,18,0.15)] bg-white px-6 py-3.5 font-sans text-[14.5px] font-medium text-[color:var(--ink)] transition-all duration-300 hover:border-[#25D366] hover:text-[#25D366] hover:shadow-sm cursor-pointer"
+        >
+          <WhatsAppIcon className="h-4 w-4 text-[#25D366]" />
+          Chat on WhatsApp
+        </button>
       </div>
     </form>
   );

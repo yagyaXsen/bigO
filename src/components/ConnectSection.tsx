@@ -9,7 +9,7 @@ const SOCIALS = [
   { num: "01", label: "Community", href: "#" },
   { num: "02", label: "Instagram", href: "#" },
   { num: "03", label: "LinkedIn", href: "#" },
-  { num: "04", label: "WhatsApp", href: "#" },
+  { num: "04", label: "WhatsApp", href: "https://wa.me/918875326549" },
 ] as const;
 
 /**
