@@ -14,7 +14,7 @@ import { ImageDivider } from "@/components/Divider";
 import { CaseStudies } from "@/components/CaseStudies";
 import { TechStack } from "@/components/TechStack";
 import { InsightsSection } from "@/components/InsightsSection";
-import { MarqueeCta } from "@/components/MarqueeCta";
+import { PhysicsCta } from "@/components/PhysicsCta";
 import { SiteFooter } from "@/components/SiteFooter";
 
 export default function Home() {
@@ -61,7 +61,7 @@ export default function Home() {
             </BlurSection>
             <InsightsSection />
             <BlurSection>
-              <MarqueeCta />
+              <PhysicsCta />
             </BlurSection>
             <BlurSection>
               <SiteFooter />
