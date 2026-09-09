@@ -32,9 +32,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${manrope.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full">{children}</body>
+      <body suppressHydrationWarning className="min-h-full">
+        {children}
+      </body>
     </html>
   );
 }
