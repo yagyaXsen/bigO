@@ -2,32 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { CartIcon, MoonIcon } from "@/components/icons";
+import { CartIcon, MoonIcon, ArrowUpRightIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { ScrambleText } from "@/components/ui/ScrambleText";
-
-const NAV_MENU = [
-  {
-    title: "01 Home",
-    links: ["Branding studio", "Software development company", "Creative agency", "Freelancer portfolio", "Design studio", "Web Developer", "Personal portfolio", "Digital agency", "Web Studio", "Digital designer"]
-  },
-  {
-    title: "02 Works",
-    links: ["Works default", "Works grid", "Works grid sticky", "Project details"]
-  },
-  {
-    title: "03 Pages",
-    links: ["About me", "About us", "Services", "Our team", "Pricing", "FAQ page", "404 error page", "Landing page"]
-  },
-  {
-    title: "04 Insights",
-    links: ["Blog standard", "Blog creative", "Single post"]
-  },
-  {
-    title: "05 Contact",
-    links: ["Contact"]
-  }
-];
 
 const THEME_KEY = "bigo-theme";
 
@@ -99,7 +76,7 @@ export function SiteHeader() {
         role="switch"
         aria-checked={isDark}
         aria-label="light/dark mode"
-        className="flex items-center text-[color:var(--ink)] transition-colors hover:text-[color:var(--accent-blue)]"
+        className="flex items-center text-[color:var(--ink)] transition-colors hover:text-[color:var(--accent-blue)] cursor-pointer"
       >
         <span className="hidden whitespace-nowrap font-mono text-[18px] font-bold uppercase tracking-[-0.5px] after:mx-[10px] after:content-['/'] md:inline-flex">
           <ScrambleText text={isDark ? "Day" : "Night"} />
@@ -144,9 +121,9 @@ export function SiteHeader() {
       {/* Menu overlay */}
       <div
         className={cn(
-          "fixed inset-0 z-[60] bg-background transition-[opacity,transform] duration-500 ease-out",
+          "fixed inset-0 z-[60] flex flex-col justify-between bg-background transition-[opacity,transform] duration-500 ease-out overflow-y-auto pb-12",
           menuOpen
-            ? "scale-100 opacity-100"
+            ? "scale-100 opacity-100 pointer-events-auto"
             : "pointer-events-none scale-[0.98] opacity-0",
         )}
         aria-hidden={!menuOpen}
@@ -158,31 +135,100 @@ export function SiteHeader() {
         </div>
 
         {/* Menu body */}
-        <div className="mxd-container flex flex-1 flex-col gap-12 pt-[clamp(2rem,6vh,5rem)] xl:flex-row xl:items-center xl:justify-between">
-          <nav className="flex w-full flex-col xl:flex-row xl:justify-between gap-12 xl:gap-8">
-            {NAV_MENU.map((col) => (
-              <div key={col.title} className="flex flex-col">
-                <span className="mxd-mono mb-6 text-muted-foreground">
-                  {col.title}
-                </span>
-                <ul className="flex flex-col gap-4">
-                  {col.links.map((link) => (
-                    <li key={link}>
-                      <Link
-                        href={link === "Contact" ? "/contact" : "#"}
-                        onClick={() => setMenuOpen(false)}
-                        className="text-[color:var(--ink)] transition-colors hover:text-muted-foreground text-[clamp(16px,1.2vw,18px)] leading-[1.3] font-medium"
-                      >
-                        {link}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+        <div className="mxd-container flex flex-1 flex-col justify-center py-[clamp(2rem,6vh,5rem)]">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-8">
+            {/* Col 1: Main Pages */}
+            <div className="md:col-span-6 flex flex-col">
+              <span className="mxd-mono mb-6 text-muted-foreground">
+                / 01 NAVIGATION
+              </span>
+              <ul className="flex flex-col gap-4">
+                <li>
+                  <Link
+                    href="/"
+                    onClick={() => setMenuOpen(false)}
+                    className="group inline-flex items-center gap-4 text-[color:var(--ink)] text-[clamp(32px,4vw,64px)] font-bold tracking-[-2px] transition-colors hover:text-[color:var(--accent-blue)]"
+                  >
+                    <span>Home</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/contact"
+                    onClick={() => setMenuOpen(false)}
+                    className="group inline-flex items-center gap-4 text-[color:var(--ink)] text-[clamp(32px,4vw,64px)] font-bold tracking-[-2px] transition-colors hover:text-[color:var(--accent-blue)]"
+                  >
+                    <span>Contact</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Col 2: Direct Contact */}
+            <div className="md:col-span-3 flex flex-col">
+              <span className="mxd-mono mb-6 text-muted-foreground">
+                / 02 CONTACT
+              </span>
+              <div className="flex flex-col gap-3">
+                <a
+                  href="mailto:bigo.company2026@gmail.com"
+                  className="text-[color:var(--ink)] text-[clamp(16px,1.3vw,20px)] leading-relaxed transition-colors hover:text-[color:var(--accent-blue)]"
+                >
+                  bigo.company2026@gmail.com
+                </a>
+                <a
+                  href="https://wa.me/918875326549"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[color:var(--ink)] text-[clamp(16px,1.3vw,20px)] leading-relaxed transition-colors hover:text-[color:var(--accent-blue)]"
+                >
+                  +91 8875326549
+                </a>
               </div>
-            ))}
-          </nav>
+            </div>
 
-
+            {/* Col 3: Socials */}
+            <div className="md:col-span-3 flex flex-col">
+              <span className="mxd-mono mb-6 text-muted-foreground">
+                / 03 SOCIALS
+              </span>
+              <ul className="flex flex-col gap-3">
+                <li>
+                  <a
+                    href="https://www.instagram.com/thebigoteam/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center justify-between w-full text-[color:var(--ink)] text-[clamp(16px,1.3vw,20px)] transition-colors hover:text-[color:var(--accent-blue)]"
+                  >
+                    <span>Instagram</span>
+                    <ArrowUpRightIcon className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.linkedin.com/in/alok-kumar-40681b323/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center justify-between w-full text-[color:var(--ink)] text-[clamp(16px,1.3vw,20px)] transition-colors hover:text-[color:var(--accent-blue)]"
+                  >
+                    <span>LinkedIn</span>
+                    <ArrowUpRightIcon className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://wa.me/918875326549"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center justify-between w-full text-[color:var(--ink)] text-[clamp(16px,1.3vw,20px)] transition-colors hover:text-[color:var(--accent-blue)]"
+                  >
+                    <span>WhatsApp</span>
+                    <ArrowUpRightIcon className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </>
