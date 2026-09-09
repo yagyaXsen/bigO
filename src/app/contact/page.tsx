@@ -12,6 +12,7 @@ import { EmailContact } from "@/components/EmailContact";
 import { ConnectSection } from "@/components/ConnectSection";
 import { OfficeSection } from "@/components/OfficeSection";
 import { ParallaxDivider } from "@/components/ParallaxDivider";
+import { MarqueeCta } from "@/components/MarqueeCta";
 import { SiteFooter } from "@/components/SiteFooter";
 
 export const metadata: Metadata = {
@@ -37,6 +38,9 @@ export default function ContactPage() {
             <ParallaxDivider />
             <BlurSection>
               <OfficeSection />
+            </BlurSection>
+            <BlurSection>
+              <MarqueeCta />
             </BlurSection>
             <BlurSection>
               <SiteFooter />
