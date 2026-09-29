@@ -6,7 +6,8 @@ import { gsap } from "@/lib/gsap";
 /**
  * Custom cursor — reference `#mxd-cursor` (z-9999).
  *
- * A fixed follower that lerps to the pointer (gsap.quickTo, ~0.4s power1.out).
+ * A fixed follower eased toward the pointer on the GSAP ticker (tight for the
+ * dot, looser for the label bubble); it snaps in place when it first appears.
  * States, driven by what's under the pointer:
  *  - default → tiny inverting dot (mix-blend difference)
  *  - link    → 2rem inverting circle over links / buttons / `.btn-link`
@@ -36,12 +37,34 @@ export function CustomCursor() {
     document.documentElement.classList.add("has-custom-cursor");
     gsap.set(root, { xPercent: -50, yPercent: -50, scale: 0, opacity: 0 });
 
-    const xTo = gsap.quickTo(root, "x", { duration: 0.4, ease: "power1.out" });
-    const yTo = gsap.quickTo(root, "y", { duration: 0.4, ease: "power1.out" });
-
     type Mode = "default" | "link" | "text";
     let mode: Mode = "default";
     let revealed = false;
+
+    /* Follow the pointer with frame-rate independent exponential smoothing:
+       each second the gap shrinks by e^-FOLLOW. The dot and link ring stay
+       tight on the real (hidden) pointer; the big label bubble trails a bit. */
+    const FOLLOW: Record<Mode, number> = { default: 26, link: 22, text: 12 };
+    const setX = gsap.quickSetter(root, "x", "px");
+    const setY = gsap.quickSetter(root, "y", "px");
+    let targetX = 0;
+    let targetY = 0;
+    let x = 0;
+    let y = 0;
+
+    const follow = (_time: number, deltaMs: number) => {
+      const dx = targetX - x;
+      const dy = targetY - y;
+      if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) return; // settled — no work
+      const k = 1 - Math.exp((-FOLLOW[mode] * deltaMs) / 1000);
+      x += dx * k;
+      y += dy * k;
+      setX(x);
+      setY(y);
+    };
+    gsap.ticker.add(follow);
+
+    const scaleFor = (m: Mode) => (m === "text" ? TEXT : m === "link" ? LINK : DOT);
 
     const apply = (next: Mode, text = "") => {
       if (next === mode && next !== "text") return;
@@ -75,11 +98,16 @@ export function CustomCursor() {
     };
 
     const onMove = (e: PointerEvent) => {
-      xTo(e.clientX);
-      yTo(e.clientY);
+      targetX = e.clientX;
+      targetY = e.clientY;
       if (!revealed) {
+        // Appear right under the pointer instead of gliding in from the old spot
         revealed = true;
-        gsap.to(root, { opacity: 1, scale: DOT, duration: 0.3, ease: "power1.out" });
+        x = targetX;
+        y = targetY;
+        setX(x);
+        setY(y);
+        gsap.to(root, { opacity: 1, scale: scaleFor(mode), duration: 0.3, ease: "power1.out", overwrite: "auto" });
       }
     };
 
@@ -89,26 +117,22 @@ export function CustomCursor() {
       apply(m, t);
     };
 
+    // Hide when the pointer leaves the window; the next move snaps it back in place
     const onLeave = () => {
-      gsap.to(root, { opacity: 0, scale: 0, duration: 0.3, ease: "power1.in" });
+      gsap.to(root, { opacity: 0, scale: 0, duration: 0.3, ease: "power1.in", overwrite: "auto" });
       revealed = false;
-    };
-    const onEnter = () => {
-      revealed = true;
-      gsap.to(root, { opacity: 1, scale: mode === "text" ? TEXT : mode === "link" ? LINK : DOT, duration: 0.3, ease: "power1.out" });
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
     document.addEventListener("pointerover", onOver, { passive: true });
     document.addEventListener("pointerleave", onLeave);
-    document.addEventListener("pointerenter", onEnter);
 
     return () => {
       document.documentElement.classList.remove("has-custom-cursor");
+      gsap.ticker.remove(follow);
       window.removeEventListener("pointermove", onMove);
       document.removeEventListener("pointerover", onOver);
       document.removeEventListener("pointerleave", onLeave);
-      document.removeEventListener("pointerenter", onEnter);
       gsap.killTweensOf(root);
       gsap.killTweensOf(label);
     };
