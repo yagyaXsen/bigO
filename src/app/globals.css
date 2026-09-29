@@ -266,6 +266,11 @@
   mask-image: linear-gradient(to bottom, transparent 70%, #000 100%);
 }
 
+/* Intro preloader already played this session (set by the head script) */
+html[data-preloaded] .preloader {
+  display: none;
+}
+
 /* Lenis smooth-scroll base styles */
 html.lenis,
 html.lenis body {
@@ -284,33 +289,12 @@ html.lenis body {
   pointer-events: none;
 }
 
-/* Reveal animation utility (GSAP toggles inline, this is the CSS fallback) */
-@keyframes mxd-fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.mxd-fade-up {
-  animation: mxd-fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* Hide scrollbars where needed */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
 /* Custom cursor active (reference #mxd-cursor) — hide the native pointer.
    Form fields keep their caret so text entry stays usable. Only engaged on
-   fine-pointer, non-reduced-motion devices (CustomCursor adds the class). */
-html.has-custom-cursor *:not(input):not(textarea):not(select) {
-  cursor: none;
+   fine-pointer, non-reduced-motion devices (CustomCursor adds the class), and
+   only at the width where the custom cursor is actually drawn. */
+@media (min-width: 1025px) {
+  html.has-custom-cursor *:not(input):not(textarea):not(select) {
+    cursor: none;
+  }
 }

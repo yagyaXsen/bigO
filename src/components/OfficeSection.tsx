@@ -24,8 +24,8 @@ const OFFICES: Office[] = [
 
 /**
  * Office / location section — reference "Welcome to our office".
- * Heading + intro on the left; two location blocks side by side on the right,
- * stacking on mobile. Each block: index, city, address, phone, email.
+ * Heading + intro on the left; location blocks on the right (two per row,
+ * stacking on mobile). Each block: index, city, address, phone, email.
  */
 export function OfficeSection() {
   const headRef = useInUp<HTMLDivElement>();
@@ -42,11 +42,11 @@ export function OfficeSection() {
             office
           </h2>
           <p className="mt-[30px] max-w-[38ch] font-sans text-[16px] leading-[1.6] text-[color:var(--body-text)] md:text-[17px]">
-            Inspiring ideas, creative insights, and the latest in design and tech. Fueling innovation for your digital journey.
+            Our base in Delhi NCR. Call, email, or message us on WhatsApp — we reply within a day.
           </p>
         </div>
 
-        {/* Right — two office blocks */}
+        {/* Right — office blocks */}
         <div
           ref={blocksRef}
           className="grid grid-cols-1 gap-x-[60px] gap-y-[48px] md:grid-cols-2 xl:col-span-8 xl:pt-[6px]"

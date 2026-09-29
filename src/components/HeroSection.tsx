@@ -12,7 +12,6 @@ const SOCIAL_LINKS: SocialLink[] = [
   { label: "Instagram", href: "https://www.instagram.com/thebigoteam/" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/alok-kumar-40681b323/" },
   { label: "WhatsApp", href: "https://wa.me/918875326549" },
-  { label: "GitHub", href: "#" },
 ];
 
 export function HeroSection() {
@@ -96,7 +95,7 @@ export function HeroSection() {
               ref={h1Ref}
               className="text-center font-sans font-semibold leading-[1.1] tracking-[-0.032em] text-white text-[50px] md:text-[75px] xl:text-[95px] min-[1600px]:text-[120px]"
             >
-              Innovative software development company
+              We build, run &amp; grow your business online
             </h1>
           </div>
 
@@ -125,13 +124,13 @@ export function HeroSection() {
 
         {/* Side labels — btn-line-small, left/right 60px → 100px at 1600 */}
         <a
-          href="#"
+          href="#about"
           className="absolute left-[60px] top-1/2 hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground xl:block min-[1600px]:left-[100px]"
         >
           [ <ScrambleText text="STUDIO" /> ]
         </a>
         <a
-          href="#"
+          href="#works"
           className="absolute right-[60px] top-1/2 hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground xl:block min-[1600px]:right-[100px]"
         >
           [ <ScrambleText text="WORKS" /> ]
@@ -149,6 +148,8 @@ export function HeroSection() {
               <li key={link.label} className="shrink-0">
                 <a
                   href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="block overflow-hidden font-mono text-[14px] font-semibold uppercase leading-[1.6] text-[color:var(--body-text)] transition-colors hover:text-[color:var(--ink)]"
                 >
                   <ScrambleText text={link.label} triggerOn="hover" />

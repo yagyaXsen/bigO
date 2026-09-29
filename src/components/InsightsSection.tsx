@@ -63,12 +63,10 @@ export function InsightsSection() {
           insights
         </h2>
 
-        <a
-          href="#"
-          className="mxd-mono text-[14px] text-muted-foreground transition-colors hover:text-[color:var(--ink)] md:justify-self-end md:pt-[10px]"
-        >
-          [ <ScrambleText text="NEWS OVERVIEW" triggerOn="hover" /> ]
-        </a>
+        {/* No articles published yet — nothing to link to */}
+        <span className="mxd-mono text-[14px] text-muted-foreground md:justify-self-end md:pt-[10px]">
+          [ <ScrambleText text="BLOG COMING SOON" triggerOn="hover" /> ]
+        </span>
       </div>
 
       {/* Cards — static top-aligned grid; varied aspects give the stagger */}
@@ -84,13 +82,10 @@ export function InsightsSection() {
   );
 }
 
+/* Preview only — cards become links once the articles exist */
 function InsightCard({ post }: { post: InsightPost }) {
   return (
-    <a
-      href="#"
-      data-cursor-text="View"
-      className="insight-card group flex flex-col"
-    >
+    <article className="insight-card group flex flex-col">
       {/* Date — mono, above the media */}
       <span className="mxd-mono mb-[20px] text-[13px] text-muted-foreground">
         {post.date}
@@ -109,7 +104,7 @@ function InsightCard({ post }: { post: InsightPost }) {
 
       {/* Caption — title bottom-left, mono tag column right */}
       <div className="mt-[26px] flex items-start justify-between gap-[40px]">
-        <h3 className="max-w-[16ch] font-sans text-[24px] font-bold leading-[1.2] tracking-[-0.4px] text-[color:var(--ink)] transition-colors duration-300 group-hover:text-[color:var(--accent-blue)] xl:text-[26px]">
+        <h3 className="max-w-[16ch] font-sans text-[24px] font-bold leading-[1.2] tracking-[-0.4px] text-[color:var(--ink)] xl:text-[26px]">
           {post.title}
         </h3>
         <ul className="flex shrink-0 flex-col items-end pt-[4px]">
@@ -123,6 +118,6 @@ function InsightCard({ post }: { post: InsightPost }) {
           ))}
         </ul>
       </div>
-    </a>
+    </article>
   );
 }

@@ -5,8 +5,7 @@ import Link from "next/link";
 import { CartIcon, MoonIcon, ArrowUpRightIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { ScrambleText } from "@/components/ui/ScrambleText";
-
-const THEME_KEY = "bigo-theme";
+import { THEME_KEY } from "@/lib/site";
 
 export function SiteHeader() {
   const [isDark, setIsDark] = useState(false);

@@ -41,7 +41,7 @@ export function ContactHero() {
 
           <div ref={introRef} className="mt-[38px] max-w-[50ch]">
             <p className="font-sans font-bold text-[clamp(17px,2vw,20px)] leading-[1.4] text-[color:var(--body-text)]">
-              Have questions? We&apos;ve got the answers! Here, you&apos;ll find clear and concise information about our services, process, and what to expect when working with us. If you need more details, feel free to reach out!
+              Tell us what you&apos;re building — a new website, a web app, a brand, or help growing online. We reply within a day with clear next steps.
             </p>
           </div>
         </div>

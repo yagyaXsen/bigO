@@ -19,7 +19,7 @@ function CardTitle({ title, tags, dark }: CardTitleProps) {
       <h3
         className={cn(
           "font-sans text-[30px] font-bold leading-[1.2] tracking-[-1px] md:text-[36px] xl:text-[40px]",
-          dark ? "text-white" : "text-[color:var(--ink)]"
+          dark ? "text-white" : "text-[#121212]"
         )}
       >
         {title}
@@ -29,7 +29,7 @@ function CardTitle({ title, tags, dark }: CardTitleProps) {
           "mxd-mono mt-[19px] flex flex-col pt-[4px] text-[14px] uppercase leading-[1.6] tracking-[0.5px]",
           dark
             ? "font-normal text-white"
-            : "font-semibold text-[color:var(--body-text)]"
+            : "font-semibold text-[#575960]"
         )}
       >
         {tags.map((tag) => (
@@ -63,11 +63,11 @@ function CardDescr({ text, highlight, dark, short, className }: CardDescrProps) 
         className={cn(
           "text-[16px] font-bold leading-[1.4] md:text-[18px]",
           short ? "max-w-[300px]" : "max-w-[360px]",
-          dark ? "text-white" : "text-[color:var(--ink)]"
+          dark ? "text-white" : "text-[#121212]"
         )}
       >
         {text}{" "}
-        <span className={dark ? "text-[#fff9]" : "text-[color:var(--body-text)]"}>
+        <span className={dark ? "text-[#fff9]" : "text-[#575960]"}>
           {highlight}
         </span>
       </p>
@@ -75,6 +75,8 @@ function CardDescr({ text, highlight, dark, short, className }: CardDescrProps) 
   );
 }
 
+/* Cards keep their own light / black palette in both themes (the artwork is
+   shot on white), so their text uses fixed colors, not the theme tokens. */
 export function NicheCards() {
   // Reference: niche cards use animate-card-2 batch reveal
   const ref = useCardBatch<HTMLDivElement>(".niche-card", 2);

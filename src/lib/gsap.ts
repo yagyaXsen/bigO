@@ -8,7 +8,7 @@ import { Flip } from "gsap/Flip";
 
 /**
  * Central GSAP setup — registers plugins once and creates the two named
- * eases decoded from the reference site (docs/research/MOTION_SYSTEM.md).
+ * eases matched to the reference design's motion curves.
  */
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase, Flip);

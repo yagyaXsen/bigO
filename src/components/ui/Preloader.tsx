@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ScrollTrigger } from "@/lib/gsap";
+import { PRELOADER_KEY } from "@/lib/site";
 
 export function Preloader() {
   const [isFinished, setIsFinished] = useState(false);
@@ -11,15 +12,19 @@ export function Preloader() {
   const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // If already shown in this session, skip immediately
-    if (typeof window !== "undefined" && sessionStorage.getItem("bigo_preloader_shown")) {
-      setHidden(true);
-      return;
-    }
+    // Already shown this session: the `data-preloaded` flag hides it via CSS.
+    // The head script sets it on full page loads; this covers client-side
+    // navigation after the first run.
+    let seen = false;
     try {
-      sessionStorage.setItem("bigo_preloader_shown", "true");
+      seen = sessionStorage.getItem(PRELOADER_KEY) === "true";
+      sessionStorage.setItem(PRELOADER_KEY, "true");
     } catch {
-      // Ignore storage errors
+      // Storage blocked — show the preloader every time
+    }
+    if (seen) {
+      document.documentElement.dataset.preloaded = "true";
+      return;
     }
 
     // Lock body scroll while preloader is active
@@ -87,15 +92,15 @@ export function Preloader() {
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0d0d0d] text-white transition-transform duration-700 ease-[cubic-bezier(0.87,0,0.13,1)] will-change-transform",
+        "preloader fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0d0d0d] text-white transition-transform duration-700 ease-[cubic-bezier(0.87,0,0.13,1)] will-change-transform",
         isFinished ? "-translate-y-full pointer-events-none" : "translate-y-0 pointer-events-auto"
       )}
     >
       <div className="flex flex-col items-center justify-center text-center">
-        {/* Brand Text */}
-        <h1 className="font-sans text-[clamp(64px,10vw,130px)] font-bold text-white tracking-[-0.03em] leading-[1.1] pb-2 md:pb-4 select-none">
+        {/* Brand Text — not a heading; the page's h1 lives in the hero */}
+        <div className="font-sans text-[clamp(64px,10vw,130px)] font-bold text-white tracking-[-0.03em] leading-[1.1] pb-2 md:pb-4 select-none">
           bigO
-        </h1>
+        </div>
 
         {/* Thin Underline Progress Bar */}
         <div className="relative mt-4 md:mt-6 h-[2px] w-[260px] sm:w-[320px] md:w-[400px] overflow-hidden bg-white/20">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Matter from "matter-js";
 import { ScrambleText } from "@/components/ui/ScrambleText";
@@ -8,37 +8,43 @@ import { useInUp } from "@/hooks/useScrollAnimations";
 import { useSplitLines } from "@/hooks/useSplitLines";
 
 interface TagConfig {
-  id: string;
   text: string;
-  width: number;
-  height: number;
   initialX: number; // percentage 0 - 100
   initialAngle?: number;
 }
 
 const TAGS_CONFIG: TagConfig[] = [
-  { id: "guidelines", text: "GUIDELINES", width: 140, height: 46, initialX: 6 },
-  { id: "applications", text: "APPLICATIONS", width: 155, height: 46, initialX: 18 },
-  { id: "3d-models", text: "3D MODELS", width: 130, height: 46, initialX: 28 },
-  { id: "brand-strategy", text: "BRAND STRATEGY", width: 180, height: 46, initialX: 36, initialAngle: Math.PI / 2 },
-  { id: "logo-design", text: "LOGO DESIGN", width: 145, height: 46, initialX: 44 },
-  { id: "development", text: "DEVELOPMENT", width: 145, height: 46, initialX: 43 },
-  { id: "branding", text: "BRANDING", width: 125, height: 46, initialX: 54 },
-  { id: "packaging", text: "PACKAGING", width: 130, height: 46, initialX: 43 },
-  { id: "web-design", text: "WEB DESIGN", width: 135, height: 46, initialX: 53, initialAngle: Math.PI },
-  { id: "app-design", text: "APP DESIGN", width: 135, height: 46, initialX: 64 },
-  { id: "visual-identity", text: "VISUAL IDENTITY", width: 180, height: 46, initialX: 77 },
-  { id: "print-design", text: "PRINT DESIGN", width: 145, height: 46, initialX: 75 },
-  { id: "ui-ux", text: "UI/UX", width: 110, height: 46, initialX: 86, initialAngle: Math.PI / 2 },
-  { id: "interactions", text: "INTERACTIONS", width: 150, height: 46, initialX: 94 },
+  { text: "WEBSITES", initialX: 6 },
+  { text: "WEB APPS", initialX: 18 },
+  { text: "E-COMMERCE", initialX: 28 },
+  { text: "AI & AUTOMATION", initialX: 36, initialAngle: Math.PI / 2 },
+  { text: "UI/UX DESIGN", initialX: 44 },
+  { text: "BRANDING", initialX: 43 },
+  { text: "LOGO DESIGN", initialX: 54 },
+  { text: "SEO", initialX: 43 },
+  { text: "SOCIAL MEDIA", initialX: 53, initialAngle: Math.PI },
+  { text: "META ADS", initialX: 64 },
+  { text: "GOOGLE ADS", initialX: 77 },
+  { text: "MAINTENANCE", initialX: 75 },
+  { text: "HOSTING", initialX: 86, initialAngle: Math.PI / 2 },
+  { text: "INTEGRATIONS", initialX: 94 },
 ];
 
+const GROUND_THICKNESS = 100;
+const GROUND_WIDTH = 10000; // wide enough that a resize never exposes an edge
+const STEP_MS = 1000 / 60;
+
+/* Matter.Mouse's DOM handlers aren't in its type definitions */
+type MouseHandlers = {
+  mousemove: EventListener;
+  mousedown: EventListener;
+  mouseup: EventListener;
+  mousewheel: EventListener;
+};
+
 export function PhysicsCta() {
-  const containerRef = useRef<HTMLDivElement>(null);
   const canvasContainerRef = useRef<HTMLDivElement>(null);
-  const [tagPositions, setTagPositions] = useState<
-    Array<{ id: string; text: string; x: number; y: number; angle: number; width: number; height: number }>
-  >([]);
+  const tagRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const subtitleRef = useInUp<HTMLDivElement>();
   const titleRef = useSplitLines<HTMLHeadingElement>();
@@ -47,120 +53,181 @@ export function PhysicsCta() {
     const container = canvasContainerRef.current;
     if (!container) return;
 
+    const { Engine, World, Bodies, Mouse, MouseConstraint, Body, Composite } = Matter;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const canDrag = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
     let width = container.clientWidth;
     let height = container.clientHeight;
-
-    const { Engine, World, Bodies, Mouse, MouseConstraint, Runner, Composite, Body } = Matter;
+    let animId = 0;
+    let running = false;
+    let cancelled = false;
+    let teardownWorld: (() => void) | null = null;
 
     const engine = Engine.create({
       gravity: { x: 0, y: 1.15, scale: 0.001 },
+      enableSleeping: true,
     });
     const world = engine.world;
 
-    // Create walls & ground
     const wallOptions = { isStatic: true, friction: 0.6, restitution: 0.2 };
-    const groundThickness = 100;
-    
-    let ground = Bodies.rectangle(width / 2, height + groundThickness / 2, width * 2, groundThickness, wallOptions);
-    let leftWall = Bodies.rectangle(-groundThickness / 2, height / 2, groundThickness, height * 2, wallOptions);
-    let rightWall = Bodies.rectangle(width + groundThickness / 2, height / 2, groundThickness, height * 2, wallOptions);
-
+    const ground = Bodies.rectangle(width / 2, height + GROUND_THICKNESS / 2, GROUND_WIDTH, GROUND_THICKNESS, wallOptions);
+    const leftWall = Bodies.rectangle(-GROUND_THICKNESS / 2, height / 2, GROUND_THICKNESS, height * 4, wallOptions);
+    const rightWall = Bodies.rectangle(width + GROUND_THICKNESS / 2, height / 2, GROUND_THICKNESS, height * 4, wallOptions);
     World.add(world, [ground, leftWall, rightWall]);
 
-    // Scale factor for responsive tags on mobile/tablet
-    const isMobile = width < 768;
-    const scale = isMobile ? Math.max(0.75, width / 768) : 1;
+    const build = () => {
+      if (cancelled) return;
 
-    // Create tag bodies
-    const tagBodies = TAGS_CONFIG.map((cfg, index) => {
-      const tagW = cfg.width * scale;
-      const tagH = cfg.height * scale;
-      // Spawn slightly above with staggered drop
-      const spawnX = (cfg.initialX / 100) * (width - 60) + 30;
-      const spawnY = -50 - index * 35;
-
-      const body = Bodies.rectangle(spawnX, spawnY, tagW, tagH, {
-        chamfer: { radius: 4 },
-        restitution: 0.25,
-        friction: 0.4,
-        density: 0.0025,
-        angle: cfg.initialAngle || (Math.random() * 0.2 - 0.1),
+      // Tag sizes come from the rendered DOM so text length and breakpoints match
+      const tags = TAGS_CONFIG.map((cfg, index) => {
+        const el = tagRefs.current[index]!;
+        const w = el.offsetWidth;
+        const h = el.offsetHeight;
+        const body = Bodies.rectangle(
+          (cfg.initialX / 100) * (width - 60) + 30,
+          -50 - index * 35,
+          w,
+          h,
+          {
+            chamfer: { radius: 4 },
+            restitution: 0.25,
+            friction: 0.4,
+            density: 0.0025,
+            angle: cfg.initialAngle ?? Math.random() * 0.2 - 0.1,
+          },
+        );
+        Body.setVelocity(body, { x: (Math.random() - 0.5) * 1.5, y: Math.random() * 2 + 1 });
+        Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.04);
+        return { el, body, w, h };
       });
+      World.add(world, tags.map((t) => t.body));
 
-      // Give small initial velocity for natural settling
-      Body.setVelocity(body, { x: (Math.random() - 0.5) * 1.5, y: Math.random() * 2 + 1 });
-      Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.04);
+      const render = (all = false) => {
+        for (const { el, body, w, h } of tags) {
+          if (!all && body.isSleeping) continue;
+          el.style.transform = `translate3d(${body.position.x - w / 2}px, ${body.position.y - h / 2}px, 0) rotate(${body.angle}rad)`;
+        }
+      };
 
-      return { body, cfg, tagW, tagH };
-    });
+      const reveal = () => {
+        for (const { el } of tags) el.style.visibility = "visible";
+      };
 
-    World.add(world, tagBodies.map((t) => t.body));
+      if (reduceMotion) {
+        // Settle instantly and draw the resting pile once
+        for (let i = 0; i < 900; i++) Engine.update(engine, STEP_MS);
+        render(true);
+        reveal();
+      }
 
-    // Mouse constraint for interactive drag & fling
-    const mouse = Mouse.create(container);
-    // Disable wheel interception by Matter so page scrolling remains intact
-    mouse.element.removeEventListener("wheel", (mouse as unknown as { mousewheel: (e: Event) => void }).mousewheel);
-    
-    const mouseConstraint = MouseConstraint.create(engine, {
-      mouse,
-      constraint: {
-        stiffness: 0.2,
-        render: { visible: false },
-      },
-    });
-    World.add(world, mouseConstraint);
+      // Drag & fling on mouse devices only; touch keeps normal page scrolling
+      let mouseCleanup: (() => void) | null = null;
+      if (canDrag) {
+        const mouse = Mouse.create(container);
+        const handlers = mouse as unknown as MouseHandlers;
+        container.removeEventListener("wheel", handlers.mousewheel);
+        container.removeEventListener("touchmove", handlers.mousemove);
+        container.removeEventListener("touchstart", handlers.mousedown);
+        container.removeEventListener("touchend", handlers.mouseup);
+        // Release a dragged tag even when the button comes up outside the area
+        window.addEventListener("mouseup", handlers.mouseup);
 
-    const runner = Runner.create();
-    Runner.run(runner, engine);
+        World.add(
+          world,
+          MouseConstraint.create(engine, {
+            mouse,
+            constraint: { stiffness: 0.2, render: { visible: false } },
+          }),
+        );
 
-    let animId: number;
+        mouseCleanup = () => {
+          container.removeEventListener("mousemove", handlers.mousemove);
+          container.removeEventListener("mousedown", handlers.mousedown);
+          container.removeEventListener("mouseup", handlers.mouseup);
+          window.removeEventListener("mouseup", handlers.mouseup);
+        };
+      }
 
-    const updateDOM = () => {
-      const positions = tagBodies.map(({ body, cfg, tagW, tagH }) => ({
-        id: cfg.id,
-        text: cfg.text,
-        x: body.position.x,
-        y: body.position.y,
-        angle: body.angle,
-        width: tagW,
-        height: tagH,
-      }));
-      setTagPositions(positions);
-      animId = requestAnimationFrame(updateDOM);
+      // Fixed 60 Hz steps so the fall looks the same on any refresh rate
+      let last = 0;
+      let pending = 0;
+      const frame = (now: number) => {
+        if (last) pending += Math.min(now - last, 100);
+        last = now;
+        while (pending >= STEP_MS) {
+          Engine.update(engine, STEP_MS);
+          pending -= STEP_MS;
+        }
+        render();
+        animId = requestAnimationFrame(frame);
+      };
+
+      const start = () => {
+        if (running || (reduceMotion && !canDrag)) return;
+        running = true;
+        reveal();
+        animId = requestAnimationFrame(frame);
+      };
+
+      const stop = () => {
+        running = false;
+        last = 0;
+        cancelAnimationFrame(animId);
+      };
+
+      // Only simulate while the section is on screen
+      const observer = new IntersectionObserver(
+        ([entry]) => (entry.isIntersecting ? start() : stop()),
+        { rootMargin: "100px 0px" },
+      );
+      observer.observe(container);
+
+      const handleResize = () => {
+        const newWidth = container.clientWidth;
+        const newHeight = container.clientHeight;
+        if (newWidth === width && newHeight === height) return;
+        width = newWidth;
+        height = newHeight;
+
+        Body.setPosition(ground, { x: width / 2, y: height + GROUND_THICKNESS / 2 });
+        Body.setPosition(rightWall, { x: width + GROUND_THICKNESS / 2, y: height / 2 });
+        // Pull back any tag the narrower container left outside
+        for (const { body, w } of tags) {
+          if (body.position.x > width - w / 2) {
+            Body.setPosition(body, { x: Math.max(w / 2, width - w / 2), y: body.position.y });
+          }
+          Matter.Sleeping.set(body, false);
+        }
+        render(true);
+      };
+      window.addEventListener("resize", handleResize);
+
+      teardownWorld = () => {
+        stop();
+        observer.disconnect();
+        window.removeEventListener("resize", handleResize);
+        mouseCleanup?.();
+      };
     };
 
-    animId = requestAnimationFrame(updateDOM);
-
-    // Handle Resize
-    const handleResize = () => {
-      if (!container) return;
-      const newWidth = container.clientWidth;
-      const newHeight = container.clientHeight;
-      if (newWidth === width && newHeight === height) return;
-
-      width = newWidth;
-      height = newHeight;
-
-      Body.setPosition(ground, { x: width / 2, y: height + groundThickness / 2 });
-      Body.setPosition(rightWall, { x: width + groundThickness / 2, y: height / 2 });
-    };
-
-    window.addEventListener("resize", handleResize);
+    // Wait for web fonts so measured tag widths match the final text
+    if ("fonts" in document) {
+      document.fonts.ready.then(build);
+    } else {
+      build();
+    }
 
     return () => {
-      window.removeEventListener("resize", handleResize);
-      cancelAnimationFrame(animId);
-      Runner.stop(runner);
-      Engine.clear(engine);
+      cancelled = true;
+      teardownWorld?.();
       Composite.clear(world, false);
+      Engine.clear(engine);
     };
   }, []);
 
   return (
-    <section
-      ref={containerRef}
-      className="relative flex min-h-[780px] flex-col justify-between overflow-hidden bg-[color:var(--accent-blue)] pt-[140px] md:min-h-[880px] md:pt-[170px] xl:min-h-[960px] xl:pt-[200px]"
-    >
+    <section className="relative flex min-h-[780px] flex-col justify-between overflow-hidden bg-[color:var(--accent-blue)] pt-[140px] md:min-h-[880px] md:pt-[170px] xl:min-h-[960px] xl:pt-[200px]">
       {/* Top CTA content */}
       <div className="mxd-container relative z-20 flex flex-col items-center text-center">
         {/* [ WRITE A LINE ] */}
@@ -191,24 +258,22 @@ export function PhysicsCta() {
         </Link>
       </div>
 
-      {/* Physics Tag Container */}
+      {/* Physics tag area — decorative; hidden from assistive tech */}
       <div
         ref={canvasContainerRef}
+        aria-hidden="true"
         className="relative h-[380px] w-full overflow-hidden md:h-[440px] xl:h-[480px]"
-        style={{ touchAction: "none" }}
       >
-        {tagPositions.map((tag) => (
+        {TAGS_CONFIG.map((tag, i) => (
           <div
-            key={tag.id}
-            className="absolute left-0 top-0 flex select-none items-center justify-center rounded-[4px] border border-black/10 bg-white shadow-sm cursor-grab active:cursor-grabbing hover:bg-neutral-50 transition-colors"
-            style={{
-              width: `${tag.width}px`,
-              height: `${tag.height}px`,
-              transform: `translate3d(${tag.x - tag.width / 2}px, ${tag.y - tag.height / 2}px, 0) rotate(${tag.angle}rad)`,
-              willChange: "transform",
+            key={tag.text}
+            ref={(el) => {
+              tagRefs.current[i] = el;
             }}
+            className="absolute left-0 top-0 flex h-[40px] select-none items-center justify-center whitespace-nowrap rounded-[4px] border border-black/10 bg-white px-4 shadow-sm transition-colors hover:bg-neutral-50 pointer-fine:cursor-grab pointer-fine:active:cursor-grabbing md:h-[46px] md:px-5"
+            style={{ visibility: "hidden", willChange: "transform" }}
           >
-            <span className="font-mono text-[12px] md:text-[13.5px] font-bold uppercase tracking-[0.06em] text-[color:var(--ink)] whitespace-nowrap px-3 text-center">
+            <span className="font-mono text-[12px] font-bold uppercase tracking-[0.06em] text-[#121212] md:text-[13.5px]">
               {tag.text}
             </span>
           </div>

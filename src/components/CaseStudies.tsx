@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useCardBatch, useInUp } from "@/hooks/useScrollAnimations";
 import { useSplitLines } from "@/hooks/useSplitLines";
@@ -18,7 +19,8 @@ interface ProjectItem {
 
 const WORKS = "/images/works/showcase-grid-x3";
 
-/* Reference: 6 × .mxd-project-item (col-12 → md-6 → xl-4), images in DOM order */
+/* Reference: 6 × .mxd-project-item (col-12 → md-6 → xl-4), images in DOM order.
+   Sample projects — replace with real client work when available. */
 const PROJECTS: ProjectItem[] = [
   {
     title: "Business website",
@@ -187,11 +189,9 @@ function ProjectCard({ project }: { project: ProjectItem }) {
 
   return (
     <article className="project-item group mb-[74px] flex flex-col gap-[22px] xl:mb-[94px]">
-      {/* __media — mxd-img-anim hover image cycle */}
-      <a
-        href="#works"
+      {/* __media — mxd-img-anim hover image cycle (no detail pages yet) */}
+      <div
         className="relative block overflow-hidden"
-        data-cursor-text="View Work"
         onPointerEnter={start}
         onPointerLeave={stop}
       >
@@ -221,7 +221,7 @@ function ProjectCard({ project }: { project: ProjectItem }) {
             )}
           />
         ))}
-      </a>
+      </div>
 
       {/* __caption — name left, right-aligned tag column */}
       <div className="flex items-start justify-between gap-[60px]">
@@ -233,7 +233,7 @@ function ProjectCard({ project }: { project: ProjectItem }) {
             ANIM_BEZIER
           )}
         >
-          <a href="#works">{project.title}</a>
+          {project.title}
         </h3>
         <ul className="flex flex-col items-end pt-[4px]">
           {project.tags.map((tag, i) => (
@@ -272,10 +272,12 @@ function AllWorksLink() {
         </svg>
       </div>
 
-      {/* __content — [ All Works ] button + hover-cycling media */}
+      {/* __content — [ Start a project ] button + hover-cycling media.
+          There is no portfolio page yet, so this leads to the contact page. */}
       <div className="flex w-full flex-col items-start gap-[20px] md:w-1/2 md:gap-[14px] xl:w-1/3">
-        <a
-          href="#works"
+        <Link
+          href="/contact"
+          onClick={() => window.scrollTo(0, 0)}
           className={cn(
             "mxd-mono inline-flex gap-[10px] text-[16px] font-medium leading-[1.6] tracking-[0.5px] text-[color:var(--ink)] md:text-[18px]",
             "before:content-['['] after:content-[']']",
@@ -283,12 +285,14 @@ function AllWorksLink() {
             "hover:before:-translate-x-[2px] hover:after:translate-x-[2px]"
           )}
         >
-          <ScrambleText text="ALL WORKS" triggerOn="hover" />
-        </a>
-        <a
-          href="#works"
+          <ScrambleText text="START A PROJECT" triggerOn="hover" />
+        </Link>
+        <Link
+          href="/contact"
+          onClick={() => window.scrollTo(0, 0)}
+          aria-label="Start a project"
           className="relative block h-[260px] w-full overflow-hidden min-[1600px]:h-[320px]"
-          data-cursor-text="All Works"
+          data-cursor-text="Let's talk"
           onPointerEnter={start}
           onPointerLeave={stop}
         >
@@ -296,7 +300,7 @@ function AllWorksLink() {
             <Image
               key={src}
               src={src}
-              alt="All works"
+              alt=""
               width={800}
               height={450}
               loading="lazy"
@@ -307,7 +311,7 @@ function AllWorksLink() {
               )}
             />
           ))}
-        </a>
+        </Link>
       </div>
     </div>
   );

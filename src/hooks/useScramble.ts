@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 /**
- * Reference scramble spec (docs/research/MOTION_SYSTEM.md):
+ * Reference scramble spec:
  * setInterval 40ms; reveal pointer advances +0.25 chars per tick;
  * pointerenter starts, pointerleave restores the original text immediately.
  */
