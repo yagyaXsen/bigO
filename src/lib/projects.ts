@@ -1,5 +1,6 @@
-/** Work page content. Screens come from the live sites via mshots; swap for local
- *  /public/images/work/* files when real screenshots are available. */
+/** Work page content. A project's `video` (a muted loop, ideally a local
+ *  /videos/work/* screen recording) is shown when present; live sites without
+ *  one fall back to an mshots screenshot of the top of the page. */
 export interface WorkProject {
   id: string;
   num: string;
@@ -18,8 +19,10 @@ export interface WorkProject {
   video?: { src: string; poster: string };
 }
 
+/* One normal 1440×900 viewport. A very tall viewport pushes vertically
+   centered heroes into the middle and leaves scroll-revealed sections blank. */
 export const shot = (url: string) =>
-  `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=1280&h=2400&vpw=1440&vph=2700`;
+  `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=1280&h=800&vpw=1440&vph=900`;
 
 export const PROJECTS: WorkProject[] = [
   {

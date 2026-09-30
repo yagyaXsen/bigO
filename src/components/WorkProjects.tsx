@@ -137,24 +137,17 @@ function StatusBadge({ label }: { label: string }) {
   );
 }
 
-/** Browser-frame preview. Live sites: tall screenshot that scrolls on hover.
- *  Retries mshots while it returns its 400×300 "generating" placeholder. */
+/* Media fills the 16:10 frame and only zooms slightly on hover — nothing
+   scrolls, so the preview can never run past the end of its content. */
+const MEDIA_CLS = cn(
+  "absolute inset-0 h-full w-full object-cover transition-[transform,opacity] duration-[1200ms] group-hover:scale-[1.03]",
+  ANIM_BEZIER
+);
+
+/** Browser-frame preview: the project's looping video when it has one,
+ *  otherwise a screenshot of the top of the live site. */
 function ProjectMedia({ project: p }: { project: WorkProject }) {
-  const [ready, setReady] = useState(false);
-  const [retry, setRetry] = useState(0);
   const [videoOk, setVideoOk] = useState(true);
-  const checkShot = (img: HTMLImageElement) => {
-    if (img.naturalWidth >= 1000) return setReady(true);
-    if (retry < 6) setTimeout(() => setRetry((r) => r + 1), 3000);
-  };
-
-  // A cached screenshot can finish loading before hydration, so onLoad never fires.
-  const imgRef = useCallback((img: HTMLImageElement | null) => {
-    if (!img?.complete || !img.naturalWidth) return;
-    if (img.naturalWidth >= 1000) setReady(true);
-    else setTimeout(() => setRetry((r) => r + 1), 3000);
-  }, []);
-
   const Frame = p.live ? "a" : "div";
 
   return (
@@ -165,64 +158,93 @@ function ProjectMedia({ project: p }: { project: WorkProject }) {
       <div className="flex items-center justify-between gap-4 border-b border-border px-4 py-3 mxd-mono text-[12px] text-muted-foreground">
         <span className="truncate">{p.url}</span>
         <span className="whitespace-nowrap transition-colors group-hover:text-[color:var(--accent-blue)]">
-          {p.live ? "Hover to scroll" : "In progress · Thailand → Global"}
+          {p.live ? "Visit live site ↗" : "In progress · Thailand → Global"}
         </span>
       </div>
       <div className="relative aspect-[16/10] overflow-hidden bg-muted">
-        {p.live && (
-          // eslint-disable-next-line @next/next/no-img-element -- remote screenshot service
-          <img
-            src={shot(p.live) + (retry ? `&_r=${retry}` : "")}
-            alt={`${p.title} website`}
-            ref={imgRef}
-            onLoad={(e) => checkShot(e.currentTarget)}
-            className={cn(
-              "absolute left-0 top-0 block h-auto w-full transition-[top,transform,opacity] duration-1000",
-              "group-hover:top-full group-hover:-translate-y-full group-hover:duration-[7000ms] group-hover:ease-in-out",
-              ready ? "opacity-100" : "opacity-0"
-            )}
-          />
-        )}
-        {p.video &&
-          (videoOk ? (
-            <VideoLoop src={p.video.src} poster={p.video.poster} onFail={() => setVideoOk(false)} />
-          ) : (
-            // eslint-disable-next-line @next/next/no-img-element -- remote poster fallback
-            <img
-              src={p.video.poster}
-              alt={`${p.title} preview`}
-              className={cn("absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105", ANIM_BEZIER)}
-            />
-          ))}
+        {p.video && videoOk ? (
+          <VideoLoop src={p.video.src} poster={p.video.poster} onFail={() => setVideoOk(false)} />
+        ) : p.live ? (
+          <LiveScreenshot url={p.live} title={p.title} />
+        ) : p.video ? (
+          // eslint-disable-next-line @next/next/no-img-element -- poster fallback when the video can't play
+          <img src={p.video.poster} alt={`${p.title} preview`} className={MEDIA_CLS} />
+        ) : null}
       </div>
     </Frame>
   );
 }
 
+/** Top-of-page screenshot from mshots. Retries while mshots returns its
+ *  small "generating" placeholder; shows a soft pulse until the real one lands. */
+function LiveScreenshot({ url, title }: { url: string; title: string }) {
+  const [ready, setReady] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [retry, setRetry] = useState(0);
+  const check = (img: HTMLImageElement) => {
+    if (img.naturalWidth >= 1000) setReady(true);
+    else if (retry < 6) setTimeout(() => setRetry((r) => r + 1), 3000);
+  };
+
+  // The screenshot can finish loading (or fail) before hydration, so onLoad /
+  // onError never fire; a complete image with no width is a failed one.
+  const imgRef = useCallback((img: HTMLImageElement | null) => {
+    if (!img?.complete) return;
+    if (!img.naturalWidth) setFailed(true);
+    else if (img.naturalWidth >= 1000) setReady(true);
+    else setTimeout(() => setRetry((r) => r + 1), 3000);
+  }, []);
+
+  if (failed) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center mxd-mono text-[14px] text-muted-foreground">
+        {url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {!ready && <div aria-hidden className="absolute inset-0 animate-pulse bg-muted" />}
+      {/* eslint-disable-next-line @next/next/no-img-element -- remote screenshot service */}
+      <img
+        src={shot(url) + (retry ? `&_r=${retry}` : "")}
+        alt={`${title} website`}
+        ref={imgRef}
+        onLoad={(e) => check(e.currentTarget)}
+        onError={() => setFailed(true)}
+        className={cn(MEDIA_CLS, "object-top", ready ? "opacity-100" : "opacity-0")}
+      />
+    </>
+  );
+}
+
+/** Muted loop that plays only while on screen (saves data and CPU) and
+ *  stays on its poster for people who prefer reduced motion. */
 function VideoLoop({ src, poster, onFail }: { src: string; poster: string; onFail: () => void }) {
   const ref = useRef<HTMLVideoElement>(null);
 
-  // Autoplay can miss on a server-rendered <video>; kick it once data is in
-  // (loadeddata may already have fired before hydration).
   useEffect(() => {
     const v = ref.current;
-    if (!v) return;
-    const play = () => v.play().catch(() => {});
-    if (v.readyState >= 2) play();
-    else v.addEventListener("loadeddata", play, { once: true });
-    return () => v.removeEventListener("loadeddata", play);
+    if (!v || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => (entry.isIntersecting ? v.play().catch(() => {}) : v.pause()),
+      { rootMargin: "200px 0px" }
+    );
+    observer.observe(v);
+    return () => observer.disconnect();
   }, []);
 
   return (
     <video
       ref={ref}
-      autoPlay
       muted
       loop
       playsInline
+      preload="metadata"
       poster={poster}
       onError={onFail}
-      className={cn("absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105", ANIM_BEZIER)}
+      className={MEDIA_CLS}
     >
       <source src={src} type="video/mp4" onError={onFail} />
     </video>
