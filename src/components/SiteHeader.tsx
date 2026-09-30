@@ -214,7 +214,7 @@ export function SiteHeader() {
                 </li>
                 <li>
                   <a
-                    href="https://www.linkedin.com/in/alok-kumar-40681b323/"
+                    href="https://www.linkedin.com/company/bigocompany/about/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="group inline-flex items-center justify-between w-full text-[color:var(--ink)] text-[clamp(16px,1.3vw,20px)] transition-colors hover:text-[color:var(--accent-blue)]"

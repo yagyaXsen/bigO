@@ -6,7 +6,7 @@ import { useInUp, useSlideDownLine } from "@/hooks/useScrollAnimations";
 
 const SOCIALS = [
   { num: "01", label: "Instagram", href: "https://www.instagram.com/thebigoteam/" },
-  { num: "02", label: "LinkedIn", href: "https://www.linkedin.com/in/alok-kumar-40681b323/" },
+  { num: "02", label: "LinkedIn", href: "https://www.linkedin.com/company/bigocompany/about/" },
   { num: "03", label: "WhatsApp", href: "https://wa.me/918875326549" },
 ] as const;
 

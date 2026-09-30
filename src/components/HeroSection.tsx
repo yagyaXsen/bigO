@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { gsap, ScrollTrigger, Flip } from "@/lib/gsap";
 import { ArrowDownIcon } from "@/components/icons";
 import type { SocialLink } from "@/types";
@@ -10,7 +11,7 @@ import { ScrambleText } from "@/components/ui/ScrambleText";
 
 const SOCIAL_LINKS: SocialLink[] = [
   { label: "Instagram", href: "https://www.instagram.com/thebigoteam/" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/alok-kumar-40681b323/" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/bigocompany/about/" },
   { label: "WhatsApp", href: "https://wa.me/918875326549" },
 ];
 
@@ -129,12 +130,13 @@ export function HeroSection() {
         >
           [ <ScrambleText text="STUDIO" /> ]
         </a>
-        <a
-          href="#works"
+        <Link
+          href="/work"
+          onClick={() => window.scrollTo(0, 0)}
           className="absolute right-[60px] top-1/2 hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground xl:block min-[1600px]:right-[100px]"
         >
           [ <ScrambleText text="WORKS" /> ]
-        </a>
+        </Link>
 
         {/* Bottom dataline — pb 51px → 35px at xl; px 30px → 70px at 1600 */}
         <div

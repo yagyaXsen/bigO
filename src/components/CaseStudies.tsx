@@ -189,9 +189,13 @@ function ProjectCard({ project }: { project: ProjectItem }) {
 
   return (
     <article className="project-item group mb-[74px] flex flex-col gap-[22px] xl:mb-[94px]">
-      {/* __media — mxd-img-anim hover image cycle (no detail pages yet) */}
-      <div
+      {/* __media — mxd-img-anim hover image cycle; opens the Work page */}
+      <Link
+        href="/work"
+        onClick={() => window.scrollTo(0, 0)}
+        aria-label={`${project.title} — view our work`}
         className="relative block overflow-hidden"
+        data-cursor-text="View work"
         onPointerEnter={start}
         onPointerLeave={stop}
       >
@@ -221,7 +225,7 @@ function ProjectCard({ project }: { project: ProjectItem }) {
             )}
           />
         ))}
-      </div>
+      </Link>
 
       {/* __caption — name left, right-aligned tag column */}
       <div className="flex items-start justify-between gap-[60px]">
@@ -233,7 +237,9 @@ function ProjectCard({ project }: { project: ProjectItem }) {
             ANIM_BEZIER
           )}
         >
-          {project.title}
+          <Link href="/work" onClick={() => window.scrollTo(0, 0)}>
+            {project.title}
+          </Link>
         </h3>
         <ul className="flex flex-col items-end pt-[4px]">
           {project.tags.map((tag, i) => (
