@@ -153,6 +153,15 @@ export function SiteHeader() {
                 </li>
                 <li>
                   <Link
+                    href="/work"
+                    onClick={() => setMenuOpen(false)}
+                    className="group inline-flex items-center gap-4 text-[color:var(--ink)] text-[clamp(32px,4vw,64px)] font-bold tracking-[-2px] transition-colors hover:text-[color:var(--accent-blue)]"
+                  >
+                    <span>Work</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     href="/contact"
                     onClick={() => setMenuOpen(false)}
                     className="group inline-flex items-center gap-4 text-[color:var(--ink)] text-[clamp(32px,4vw,64px)] font-bold tracking-[-2px] transition-colors hover:text-[color:var(--accent-blue)]"

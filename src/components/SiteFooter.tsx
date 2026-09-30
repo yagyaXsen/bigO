@@ -6,7 +6,7 @@ import Link from "next/link";
 const DISCOVER_LINKS = [
   { label: "Home", href: "/", isAvailable: true },
   { label: "About us", href: "#", isAvailable: false },
-  { label: "Case studies", href: "#", isAvailable: false },
+  { label: "Work", href: "/work", isAvailable: true },
   { label: "Services", href: "#", isAvailable: false },
   { label: "Our team", href: "#", isAvailable: false },
   { label: "Insights", href: "#", isAvailable: false },

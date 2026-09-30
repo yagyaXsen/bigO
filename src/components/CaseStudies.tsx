@@ -272,11 +272,10 @@ function AllWorksLink() {
         </svg>
       </div>
 
-      {/* __content — [ Start a project ] button + hover-cycling media.
-          There is no portfolio page yet, so this leads to the contact page. */}
+      {/* __content — [ View all work ] button + hover-cycling media → /work */}
       <div className="flex w-full flex-col items-start gap-[20px] md:w-1/2 md:gap-[14px] xl:w-1/3">
         <Link
-          href="/contact"
+          href="/work"
           onClick={() => window.scrollTo(0, 0)}
           className={cn(
             "mxd-mono inline-flex gap-[10px] text-[16px] font-medium leading-[1.6] tracking-[0.5px] text-[color:var(--ink)] md:text-[18px]",
@@ -285,14 +284,14 @@ function AllWorksLink() {
             "hover:before:-translate-x-[2px] hover:after:translate-x-[2px]"
           )}
         >
-          <ScrambleText text="START A PROJECT" triggerOn="hover" />
+          <ScrambleText text="VIEW ALL WORK" triggerOn="hover" />
         </Link>
         <Link
-          href="/contact"
+          href="/work"
           onClick={() => window.scrollTo(0, 0)}
-          aria-label="Start a project"
+          aria-label="View all work"
           className="relative block h-[260px] w-full overflow-hidden min-[1600px]:h-[320px]"
-          data-cursor-text="Let's talk"
+          data-cursor-text="All work"
           onPointerEnter={start}
           onPointerLeave={stop}
         >
