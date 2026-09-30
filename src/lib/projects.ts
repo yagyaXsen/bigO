@@ -50,6 +50,8 @@ export const PROJECTS: WorkProject[] = [
       { label: "Live site", href: "https://nexora-8y5.pages.dev/" },
       { label: "GitHub", href: "https://github.com/yagyaXsen/Nexora" },
     ],
+    // Loop built from Nexora's own product visuals (yagyaXsen/Nexora frontend/public/images)
+    video: { src: "/videos/work/nexora.mp4", poster: "/images/work/nexora-poster.jpg" },
   },
   {
     id: "hirearn",
