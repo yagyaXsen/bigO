@@ -6,7 +6,17 @@ import { useInUp } from "@/hooks/useScrollAnimations";
 import { ArrowDownIcon } from "@/components/icons";
 import { PROJECTS } from "@/lib/projects";
 
-const MARQUEE = ["Nexora", "Hirearn", "Catering, Thailand", "Automation", "Marketplaces", "Digital growth"];
+// Keep an even count: colours alternate by index, so an odd list would flip them at the loop seam
+const MARQUEE = [
+  "Nexora",
+  "Hirearn",
+  "Catering, Thailand",
+  "Lumora Dental",
+  "Automation",
+  "Marketplaces",
+  "Healthcare",
+  "Digital growth",
+];
 
 /** Work hero — follows ContactHero: breadcrumb → split-line H1 + intro (xl 8) / index (xl 4). */
 export function WorkHero() {
@@ -37,7 +47,7 @@ export function WorkHero() {
             <div ref={introRef} className="mt-[38px] max-w-[50ch]">
               <p className="font-sans font-bold text-[clamp(17px,2vw,20px)] leading-[1.4] text-[color:var(--body-text)]">
                 A few projects that represent the kind of work we do — automation-heavy products, marketplace
-                platforms and ongoing digital growth for international clients.
+                platforms, business websites and ongoing digital growth for international clients.
               </p>
             </div>
           </div>

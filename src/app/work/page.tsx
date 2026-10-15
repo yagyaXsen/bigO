@@ -13,7 +13,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 
 const title = "Work — bigO Digital Studio";
 const description =
-  "Selected bigO projects: Nexora, an automated opportunity-intelligence platform; Hirearn, a local jobs and services marketplace; and an ongoing international catering engagement.";
+  "Selected bigO projects: Nexora, an automated opportunity-intelligence platform; Hirearn, a local jobs and services marketplace; an ongoing international catering engagement; and Lumora Dental, a modern dental clinic website.";
 
 export const metadata: Metadata = {
   title,

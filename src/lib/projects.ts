@@ -96,6 +96,30 @@ export const PROJECTS: WorkProject[] = [
       poster: "https://images.pexels.com/videos/4170293/pexels-photo-4170293.jpeg?auto=compress&w=1260&h=750&dpr=1",
     },
   },
+  {
+    id: "lumora",
+    num: "04",
+    title: "Lumora Dental",
+    subtitle: "Dental clinic website",
+    status: "Live",
+    url: "yagyaxsen.github.io/lumora-dental",
+    live: "https://yagyaxsen.github.io/lumora-dental/",
+    tags: ["Website", "Healthcare", "Booking", "Motion"],
+    description:
+      "A dental clinic has to feel calm and trustworthy before a patient ever walks in. Lumora Dental's website does that work: a warm, image-led home page, clear pages for preventive, cosmetic, restorative and orthodontic care, the team, patient stories and a blog — with every appointment button leading straight to online booking and a quick callback form right in the hero.",
+    flowLabel: "/ PATIENT JOURNEY",
+    flow: ["Discover the clinic", "Explore treatments", "Meet the team", "Book a visit"],
+    highlights: [
+      { h: "Complete clinic website", d: "Home, about, services and blog pages, plus privacy, terms and cookie pages." },
+      { h: "Booking built in", d: "Appointment buttons open online scheduling; the hero form requests a callback." },
+      { h: "Motion with restraint", d: "Scroll reveals, a pinned treatment carousel, animated counters and sliders." },
+      { h: "Fast, self-contained build", d: "A static site with every asset served locally, deployed on GitHub Pages." },
+    ],
+    stack: ["HTML", "CSS", "JavaScript", "GSAP", "ScrollTrigger", "GitHub Pages"],
+    links: [{ label: "Live site", href: "https://yagyaxsen.github.io/lumora-dental/" }],
+    // Scroll-through recording of the live home page
+    video: { src: "/videos/work/lumora.mp4", poster: "/images/work/lumora-poster.jpg" },
+  },
 ];
 
 export const PROCESS: [string, string][] = [
