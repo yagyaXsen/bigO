@@ -293,3 +293,20 @@ html.lenis body {
     cursor: none;
   }
 }
+/* Page-load entrance for above-the-fold headings and text. Pure CSS so it
+   starts with the first paint: a script-driven reveal would show the text,
+   hide it once the scripts load, then bring it back in. */
+@keyframes load-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise-y, 40px));
+  }
+}
+.anim-load-rise {
+  animation: load-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--rise-delay, 0s) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .anim-load-rise {
+    animation: none;
+  }
+}

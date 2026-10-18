@@ -23,13 +23,7 @@ export default function Home() {
           <SelectedWork />
           <WorkProcess
             counter="P/03"
-            title={
-              <>
-                How we
-                <br />
-                work
-              </>
-            }
+            title="How we work"
             intro="From first call to launch in four clear steps — with the same small team from start to finish, so you always know what's next."
             steps={PROCESS_SHORT}
           />

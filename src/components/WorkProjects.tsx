@@ -164,7 +164,7 @@ export function ProjectMedia({ project: p, href }: { project: WorkProject; href?
         {p.video && videoOk ? (
           <VideoLoop src={p.video.src} poster={p.video.poster} onFail={() => setVideoOk(false)} />
         ) : p.live ? (
-          <LiveScreenshot url={p.live} title={p.title} />
+          <LiveScreenshot url={p.live} title={p.title} subtitle={p.subtitle} />
         ) : p.video ? (
           // eslint-disable-next-line @next/next/no-img-element -- poster fallback when the video can't play
           <img src={p.video.poster} alt={`${p.title} preview`} className={MEDIA_CLS} />
@@ -191,14 +191,16 @@ export function ProjectMedia({ project: p, href }: { project: WorkProject; href?
 }
 
 /** Top-of-page screenshot from mshots. Retries while mshots returns its
- *  small "generating" placeholder; shows a soft pulse until the real one lands. */
-function LiveScreenshot({ url, title }: { url: string; title: string }) {
+ *  small "generating" placeholder; shows a soft pulse until the real one lands,
+ *  and a title card if it never does. */
+function LiveScreenshot({ url, title, subtitle }: { url: string; title: string; subtitle: string }) {
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
   const [retry, setRetry] = useState(0);
   const check = (img: HTMLImageElement) => {
     if (img.naturalWidth >= 1000) setReady(true);
     else if (retry < 6) setTimeout(() => setRetry((r) => r + 1), 3000);
+    else setFailed(true);
   };
 
   // The screenshot can finish loading (or fail) before hydration, so onLoad /
@@ -212,8 +214,10 @@ function LiveScreenshot({ url, title }: { url: string; title: string }) {
 
   if (failed) {
     return (
-      <div className="absolute inset-0 flex items-center justify-center mxd-mono text-[14px] text-muted-foreground">
-        {url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-[14px] bg-[color:var(--ink)] px-6 text-center text-[color:var(--background)]">
+        <span className="mxd-mono text-[12px] opacity-60">{subtitle}</span>
+        <span className="font-sans text-[clamp(34px,4vw,60px)] font-semibold leading-none tracking-[-0.03em]">{title}</span>
+        <span className="mxd-mono text-[12px] opacity-60">{url.replace(/^https?:\/\//, "").replace(/\/$/, "")}</span>
       </div>
     );
   }

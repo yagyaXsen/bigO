@@ -3,21 +3,14 @@
 import { useEffect, useRef } from "react";
 import { gsap, SplitText } from "@/lib/gsap";
 
-interface SplitLinesOptions {
-  /** true = hero variant: plays on load (no ScrollTrigger), duration .6 */
-  onLoad?: boolean;
-}
-
 /**
  * Reference `splitLines` (.mxd-split-lines): split into masked lines, then
  *   from { yPercent: 100, rotation: 1, duration: .5, stagger: { amount: .2 } }
  * with ScrollTrigger "top bottom" → "top 90%", toggleActions
  * "none play none reset" (replays when scrolled back above).
- * `onLoad` = reference `splitLinesLoad` (hero H1): same tween, duration .6.
+ * Above-the-fold headings use the CSS `.anim-load-rise` entrance instead.
  */
-export function useSplitLines<T extends HTMLElement = HTMLHeadingElement>({
-  onLoad = false,
-}: SplitLinesOptions = {}) {
+export function useSplitLines<T extends HTMLElement = HTMLHeadingElement>() {
   const ref = useRef<T>(null);
 
   useEffect(() => {
@@ -38,18 +31,14 @@ export function useSplitLines<T extends HTMLElement = HTMLHeadingElement>({
       gsap.from(split!.lines, {
         yPercent: 100,
         rotation: 1,
-        duration: onLoad ? 0.6 : 0.5,
+        duration: 0.5,
         stagger: { amount: 0.2 },
-        ...(onLoad
-          ? {}
-          : {
-              scrollTrigger: {
-                trigger: el,
-                start: "top bottom",
-                end: "top 90%",
-                toggleActions: "none play none reset",
-              },
-            }),
+        scrollTrigger: {
+          trigger: el,
+          start: "top bottom",
+          end: "top 90%",
+          toggleActions: "none play none reset",
+        },
       });
     }, el);
 
@@ -57,7 +46,7 @@ export function useSplitLines<T extends HTMLElement = HTMLHeadingElement>({
       ctx.revert();
       split?.revert();
     };
-  }, [onLoad]);
+  }, []);
 
   return ref;
 }

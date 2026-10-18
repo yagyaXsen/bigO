@@ -106,7 +106,7 @@ export function ServicesSection() {
 
       <p
         ref={extraRef}
-        className="mt-[40px] max-w-[60ch] font-sans text-[16px] leading-[1.5] text-[color:var(--body-text)] md:text-[17px]"
+        className="mt-[40px] max-w-[80ch] font-sans text-[16px] leading-[1.5] text-[color:var(--body-text)] md:text-[17px]"
       >
         <span className="font-semibold text-[color:var(--ink)]">Also:</span>{" "}
         care &amp; maintenance, branding and digital marketing for what we build.{" "}

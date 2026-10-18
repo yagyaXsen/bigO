@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useSplitLines } from "@/hooks/useSplitLines";
-import { useInUp } from "@/hooks/useScrollAnimations";
 import { ContactForm } from "@/components/ContactForm";
 
 
@@ -12,8 +10,6 @@ import { ContactForm } from "@/components/ContactForm";
  * minimal contact form (right). Stacks to a single column below xl.
  */
 export function ContactHero() {
-  const headingRef = useSplitLines<HTMLHeadingElement>({ onLoad: true });
-  const introRef = useInUp<HTMLDivElement>();
 
   return (
     <section className="mxd-container pt-[150px] pb-[110px] md:pt-[200px] md:pb-[140px] xl:pt-[230px] xl:pb-[160px]">
@@ -33,13 +29,12 @@ export function ContactHero() {
         {/* Left — eyebrow + heading + intro */}
         <div className="xl:col-span-8">
           <h1
-            ref={headingRef}
-            className="mxd-display mt-[26px] font-semibold text-[color:var(--ink)] text-[clamp(44px,6vw,120px)] leading-[1.1] tracking-[-3px]"
+            className="anim-load-rise mxd-display mt-[26px] font-semibold text-[color:var(--ink)] text-[clamp(44px,6vw,120px)] leading-[1.1] tracking-[-3px]"
           >
             Let&apos;s make it happen
           </h1>
 
-          <div ref={introRef} className="mt-[38px] max-w-[50ch]">
+          <div className="anim-load-rise mt-[38px] max-w-[50ch] [--rise-delay:.2s] [--rise-y:24px]">
             <p className="font-sans font-bold text-[clamp(17px,2vw,20px)] leading-[1.4] text-[color:var(--body-text)]">
               Tell us what you&apos;re building — a new website, a web app, a brand, or help growing online. We reply within a day with clear next steps.
             </p>

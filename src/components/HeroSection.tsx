@@ -1,12 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap, ScrollTrigger, Flip } from "@/lib/gsap";
 import { ArrowUpRightIcon } from "@/components/icons";
-import { cn } from "@/lib/utils";
 import { WHATSAPP_NUMBER } from "@/lib/contact";
-import { useSplitLines } from "@/hooks/useSplitLines";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 
 /* Real, live projects — each links to its case study on /work */
@@ -17,18 +15,9 @@ const RECENT_BUILDS = [
 ];
 
 export function HeroSection() {
-  const [mounted, setMounted] = useState(false);
-  // Reference splitLinesLoad: masked lines from yPercent 100 on page load
-  const h1Ref = useSplitLines<HTMLHeadingElement>({ onLoad: true });
-
   const mediaRef = useRef<HTMLDivElement>(null);
   const smallWrapRef = useRef<HTMLDivElement>(null);
   const largeWrapRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
 
   /* Reference hero Flip: ONE video (.mxd-hero-media__scaling-media) starts in
      the small centered wrapper and Flip.fit()s into the large full-width
@@ -86,16 +75,14 @@ export function HeroSection() {
 
   return (
     <section className="mxd-hero relative w-full">
-      {/* Headline stage */}
-      <div className="relative flex min-h-screen flex-col items-center justify-center">
+      {/* Headline stage — top padding keeps the media clear of the header below xl */}
+      <div className="relative flex min-h-screen flex-col items-center justify-center pt-[110px] xl:pt-0">
         {/* Headline block — reference .mxd-hero-03__headline (max-w 1300px);
             the small media is sized against THIS block, not the viewport */}
         <div className="relative flex w-full flex-col items-center justify-center px-[30px] text-center xl:max-w-[1300px] xl:px-0">
           {/* H1 — white text with difference blend over the video + page bg */}
           <div className="relative z-[2] mix-blend-difference">
-            <h1
-              ref={h1Ref}
-              className="text-center font-sans font-semibold leading-[1.1] tracking-[-0.032em] text-white text-[50px] md:text-[75px] xl:text-[95px] min-[1600px]:text-[120px]"
+            <h1 className="anim-load-rise text-center font-sans font-semibold leading-[1.1] tracking-[-0.032em] text-white text-[50px] md:text-[75px] xl:text-[95px] min-[1600px]:text-[120px]"
             >
               We build software &amp; AI that runs your business
             </h1>
@@ -125,31 +112,27 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Side labels — btn-line-small, left/right 60px → 100px at 1600 */}
+        {/* Side labels — btn-line-small, left/right 60px → 100px at 1600. Only
+            from 1536px: on narrower laptops the headline reaches into them. */}
         <a
           href="#services"
-          className="absolute left-[60px] top-1/2 hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground xl:block min-[1600px]:left-[100px]"
+          className="absolute left-[60px] top-1/2 hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground min-[1536px]:block min-[1600px]:left-[100px]"
         >
           [ <ScrambleText text="SERVICES" /> ]
         </a>
         <Link
           href="/work"
           onClick={() => window.scrollTo(0, 0)}
-          className="absolute right-[60px] top-1/2 hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground xl:block min-[1600px]:right-[100px]"
+          className="absolute right-[60px] top-1/2 hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground min-[1536px]:block min-[1600px]:right-[100px]"
         >
           [ <ScrambleText text="WORKS" /> ]
         </Link>
 
         {/* Bottom dataline — what we do + recent builds (left), the two ways to
             start (right). Under the headline on small screens, pinned to the
-            bottom of the stage from xl. */}
-        <div
-          className={cn(
-            "relative z-[2] mt-[56px] flex w-full flex-col items-center gap-[28px] px-[30px] pb-[51px] text-center transition-all duration-[900ms] ease-out",
-            "xl:absolute xl:inset-x-0 xl:bottom-0 xl:mt-0 xl:flex-row xl:items-end xl:justify-between xl:gap-[60px] xl:px-[60px] xl:pb-[35px] xl:text-left min-[1600px]:px-[100px]",
-            mounted ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
-          )}
-        >
+            bottom of the stage from xl. The top margin clears the media, which
+            reaches above and below the headline (14vw ≈ half its height at md). */}
+        <div className="anim-load-rise relative z-[2] mt-[80px] flex w-full flex-col items-center gap-[28px] px-[30px] pb-[51px] text-center [--rise-delay:.3s] [--rise-y:24px] md:mt-[max(80px,calc(14vw-50px))] xl:absolute xl:inset-x-0 xl:bottom-0 xl:mt-0 xl:flex-row xl:items-end xl:justify-between xl:gap-[60px] xl:px-[60px] xl:pb-[35px] xl:text-left min-[1600px]:px-[100px]">
           <div className="flex max-w-[520px] flex-col gap-[14px]">
             <p className="font-mono text-[13px] font-semibold uppercase leading-[1.6] tracking-[0.5px] text-muted-foreground">
               Recent builds —{" "}

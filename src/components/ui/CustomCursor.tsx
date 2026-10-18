@@ -143,7 +143,9 @@ export function CustomCursor() {
       ref={rootRef}
       aria-hidden="true"
       className="pointer-events-none fixed left-0 top-0 z-[9999] hidden h-40 w-40 items-center justify-center rounded-full will-change-transform min-[1025px]:flex"
-      style={{ backgroundColor: "#ffffff", mixBlendMode: "difference" }}
+      // Invisible until the pointer first moves — otherwise the full-size
+      // circle sits in the top-left corner while the page is still loading.
+      style={{ backgroundColor: "#ffffff", mixBlendMode: "difference", opacity: 0 }}
     >
       <span
         ref={textRef}

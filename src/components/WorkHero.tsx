@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useSplitLines } from "@/hooks/useSplitLines";
-import { useInUp } from "@/hooks/useScrollAnimations";
 import { ArrowDownIcon } from "@/components/icons";
 import { PROJECTS } from "@/lib/projects";
 
@@ -20,8 +18,6 @@ const MARQUEE = [
 
 /** Work hero — follows ContactHero: breadcrumb → split-line H1 + intro (xl 8) / index (xl 4). */
 export function WorkHero() {
-  const headingRef = useSplitLines<HTMLHeadingElement>({ onLoad: true });
-  const introRef = useInUp<HTMLDivElement>();
 
   return (
     <>
@@ -37,14 +33,13 @@ export function WorkHero() {
         <div className="grid grid-cols-1 gap-x-[60px] gap-y-[60px] xl:grid-cols-12">
           <div className="xl:col-span-8">
             <h1
-              ref={headingRef}
-              className="mxd-display mt-[26px] font-semibold text-[color:var(--ink)] text-[clamp(44px,6vw,120px)] leading-[1.1] tracking-[-3px]"
+              className="anim-load-rise mxd-display mt-[26px] font-semibold text-[color:var(--ink)] text-[clamp(44px,6vw,120px)] leading-[1.1] tracking-[-3px]"
             >
               Selected work,
               <br />
               <span className="text-muted-foreground">shipped &amp; live</span>
             </h1>
-            <div ref={introRef} className="mt-[38px] max-w-[50ch]">
+            <div className="anim-load-rise mt-[38px] max-w-[50ch] [--rise-delay:.2s] [--rise-y:24px]">
               <p className="font-sans font-bold text-[clamp(17px,2vw,20px)] leading-[1.4] text-[color:var(--body-text)]">
                 A few projects that represent the kind of work we do — automation-heavy products, marketplace
                 platforms, business websites and ongoing digital growth for international clients.

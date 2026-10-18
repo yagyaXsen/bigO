@@ -101,40 +101,36 @@ export function TechStack() {
   return (
     <section
       id="tech-stack"
-      className="mxd-container py-[clamp(80px,10vw,150px)]"
+      className="mxd-container pb-[140px] md:pb-[170px] xl:pb-[180px]"
     >
-      <div className="grid grid-cols-12 gap-y-16">
-        {/* Counter T/04 */}
-        <div ref={counterRef} className="col-span-12 md:col-span-2">
-          <span className="mxd-counter block text-[clamp(48px,6vw,80px)] leading-none text-muted-foreground">
+      {/* Section title — same counter + h2 grid as S/01, W/02 and P/03 */}
+      <div className="mb-[48px] grid grid-cols-1 xl:mb-[64px] xl:grid-cols-12">
+        <div ref={counterRef} className="mb-[21px] xl:col-span-4 xl:mb-0">
+          <span className="block font-mono text-[42px] font-medium leading-none tracking-[-2.4px] text-muted-foreground md:text-[52px] md:tracking-[-3px] xl:text-[60px]">
             <ScrambleText text="T/04" triggerOn="hover" />
           </span>
         </div>
-
-        {/* Heading */}
-        <div className="col-span-12 md:col-start-5 md:col-span-8">
+        <div className="xl:col-span-8">
           <h2
             ref={titleRef}
-            className="mxd-display font-medium text-[clamp(48px,7.5vw,96px)] leading-[1.05] tracking-[-0.02em] text-[color:var(--ink)]"
+            className="font-sans text-[44px] font-semibold leading-[1.1] tracking-[-1.8px] text-[color:var(--ink)] md:text-[54px] xl:text-[75px] xl:tracking-[-3px]"
           >
-            Our tech
-            <br />
-            stack
+            Our tech stack
           </h2>
         </div>
+      </div>
 
+      <div className="grid grid-cols-1 gap-y-[40px] xl:grid-cols-12">
         {/* Sub-line (lower-left) */}
-        <div ref={subRef} className="col-span-12 md:col-span-3">
+        <div ref={subRef} className="xl:col-span-4">
           <p className="max-w-[280px] font-sans font-medium text-[clamp(16px,1.2vw,19px)] leading-[1.4]">
-            <span className="text-[color:var(--ink)]">A powerhouse in </span>
-            <span className="text-muted-foreground">
-              full-stack development solutions
-            </span>
+            <span className="text-[color:var(--ink)]">The tools we build and ship with </span>
+            <span className="text-muted-foreground">every day</span>
           </p>
         </div>
 
         {/* Tech grid — slideDownLine: names drop from behind the top border */}
-        <div className="col-span-12 md:col-start-5 md:col-span-8">
+        <div className="xl:col-span-8">
           <div
             ref={gridRef}
             className="grid grid-cols-1 gap-x-12 md:grid-cols-2 xl:grid-cols-3"
