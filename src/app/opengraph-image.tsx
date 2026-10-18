@@ -1,8 +1,8 @@
 import { ImageResponse } from "next/og";
 
-/* Social share card: brand wordmark + tagline in the site's light palette */
+/* Social share card in the site's palette: cream paper, ink text, one accent rule */
 
-export const alt = "bigO — Digital Studio";
+export const alt = "bigO — Custom software and AI automation for growing businesses";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -17,23 +17,23 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "72px 80px",
-          background: "#eeeae8",
-          color: "#121212",
-          fontFamily: "sans-serif",
+          background: "#f4efe6",
+          color: "#1b1915",
+          fontFamily: "serif",
         }}
       >
-        <div style={{ display: "flex", fontSize: 28, letterSpacing: 4, color: "#575960" }}>
-          DIGITAL STUDIO
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", fontSize: 56, letterSpacing: -1 }}>bigO</div>
+          <div style={{ display: "flex", fontSize: 22, letterSpacing: 3, color: "#6d675c", fontFamily: "monospace" }}>
+            SOFTWARE &amp; AI AUTOMATION
+          </div>
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", fontSize: 220, fontWeight: 700, letterSpacing: -8, lineHeight: 1 }}>
-            bigO
-          </div>
-          <div style={{ display: "flex", marginTop: 28, fontSize: 44, color: "#575960" }}>
-            We build software &amp; AI that runs your business.
+          <div style={{ display: "flex", height: 2, width: 96, background: "#2e4c8c", marginBottom: 36 }} />
+          <div style={{ display: "flex", fontSize: 76, lineHeight: 1.08, letterSpacing: -1.5, maxWidth: 980 }}>
+            Custom software and AI automation for growing businesses.
           </div>
         </div>
-        <div style={{ display: "flex", height: 8, width: 160, background: "#002bba" }} />
       </div>
     ),
     size,

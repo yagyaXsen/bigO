@@ -1,312 +1,188 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-manrope), "Manrope Fallback", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono Fallback", ui-monospace, monospace;
-  --font-heading: var(--font-manrope), "Manrope Fallback", ui-sans-serif, sans-serif;
-  /* bigO brand tokens */
-  --color-accent-blue: var(--accent-blue);
-  --color-ink: var(--ink);
-  --color-body: var(--body-text);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
-}
-
+/* ---------- Design tokens ----------
+   Warm cream paper, near-black ink, one quiet accent (a softened version of
+   the bigO brand blue). The "invert" set is the one dark section per page. */
 :root {
-  /* bigO light theme — warm off-white bg, near-black ink, muted body, electric-blue accent */
-  --background: #eeeae8; /* rgb(238,234,232) */
-  --foreground: #575960; /* rgb(87,89,96) body text */
-  --ink: #121212; /* rgb(18,18,18) headings */
-  --body-text: #575960;
-  --accent-blue: #002bba; /* rgb(0,43,186) */
-  --card: #f9f7f7; /* rgb(249,247,247) */
-  --card-foreground: #121212;
-  --popover: #f9f7f7;
-  --popover-foreground: #121212;
-  --primary: #121212;
-  --primary-foreground: #eeeae8;
-  --secondary: #e6e1df;
-  --secondary-foreground: #121212;
-  --muted: #e6e1df;
-  --muted-foreground: #8e93a1; /* rgb(142,147,161) */
-  --accent: #002bba;
-  --accent-foreground: #ffffff;
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: rgba(18, 18, 18, 0.12);
-  --input: rgba(18, 18, 18, 0.14);
-  --ring: #002bba;
-  --chart-1: #002bba;
-  --chart-2: #575960;
-  --chart-3: #8e93a1;
-  --chart-4: #121212;
-  --chart-5: #dbd8d8;
-  --radius: 0.625rem;
-  --sidebar: #eeeae8;
-  --sidebar-foreground: #121212;
-  --sidebar-primary: #121212;
-  --sidebar-primary-foreground: #eeeae8;
-  --sidebar-accent: #e6e1df;
-  --sidebar-accent-foreground: #121212;
-  --sidebar-border: rgba(18, 18, 18, 0.12);
-  --sidebar-ring: #002bba;
+  --bg: #f4efe6;
+  --surface: #faf7f1;
+  --ink: #1b1915;
+  --text: #3d3931;
+  --muted: #6d675c;
+  --line: #ddd5c6;
+  --line-strong: #c4baa8;
+  --accent: #2e4c8c;
+  --accent-soft: rgba(46, 76, 140, 0.08);
+  --invert-bg: #1b1915;
+  --invert-ink: #f4efe6;
+  --invert-text: #cfc7b8;
+  --invert-muted: #9a9182;
+  --invert-line: #38332b;
+  --invert-accent: #a9bbe6;
+  --danger: #a33a2a;
+  color-scheme: light;
 }
 
 .dark {
-  /* bigO "Night" theme — near-black bg, cool-grey body, white headings */
-  --background: #0f0f0f; /* rgb(15,15,15) */
-  --foreground: #8e93a1; /* rgb(142,147,161) */
-  --ink: #ffffff;
-  --body-text: #8e93a1;
-  --accent-blue: #3355ff;
-  --card: #161616;
-  --card-foreground: #ffffff;
-  --popover: #161616;
-  --popover-foreground: #ffffff;
-  --primary: #ffffff;
-  --primary-foreground: #0f0f0f;
-  --secondary: #1c1c1c;
-  --secondary-foreground: #ffffff;
-  --muted: #1c1c1c;
-  --muted-foreground: #8e93a1;
-  --accent: #3355ff;
-  --accent-foreground: #ffffff;
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: rgba(255, 255, 255, 0.12);
-  --input: rgba(255, 255, 255, 0.15);
-  --ring: #3355ff;
-  --chart-1: #3355ff;
-  --chart-2: #8e93a1;
-  --chart-3: #575960;
-  --chart-4: #ffffff;
-  --chart-5: #1c1c1c;
-  --sidebar: #0f0f0f;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #3355ff;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #1c1c1c;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(255, 255, 255, 0.12);
-  --sidebar-ring: #3355ff;
+  --bg: #15130f;
+  --surface: #1c1a16;
+  --ink: #efe9dd;
+  --text: #cfc7b8;
+  --muted: #9a9182;
+  --line: #2f2b25;
+  --line-strong: #433d34;
+  --accent: #a9bbe6;
+  --accent-soft: rgba(169, 187, 230, 0.1);
+  --invert-bg: #201d18;
+  --invert-ink: #efe9dd;
+  --invert-text: #cfc7b8;
+  --invert-muted: #9a9182;
+  --invert-line: #3a352d;
+  --invert-accent: #a9bbe6;
+  --danger: #e08a7a;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-invert-bg: var(--invert-bg);
+  --color-invert-ink: var(--invert-ink);
+  --color-invert-text: var(--invert-text);
+  --color-invert-muted: var(--invert-muted);
+  --color-invert-line: var(--invert-line);
+  --color-invert-accent: var(--invert-accent);
+  --color-danger: var(--danger);
+
+  --font-serif: var(--font-newsreader), "Newsreader Fallback", Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), "Inter Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono Fallback", ui-monospace, monospace;
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+  html {
+    scroll-padding-top: 88px;
   }
   body {
-    @apply bg-background text-foreground;
+    background: var(--bg);
+    color: var(--text);
     font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
-  html {
-    @apply font-sans;
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
   }
   ::selection {
-    background: var(--accent-blue);
-    color: #fff;
+    background: var(--accent);
+    color: var(--bg);
   }
-}
-
-/* ---------- bigO design system ---------- */
-@theme inline {
-  --text-eyebrow: 0.875rem;
-  
-  --animate-marquee: marquee 30s linear infinite;
-
-  @keyframes marquee {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(calc(-100% / 3 - 16px));
-    }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  summary {
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
   }
 }
 
 @layer components {
-  /* Display headings — Manrope 600, tight tracking */
-  .mxd-display {
-    font-family: var(--font-sans);
-    font-weight: 600;
-    letter-spacing: -0.032em;
-    line-height: 1.1;
-    color: var(--ink);
-  }
-  /* Mono eyebrow / label / tag */
-  .mxd-mono {
-    font-family: var(--font-mono);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    font-size: 0.8125rem;
-    line-height: 1.2;
-  }
-  .mxd-eyebrow {
-    font-family: var(--font-mono);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.8125rem;
-    color: var(--muted-foreground);
-  }
-  /* Section counter e.g. A/01 */
-  .mxd-counter {
-    font-family: var(--font-mono);
-    font-weight: 500;
-    color: var(--muted-foreground);
-    letter-spacing: 0.02em;
-  }
-  /* Page container — reference .mxd-container:
-     max-width 1920px; padding 30px → 60px (768+) → 100px (1600+) */
-  .mxd-container {
-    position: relative;
+  /* Page container: 1200px grid with 20 / 32 / 48px gutters */
+  .container-page {
     width: 100%;
-    max-width: 1920px;
+    max-width: 1296px;
     margin-inline: auto;
-    padding-inline: 30px;
+    padding-inline: 20px;
   }
   @media (min-width: 768px) {
-    .mxd-container {
-      padding-inline: 60px;
+    .container-page {
+      padding-inline: 32px;
     }
   }
-  @media (min-width: 1600px) {
-    .mxd-container {
-      padding-inline: 100px;
+  @media (min-width: 1280px) {
+    .container-page {
+      padding-inline: 48px;
     }
   }
-}
 
-/* Progressive bottom-of-viewport blur (optimized reference .blur-container):
-   fixed 240px (→300px @1200) strip with 3 hardware-accelerated backdrop-filter layers.
-   Toggled display:block by BlurSection ScrollTriggers. */
-.blur-container {
-  pointer-events: none;
-  z-index: 10;
-  flex: none;
-  width: 100%;
-  height: 240px;
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  transform: translateZ(0);
-}
-@media (min-width: 1200px) {
-  .blur-container {
-    height: 300px;
+  /* Small monospace label, e.g. "01 — Problems we solve" */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* The one dark section per page: re-points the tokens, so everything
+     inside (text, lines, links, buttons) switches without extra classes */
+  .tone-invert {
+    --bg: var(--invert-bg);
+    --surface: var(--invert-bg);
+    --ink: var(--invert-ink);
+    --text: var(--invert-text);
+    --muted: var(--invert-muted);
+    --line: var(--invert-line);
+    --line-strong: var(--invert-line);
+    --accent: var(--invert-accent);
+    --accent-soft: rgba(169, 187, 230, 0.12);
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  /* Missing content (prices, results, names) — easy to spot and replace */
+  .placeholder {
+    border-radius: 3px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 0 0.25em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* Text link with an underline that appears on hover */
+  .link {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--line-strong);
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+    transition: text-decoration-color 0.2s, color 0.2s;
+  }
+  .link:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
   }
 }
-.blur-layer {
-  pointer-events: none;
-  border-radius: 0;
-  position: absolute;
-  inset: 0;
-  transform: translateZ(0);
-}
-.blur-1 {
-  z-index: 1;
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0.8) 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0.8) 100%);
-}
-.blur-2 {
-  z-index: 2;
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 35%, rgba(0, 0, 0, 0.6) 70%, #000 100%);
-  mask-image: linear-gradient(to bottom, transparent 35%, rgba(0, 0, 0, 0.6) 70%, #000 100%);
-}
-.blur-3 {
-  z-index: 3;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 70%, #000 100%);
-  mask-image: linear-gradient(to bottom, transparent 70%, #000 100%);
-}
 
-/* Lenis smooth-scroll base styles */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-.lenis.lenis-stopped {
-  overflow: clip;
-}
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
-}
-
-/* Custom cursor active (reference #mxd-cursor) — hide the native pointer.
-   Form fields keep their caret so text entry stays usable. Only engaged on
-   fine-pointer, non-reduced-motion devices (CustomCursor adds the class), and
-   only at the width where the custom cursor is actually drawn. */
-@media (min-width: 1025px) {
-  html.has-custom-cursor *:not(input):not(textarea):not(select) {
-    cursor: none;
-  }
-}
-/* Page-load entrance for above-the-fold headings and text. Pure CSS so it
-   starts with the first paint: a script-driven reveal would show the text,
-   hide it once the scripts load, then bring it back in. */
-@keyframes load-rise {
-  from {
-    opacity: 0;
-    transform: translateY(var(--rise-y, 40px));
-  }
-}
-.anim-load-rise {
-  animation: load-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--rise-delay, 0s) both;
-}
 @media (prefers-reduced-motion: reduce) {
-  .anim-load-rise {
-    animation: none;
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

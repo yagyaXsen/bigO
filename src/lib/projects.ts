@@ -1,140 +1,120 @@
-/** Work page content. A project's `video` (a muted loop, ideally a local
- *  /videos/work/* screen recording) is shown when present; live sites without
- *  one fall back to an mshots screenshot of the top of the page. */
-export interface WorkProject {
+/** Case studies for the Work page and the home page's Selected work.
+ *  `result` and missing screenshots are placeholders until real numbers and
+ *  images are available — they render as clearly marked placeholders. */
+export interface Project {
   id: string;
-  num: string;
-  title: string;
-  subtitle: string;
+  name: string;
+  /** What kind of system it is, e.g. "AI data pipeline" */
+  kind: string;
   status: "Live" | "Ongoing";
-  url: string;
+  /** Short address shown on cards */
+  url?: string;
   live?: string;
-  tags: string[];
-  /** One sentence for the home page's Selected work */
-  summary?: string;
-  description: string;
-  flowLabel?: string;
-  flow?: string[];
-  highlights: { h: string; d: string }[];
-  stack?: string[];
+  /** One sentence for the home page */
+  summary: string;
+  problem: string;
+  built: string;
+  features: string[];
+  /** Placeholder until a measured result is available */
+  result: string;
+  stack: string[];
+  /** A real screenshot; projects without one show a screenshot placeholder */
+  image?: { src: string; alt: string };
   links: { label: string; href: string }[];
-  video?: { src: string; poster: string };
 }
 
-/* One normal 1440×900 viewport. A very tall viewport pushes vertically
-   centered heroes into the middle and leaves scroll-revealed sections blank. */
-export const shot = (url: string) =>
-  `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=1280&h=800&vpw=1440&vph=900`;
-
-export const PROJECTS: WorkProject[] = [
+export const PROJECTS: Project[] = [
   {
     id: "nexora",
-    num: "01",
-    title: "Nexora",
-    subtitle: "Opportunity intelligence platform",
+    name: "Nexora",
+    kind: "AI data pipeline",
     status: "Live",
     url: "nexora-8y5.pages.dev",
     live: "https://nexora-8y5.pages.dev/",
-    tags: ["Automation", "Backend", "AI extraction", "Search"],
     summary:
-      "An AI pipeline that finds scholarships, grants, fellowships and accelerators across hundreds of sites, turns them into clean records and keeps them up to date on its own.",
-    description:
-      "Students, researchers and early founders lose hours hunting for scholarships, fellowships, accelerators, hackathons and grants spread across hundreds of sites. Nexora does the hunting for them. An automated pipeline crawls sources on a schedule, turns messy pages into clean structured records, keeps them up to date and publishes only what passes strict quality checks — then helps each user track their applications through to the deadline.",
-    flowLabel: "/ PIPELINE",
-    flow: ["Collect", "Extract", "Deduplicate", "Maintain", "Publish", "Track"],
-    highlights: [
-      { h: "Automated discovery", d: "Scheduled crawlers read listings, RSS feeds and sitemaps with no manual input." },
-      { h: "AI-assisted extraction", d: "Unstructured pages become validated records — deadlines, funding, eligibility." },
-      { h: "Self-maintaining catalog", d: "Records re-verify, expire, revive and link-check themselves over time." },
-      { h: "Semantic search & matching", d: "Natural-language search and a dashboard ranked against each user's profile." },
-      { h: "Application tracker", d: "Kanban from Saved to Accepted, with deadline reminders." },
+      "An automated pipeline that finds scholarships, grants and fellowships across hundreds of sites and keeps them up to date on its own.",
+    problem:
+      "Students, researchers and early founders spend hours searching hundreds of websites for scholarships, fellowships, grants and accelerators, and most listings go out of date quickly.",
+    built:
+      "A pipeline that collects listings on a schedule, uses AI to turn messy pages into clean records, removes duplicates and re-checks everything over time. Users search in plain language and track their applications up to the deadline.",
+    features: [
+      "Scheduled collection from listings, RSS feeds and sitemaps",
+      "AI extraction of deadlines, funding and eligibility",
+      "Records that re-verify and expire on their own",
+      "Plain-language search and an application tracker",
     ],
-    stack: ["Python", "FastAPI", "PostgreSQL", "React", "Vite", "Tailwind CSS", "Groq", "GitHub Actions"],
+    result: "[Result: e.g. number of listings processed, or hours of manual research saved]",
+    stack: ["Python", "FastAPI", "PostgreSQL", "React", "Groq", "GitHub Actions"],
     links: [
       { label: "Live site", href: "https://nexora-8y5.pages.dev/" },
-      { label: "GitHub", href: "https://github.com/yagyaXsen/Nexora" },
+      { label: "Source code", href: "https://github.com/yagyaXsen/Nexora" },
     ],
-    // Loop built from Nexora's own product visuals (yagyaXsen/Nexora frontend/public/images)
-    video: { src: "/videos/work/nexora.mp4", poster: "/images/work/nexora-poster.jpg" },
   },
   {
     id: "hirearn",
-    num: "02",
-    title: "Hirearn",
-    subtitle: "Local jobs and services platform",
+    name: "Hirearn",
+    kind: "Marketplace web app",
     status: "Live",
     url: "hirearn.com",
     live: "https://hirearn.com/",
-    tags: ["Marketplace", "Web platform", "PWA"],
     summary: "A two-sided marketplace and installable app that connects people with local jobs and services.",
-    description:
-      "Finding someone nearby for a job — or finding nearby work — usually means word of mouth and scattered groups. Hirearn brings both sides into one place: people post what they need, local providers discover it and take it up. Our freelance development team architected and built the full product: a complete web platform with installable PWA/app capabilities, structured as a marketplace that can scale to more categories and cities.",
-    flowLabel: "/ HOW IT WORKS",
-    flow: ["Post a requirement", "Discover nearby opportunities", "Take up relevant work"],
-    highlights: [
-      { h: "Two-sided marketplace", d: "One platform for people who need work done and people who do it." },
-      { h: "Local-first discovery", d: "Requirements and opportunities surfaced by what's nearby." },
-      { h: "PWA / app experience", d: "Installable on phones, built mobile-first for on-the-go use." },
-      { h: "Built to scale", d: "Marketplace architecture ready for new categories and regions." },
+    problem:
+      "Finding someone nearby for a job, or finding nearby work, usually depends on word of mouth and scattered groups.",
+    built:
+      "A complete web platform where people post what they need and local providers find it and take it up. It installs on phones like an app and is structured to add more categories and cities.",
+    features: [
+      "One platform for both sides of the marketplace",
+      "Requirements and work shown by what's nearby",
+      "Installable on phones (PWA), built mobile-first",
+      "Architecture ready for new categories and regions",
     ],
+    result: "[Result: e.g. registered users, jobs posted or cities live]",
+    stack: [],
     links: [{ label: "Live site", href: "https://hirearn.com/" }],
   },
   {
-    id: "catering",
-    num: "03",
-    title: "Catering, Thailand",
-    subtitle: "Ongoing international client project",
-    status: "Ongoing",
-    url: "Client project",
-    tags: ["Digital growth", "Development", "International"],
-    description:
-      "A Thailand-based catering business with ambitions beyond its home market. We're partnering with them to take operations and presence to a broader digital level — building a connected digital ecosystem that carries the brand across multiple countries instead of a single local market. The engagement covers both sides: the technical foundation and the digital growth that puts it in front of new audiences.",
-    highlights: [
-      { h: "Digital ecosystem", d: "Connecting the brand's online touchpoints into one coherent system." },
-      { h: "Technical foundation", d: "Development work that supports operations as the business grows." },
-      { h: "Multi-country visibility", d: "Presence and reach planned for several markets, not one city." },
-      { h: "Ongoing growth", d: "A long-term engagement — improving and expanding month by month." },
-    ],
-    links: [],
-    video: {
-      src: "https://videos.pexels.com/video-files/4170293/4170293-hd_1366_720_24fps.mp4",
-      poster: "https://images.pexels.com/videos/4170293/pexels-photo-4170293.jpeg?auto=compress&w=1260&h=750&dpr=1",
-    },
-  },
-  {
     id: "lumora",
-    num: "04",
-    title: "Lumora Dental",
-    subtitle: "Dental clinic website",
+    name: "Lumora Dental",
+    kind: "Clinic website with booking",
     status: "Live",
     url: "yagyaxsen.github.io/lumora-dental",
     live: "https://yagyaxsen.github.io/lumora-dental/",
-    tags: ["Website", "Healthcare", "Booking", "Motion"],
-    summary: "A calm, image-led clinic website with treatment pages, online booking and a callback form.",
-    description:
-      "A dental clinic has to feel calm and trustworthy before a patient ever walks in. Lumora Dental's website does that work: a warm, image-led home page, clear pages for preventive, cosmetic, restorative and orthodontic care, the team, patient stories and a blog — with every appointment button leading straight to online booking and a quick callback form right in the hero.",
-    flowLabel: "/ PATIENT JOURNEY",
-    flow: ["Discover the clinic", "Explore treatments", "Meet the team", "Book a visit"],
-    highlights: [
-      { h: "Complete clinic website", d: "Home, about, services and blog pages, plus privacy, terms and cookie pages." },
-      { h: "Booking built in", d: "Appointment buttons open online scheduling; the hero form requests a callback." },
-      { h: "Motion with restraint", d: "Scroll reveals, a pinned treatment carousel, animated counters and sliders." },
-      { h: "Fast, self-contained build", d: "A static site with every asset served locally, deployed on GitHub Pages." },
+    summary: "A calm, trustworthy clinic website with treatment pages, online booking and a callback form.",
+    problem:
+      "A dental clinic has to feel calm and trustworthy online before a patient walks in, and booking a visit has to take seconds.",
+    built:
+      "A complete clinic website: clear pages for each type of treatment, the team, patient stories and a blog. Every appointment button leads to online booking, and a callback form sits on the first screen.",
+    features: [
+      "Home, about, treatment and blog pages",
+      "Online booking and a callback request form",
+      "Privacy, terms and cookie pages",
+      "Static, fast build hosted on GitHub Pages",
     ],
-    stack: ["HTML", "CSS", "JavaScript", "GSAP", "ScrollTrigger", "GitHub Pages"],
+    result: "[Result: e.g. online bookings per month, or calls saved for front-desk staff]",
+    stack: ["HTML", "CSS", "JavaScript", "GSAP", "GitHub Pages"],
+    image: { src: "/images/work/lumora.jpg", alt: "Lumora Dental website home page" },
     links: [{ label: "Live site", href: "https://yagyaxsen.github.io/lumora-dental/" }],
-    // Scroll-through recording of the live home page
-    video: { src: "/videos/work/lumora.mp4", poster: "/images/work/lumora-poster.jpg" },
+  },
+  {
+    id: "catering",
+    name: "Catering business, Thailand",
+    kind: "Ongoing client engagement",
+    status: "Ongoing",
+    summary: "Technical foundation and digital growth for a catering business expanding beyond its home market.",
+    problem:
+      "A Thailand-based catering business wants to operate and be found across several countries, not just one local market.",
+    built:
+      "An ongoing engagement covering the technical foundation that supports operations as the business grows, and the online presence that puts it in front of new markets.",
+    features: [
+      "Connecting the business's online touchpoints into one system",
+      "Development work that supports day-to-day operations",
+      "Presence planned for several markets",
+      "Month-by-month improvements",
+    ],
+    result: "[Result: to be added as the engagement progresses]",
+    stack: [],
+    links: [],
   },
 ];
 
-/* Home page: the same process in four steps */
-export const PROCESS: [string, string][] = [
-  ["Discovery", "We learn the business, audience, goals, competitors and requirements."],
-  ["Research & Planning", "Scope, structure and technical approach agreed before anything is designed."],
-  ["Design", "Structure, visual direction and user experience, shaped before development."],
-  ["Development", "The approved design becomes a fast, responsive, production-ready product."],
-  ["Testing", "Devices, browsers, forms, integrations, performance and security — all checked."],
-  ["Launch", "Hosting, domains, SSL, analytics and production deployment configured."],
-  ["Maintenance & Growth", "After launch we keep improving through maintenance, SEO, content and marketing."],
-];
+export const projectById = (id: string) => PROJECTS.find((p) => p.id === id);

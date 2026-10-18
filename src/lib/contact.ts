@@ -36,3 +36,12 @@ export interface Enquiry {
   phone: string;
   message: string;
 }
+
+export const SOCIAL = {
+  linkedin: "https://www.linkedin.com/company/bigocompany/about/",
+  instagram: "https://www.instagram.com/thebigoteam/",
+  whatsapp: `https://wa.me/${WHATSAPP_NUMBER}`,
+};
+
+/** +91 88753 26549 — the WhatsApp number as people read it */
+export const PHONE_DISPLAY = "+91 88753 26549";

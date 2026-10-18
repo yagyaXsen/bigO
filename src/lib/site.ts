@@ -11,11 +11,10 @@ export const SITE_URL = (
 
 export const SITE_NAME = "bigO";
 
-export const SITE_TITLE = "bigO — Digital Studio | We build software & AI that runs your business";
+export const SITE_TITLE = "bigO — Custom software and AI automation for growing businesses";
 
 export const SITE_DESCRIPTION =
-  "bigO is a small, focused studio that designs and builds custom software, web apps and AI automation — you work directly with the people writing the code.";
+  "bigO is a small engineering studio in Delhi NCR. We build web apps, client portals, AI chatbots and automated workflows for businesses that have outgrown spreadsheets and manual work.";
 
-/** localStorage key for the Night/Day toggle. */
+/** localStorage key for the light/dark toggle. */
 export const THEME_KEY = "bigo-theme";
-

@@ -2,7 +2,7 @@
   "name": "bigo-website",
   "version": "1.0.0",
   "private": true,
-  "description": "bigO digital studio website — a small, focused team that builds and manages websites, web apps, and digital presence.",
+  "description": "bigO website: a small engineering studio building custom software and AI automation for growing businesses.",
   "author": "bigO",
   "license": "UNLICENSED",
   "repository": {
@@ -15,11 +15,11 @@
   },
   "keywords": [
     "bigo",
-    "digital-studio",
+    "custom-software",
+    "ai-automation",
     "nextjs",
     "react",
-    "tailwindcss",
-    "gsap"
+    "tailwindcss"
   ],
   "engines": {
     "node": ">=24"
@@ -34,27 +34,20 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "framer-motion": "^13.1.1",
-    "gsap": "^3.15.0",
-    "lenis": "^1.3.25",
-    "matter-js": "^0.20.0",
     "next": "16.2.1",
     "nodemailer": "^9.1.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "tailwind-merge": "^3.5.0",
-    "tw-animate-css": "^1.4.0"
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/matter-js": "^0.20.2",
     "@types/node": "^24",
     "@types/nodemailer": "^8.0.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
-    "shadcn": "^4.1.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

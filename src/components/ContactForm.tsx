@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { WhatsAppIcon } from "@/components/icons";
+import { ArrowUpRightIcon, WhatsAppIcon } from "@/components/icons";
 import {
   CONTACT_EMAIL,
   EMAIL_RE,
@@ -108,33 +108,37 @@ const mailtoUrl = (d: Enquiry) =>
     `New Project Inquiry from ${d.name.trim() || "bigO website"}`,
   )}&body=${encodeURIComponent(buildBrief(d).replace(/\*/g, ""))}`;
 
-/* ── inline glyphs ─────────────────────────────────────────────── */
-function ArrowUpRight({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeWidth="1.5">
-      <path d="M4.5 11.5 11.5 4.5M6 4.5h5.5V10" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function CheckGlyph({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 20 20" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeWidth="1.75">
-      <path d="m4.5 10.5 3.5 3.5 7.5-8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function AlertGlyph({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 20 20" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeWidth="1.75">
-      <path d="M10 6v5M10 14h.01" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 const inputCls =
-  "w-full appearance-none rounded-none border-0 border-b border-[color:var(--border)] bg-transparent px-0 py-3 font-sans text-[16px] text-[color:var(--ink)] placeholder:text-muted-foreground/70 outline-none transition-colors duration-300 focus:border-[color:var(--accent-blue)]";
+  "w-full rounded-md border border-line-strong bg-surface px-4 py-3 text-[16px] text-ink placeholder:text-muted/80 outline-none transition-colors focus:border-accent";
+
+function Field({
+  id,
+  label,
+  error,
+  optional,
+  children,
+}: {
+  id: string;
+  label: string;
+  error?: string;
+  optional?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label htmlFor={id} className="mb-2 flex items-baseline justify-between text-[14px] font-medium text-ink">
+        {label}
+        {optional && <span className="text-[13px] font-normal text-muted">Optional</span>}
+      </label>
+      {children}
+      {error && (
+        <p id={`${id}-error`} className="mt-1.5 text-[13px] text-danger">
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
 
 export function ContactForm() {
   const [name, setName] = useState("");
@@ -207,84 +211,44 @@ export function ContactForm() {
   };
 
   return (
-    <form
-      noValidate
-      onSubmit={submitForm}
-      className="pointer-events-auto w-full"
-    >
+    <form noValidate onSubmit={submitForm} className="relative w-full">
       {status === "success" && (
-        <div
-          role="status"
-          className="mb-8 border border-[color:var(--accent-blue)]/30 bg-[color:var(--accent-blue)]/5 p-6 rounded-2xl animate-in fade-in slide-in-from-bottom-2 duration-500"
-        >
-          <div className="flex items-start gap-3">
-            <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color:var(--accent-blue)] text-white">
-              <CheckGlyph className="h-3.5 w-3.5" />
-            </span>
-            <div className="w-full">
-              <h4 className="font-sans font-bold text-[17px] text-[color:var(--ink)]">
-                Inquiry Sent Successfully!
-              </h4>
-              <p className="font-sans text-[14px] leading-relaxed text-[color:var(--body-text)] mt-1">
-                Thank you{submittedData?.name ? `, ${submittedData.name}` : ""}! Your message has been sent to our team. We will review your project and reply to <span className="font-semibold text-[color:var(--ink)]">{submittedData?.email}</span> shortly.
-              </p>
-
-              {submittedData && (
-                <div className="mt-4 pt-4 border-t border-[color:var(--accent-blue)]/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <p className="text-[13px] font-medium text-[color:var(--ink)]">
-                    Need an immediate reply?
-                  </p>
-                  <a
-                    href={whatsAppUrl(submittedData)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 font-sans text-[13.5px] font-semibold text-white transition-all hover:bg-[#1EBE5D] hover:shadow-md cursor-pointer whitespace-nowrap"
-                  >
-                    <WhatsAppIcon className="h-4 w-4" />
-                    Open in WhatsApp
-                  </a>
-                </div>
-              )}
-            </div>
-          </div>
+        <div role="status" className="mb-8 border border-line-strong bg-surface p-6">
+          <p className="font-serif text-[22px] text-ink">Thanks{submittedData?.name ? `, ${submittedData.name}` : ""}. We have your message.</p>
+          <p className="mt-2 text-[15px]">
+            We&apos;ll reply to <span className="font-medium text-ink">{submittedData?.email}</span> within a day with
+            next steps.
+          </p>
+          {submittedData && (
+            <a
+              href={whatsAppUrl(submittedData)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link mt-4 inline-flex items-center gap-2 text-[15px]"
+            >
+              <WhatsAppIcon className="h-4 w-4" />
+              Need a faster reply? Send it on WhatsApp
+            </a>
+          )}
         </div>
       )}
 
       {status === "error" && submittedData && (
-        <div
-          role="alert"
-          className="mb-8 border border-[#c0392b]/30 bg-[#c0392b]/5 p-6 rounded-2xl animate-in fade-in slide-in-from-bottom-2 duration-500"
-        >
-          <div className="flex items-start gap-3">
-            <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#c0392b] text-white">
-              <AlertGlyph className="h-4 w-4" />
-            </span>
-            <div className="w-full">
-              <h4 className="font-sans font-bold text-[17px] text-[color:var(--ink)]">
-                We couldn&apos;t send your message
-              </h4>
-              <p className="font-sans text-[14px] leading-relaxed text-[color:var(--body-text)] mt-1">
-                Something went wrong on our side. Your details are still in the form — send them on WhatsApp or by email and we&apos;ll get straight back to you.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-3">
-                <a
-                  href={whatsAppUrl(submittedData)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 font-sans text-[13.5px] font-semibold text-white transition-all hover:bg-[#1EBE5D] hover:shadow-md cursor-pointer whitespace-nowrap"
-                >
-                  <WhatsAppIcon className="h-4 w-4" />
-                  Send on WhatsApp
-                </a>
-                <a
-                  href={mailtoUrl(submittedData)}
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[color:var(--border)] px-5 py-2.5 font-sans text-[13.5px] font-semibold text-[color:var(--ink)] transition-colors hover:border-[color:var(--accent-blue)] hover:text-[color:var(--accent-blue)] whitespace-nowrap"
-                >
-                  Email us instead
-                  <ArrowUpRight className="h-[13px] w-[13px]" />
-                </a>
-              </div>
-            </div>
+        <div role="alert" className="mb-8 border border-danger/50 bg-surface p-6">
+          <p className="font-serif text-[22px] text-ink">We couldn&apos;t send your message.</p>
+          <p className="mt-2 text-[15px]">
+            Something went wrong on our side. Your details are still in the form. Send them on WhatsApp or by email
+            and we&apos;ll get straight back to you.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-[15px]">
+            <a href={whatsAppUrl(submittedData)} target="_blank" rel="noopener noreferrer" className="link inline-flex items-center gap-2">
+              <WhatsAppIcon className="h-4 w-4" />
+              Send on WhatsApp
+            </a>
+            <a href={mailtoUrl(submittedData)} className="link inline-flex items-center gap-2">
+              Email us instead
+              <ArrowUpRightIcon className="h-3.5 w-3.5" />
+            </a>
           </div>
         </div>
       )}
@@ -302,9 +266,8 @@ export function ContactForm() {
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-x-[40px] gap-y-[24px] sm:grid-cols-2">
-        {/* name */}
-        <div className="col-span-1">
+      <div className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
+        <Field id="cf-name" label="Name" error={errors.name}>
           <input
             id="cf-name"
             type="text"
@@ -312,16 +275,13 @@ export function ContactForm() {
             maxLength={FIELD_LIMITS.name}
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Your name*"
-            aria-label="Your name"
             aria-invalid={!!errors.name}
-            className={cn(inputCls, errors.name && "border-[#c0392b]")}
+            aria-describedby={errors.name ? "cf-name-error" : undefined}
+            className={cn(inputCls, errors.name && "border-danger")}
           />
-          {errors.name && <span className="text-[12px] text-red-500 mt-1 block">{errors.name}</span>}
-        </div>
+        </Field>
 
-        {/* company */}
-        <div className="col-span-1">
+        <Field id="cf-company" label="Company" optional>
           <input
             id="cf-company"
             type="text"
@@ -329,14 +289,11 @@ export function ContactForm() {
             maxLength={FIELD_LIMITS.company}
             value={company}
             onChange={(e) => setCompany(e.target.value)}
-            placeholder="Company / Brand"
-            aria-label="Company or brand"
-            className={cn(inputCls)}
+            className={inputCls}
           />
-        </div>
+        </Field>
 
-        {/* email */}
-        <div className="col-span-1">
+        <Field id="cf-email" label="Email" error={errors.email}>
           <input
             id="cf-email"
             type="email"
@@ -344,16 +301,13 @@ export function ContactForm() {
             maxLength={FIELD_LIMITS.email}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email address*"
-            aria-label="Email address"
             aria-invalid={!!errors.email}
-            className={cn(inputCls, errors.email && "border-[#c0392b]")}
+            aria-describedby={errors.email ? "cf-email-error" : undefined}
+            className={cn(inputCls, errors.email && "border-danger")}
           />
-          {errors.email && <span className="text-[12px] text-red-500 mt-1 block">{errors.email}</span>}
-        </div>
+        </Field>
 
-        {/* phone */}
-        <div className="col-span-1">
+        <Field id="cf-phone" label="Phone or WhatsApp" optional>
           <input
             id="cf-phone"
             type="tel"
@@ -361,51 +315,42 @@ export function ContactForm() {
             maxLength={FIELD_LIMITS.phone}
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            placeholder="Phone / WhatsApp"
-            aria-label="Phone or WhatsApp number"
-            className={cn(inputCls)}
+            className={inputCls}
           />
-        </div>
+        </Field>
 
-        {/* message — full width */}
-        <div className="sm:col-span-2 mt-4">
-          <textarea
-            id="cf-message"
-            rows={3}
-            maxLength={FIELD_LIMITS.message}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Tell us about your project, timeline, or goals*"
-            aria-label="Project details"
-            aria-invalid={!!errors.message}
-            className={cn(
-              inputCls,
-              "resize-none leading-relaxed",
-              errors.message && "border-[#c0392b]",
-            )}
-          />
-          {errors.message && <span className="text-[12px] text-red-500 mt-1 block">{errors.message}</span>}
+        <div className="sm:col-span-2">
+          <Field id="cf-message" label="What would you like to build or fix?" error={errors.message}>
+            <textarea
+              id="cf-message"
+              rows={6}
+              maxLength={FIELD_LIMITS.message}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="For example: we take orders on WhatsApp and copy them into a spreadsheet by hand."
+              aria-invalid={!!errors.message}
+              aria-describedby={errors.message ? "cf-message-error" : undefined}
+              className={cn(inputCls, "resize-y leading-relaxed", errors.message && "border-danger")}
+            />
+          </Field>
         </div>
       </div>
 
-      {/* actions */}
-      <div className="mt-[40px] flex flex-wrap items-center gap-4">
+      <div className="mt-8 flex flex-wrap items-center gap-3">
         <button
           type="submit"
           disabled={isPending}
-          className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[color:var(--ink)] px-8 py-4 font-sans text-[15px] font-semibold text-[color:var(--background)] transition-[transform,background-color] duration-300 hover:-translate-y-0.5 hover:bg-[color:var(--accent-blue)] hover:text-white disabled:opacity-70 disabled:hover:translate-y-0 cursor-pointer"
+          className="inline-flex h-11 cursor-pointer items-center justify-center rounded-md bg-ink px-6 text-[15px] font-medium text-bg transition-colors hover:bg-accent disabled:cursor-wait disabled:opacity-70"
         >
-          {isPending ? "Sending..." : "Submit Inquiry"}
-          {!isPending && <ArrowUpRight className="h-[15px] w-[15px] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />}
+          {isPending ? "Sending…" : "Send message"}
         </button>
-
         <button
           type="button"
           onClick={sendDirectWhatsApp}
-          className="inline-flex items-center justify-center gap-2 rounded-full border border-[color:var(--border)] bg-white px-6 py-3.5 font-sans text-[14.5px] font-medium text-[#121212] transition-all duration-300 hover:border-[#25D366] hover:text-[#25D366] hover:shadow-sm cursor-pointer"
+          className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-md border border-line-strong px-5 text-[15px] font-medium text-ink transition-colors hover:border-ink"
         >
-          <WhatsAppIcon className="h-4 w-4 text-[#25D366]" />
-          Chat on WhatsApp
+          <WhatsAppIcon className="h-4 w-4" />
+          Send on WhatsApp instead
         </button>
       </div>
     </form>
