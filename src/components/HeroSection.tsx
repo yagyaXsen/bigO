@@ -113,17 +113,19 @@ export function HeroSection() {
         </div>
 
         {/* Side labels — btn-line-small, left/right 60px → 100px at 1600. Only
-            from 1536px: on narrower laptops the headline reaches into them. */}
-        <a
-          href="#services"
-          className="absolute left-[60px] top-1/2 hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground min-[1536px]:block min-[1600px]:left-[100px]"
+            from 1536px: on narrower laptops the headline reaches into them.
+            z-[3] keeps them clickable above the headline block's z-[2] layer. */}
+        <Link
+          href="/services"
+          onClick={() => window.scrollTo(0, 0)}
+          className="absolute left-[60px] top-1/2 z-[3] hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground min-[1536px]:block min-[1600px]:left-[100px]"
         >
           [ <ScrambleText text="SERVICES" /> ]
-        </a>
+        </Link>
         <Link
           href="/work"
           onClick={() => window.scrollTo(0, 0)}
-          className="absolute right-[60px] top-1/2 hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground min-[1536px]:block min-[1600px]:right-[100px]"
+          className="absolute right-[60px] top-1/2 z-[3] hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground min-[1536px]:block min-[1600px]:right-[100px]"
         >
           [ <ScrambleText text="WORKS" /> ]
         </Link>

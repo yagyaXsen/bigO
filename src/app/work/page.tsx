@@ -6,7 +6,6 @@ import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { SiteHeader } from "@/components/SiteHeader";
 import { WorkHero } from "@/components/WorkHero";
 import { WorkProjects } from "@/components/WorkProjects";
-import { WorkProcess } from "@/components/WorkProcess";
 import { MarqueeCta } from "@/components/MarqueeCta";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -32,9 +31,6 @@ export default function WorkPage() {
           <main id="top" className="overflow-x-clip">
             <WorkHero />
             <WorkProjects />
-            <BlurSection>
-              <WorkProcess />
-            </BlurSection>
             <BlurSection>
               <MarqueeCta />
             </BlurSection>

@@ -5,9 +5,9 @@ import Link from "next/link";
 
 const DISCOVER_LINKS = [
   { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
   { label: "Work", href: "/work" },
-  { label: "Services", href: "/#services" },
-  { label: "Process", href: "/#process" },
+  { label: "Process", href: "/services#process" },
   { label: "Contact", href: "/contact" },
 ];
 

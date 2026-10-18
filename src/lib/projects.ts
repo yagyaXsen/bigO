@@ -129,13 +129,6 @@ export const PROJECTS: WorkProject[] = [
 ];
 
 /* Home page: the same process in four steps */
-export const PROCESS_SHORT: [string, string][] = [
-  ["Discover & plan", "We learn the business, goals and requirements, then agree scope, structure and technical approach."],
-  ["Design", "Structure, visual direction and user experience — shaped and approved before development starts."],
-  ["Build & test", "The approved design becomes a fast, production-ready product, tested across devices, integrations and security."],
-  ["Launch & grow", "Hosting, domains, SSL and analytics configured — then maintenance and improvements after launch."],
-];
-
 export const PROCESS: [string, string][] = [
   ["Discovery", "We learn the business, audience, goals, competitors and requirements."],
   ["Research & Planning", "Scope, structure and technical approach agreed before anything is designed."],

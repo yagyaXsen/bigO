@@ -49,7 +49,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  // On a new page: jump to the #section in the URL (e.g. /#services from
+  // On a new page: jump to the #section in the URL (e.g. /services#ai from
   // another page), otherwise to the top. Re-run after ScrollTrigger lays out
   // pins, which shifts section offsets.
   useEffect(() => {
