@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { gsap, ScrollTrigger, Flip } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { ArrowUpRightIcon } from "@/components/icons";
 import { WHATSAPP_NUMBER } from "@/lib/contact";
 import { ScrambleText } from "@/components/ui/ScrambleText";
+import { PROJECTS } from "@/lib/projects";
 
 /* Real, live projects — each links to its case study on /work */
 const RECENT_BUILDS = [
@@ -14,170 +15,208 @@ const RECENT_BUILDS = [
   { label: "Lumora Dental", href: "/work#lumora" },
 ];
 
+/* hero-reel.mp4 is Nexora's loop crossfading into Lumora Dental's and back
+   (20s). Segment times pick the project shown in the browser bar. */
+const REEL = [
+  { id: "nexora", from: 0, to: 11.1 },
+  { id: "lumora", from: 11.1, to: 19.7 },
+].map((s) => ({ ...s, project: PROJECTS.find((p) => p.id === s.id)! }));
+
+const segmentAt = (t: number) => REEL.find((s) => t >= s.from && t < s.to) ?? REEL[0];
+
+/* Browser bar height — the stage reserves it under the 16:10 video */
+const BAR = 44;
+
 export function HeroSection() {
-  const mediaRef = useRef<HTMLDivElement>(null);
-  const smallWrapRef = useRef<HTMLDivElement>(null);
-  const largeWrapRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [segment, setSegment] = useState(REEL[0]);
 
-  /* Reference hero Flip: ONE video (.mxd-hero-media__scaling-media) starts in
-     the small centered wrapper and Flip.fit()s into the large full-width
-     wrapper, scrubbed between "small bottom center-=100" → "large top center".
-     Scrub smoothing slightly above the decoded .55 for a softer feel.
-     Rebuilt on resize/fonts-ready. */
+  /* The reel starts as a centred frame under the text and widens to the full
+     page width while the page scrolls from the top until the stage reaches
+     the top of the screen — the theme's hero media growth, without moving
+     anything else on the page (the frame is absolute inside its stage). */
   useEffect(() => {
-    const media = mediaRef.current;
-    const small = smallWrapRef.current;
-    const large = largeWrapRef.current;
-    if (!media || !small || !large) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    let tl: gsap.core.Timeline | null = null;
-    let resizeTimer: ReturnType<typeof setTimeout> | null = null;
-
-    const build = () => {
-      if (tl) {
-        tl.scrollTrigger?.kill();
-        tl.kill();
-        gsap.set(media, { clearProps: "all" });
-      }
-      tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: small,
-          start: "bottom center-=100",
-          endTrigger: large,
-          end: "top center",
-          scrub: 0.9,
-        },
-      });
-      tl.add(Flip.fit(media, large, { duration: 1, ease: "none" }) as gsap.core.Tween);
-      ScrollTrigger.refresh();
-    };
-
-    const rebuild = () => {
-      if (resizeTimer) clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(build, 100);
-    };
-
-    build();
-    if ("fonts" in document) {
-      document.fonts.ready.then(build);
+    const stage = stageRef.current;
+    const frame = frameRef.current;
+    const video = videoRef.current;
+    if (!stage || !frame || !video) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      video.pause();
+      return;
     }
-    window.addEventListener("resize", rebuild);
+
+    const small = () => Math.min(1120, stage.clientWidth - (window.innerWidth >= 768 ? 120 : 60));
+    // Page offset from layout (offsetTop), not getBoundingClientRect: the
+    // stage's load-in transform would skew a measurement taken mid-animation
+    const stageTop = () => {
+      let y = 0;
+      for (let el: HTMLElement | null = stage; el; el = el.offsetParent as HTMLElement | null) y += el.offsetTop;
+      return y;
+    };
+    const tween = gsap.fromTo(
+      frame,
+      { width: small },
+      {
+        width: () => stage.clientWidth,
+        ease: "none",
+        scrollTrigger: {
+          start: 0,
+          end: stageTop,
+          scrub: 0.9,
+          invalidateOnRefresh: true,
+        },
+      },
+    );
+    const fontsReady = () => ScrollTrigger.refresh();
+    document.fonts?.ready.then(fontsReady);
 
     return () => {
-      tl?.scrollTrigger?.kill();
-      tl?.kill();
-      gsap.set(media, { clearProps: "all" });
-      window.removeEventListener("resize", rebuild);
-      if (resizeTimer) clearTimeout(resizeTimer);
+      tween.scrollTrigger?.kill();
+      tween.kill();
+      gsap.set(frame, { clearProps: "width" });
     };
   }, []);
 
+  const onTime = () => {
+    const next = segmentAt(videoRef.current?.currentTime ?? 0);
+    if (next.id !== segment.id) setSegment(next);
+  };
+
   return (
     <section className="mxd-hero relative w-full">
-      {/* Headline stage — top padding keeps the media clear of the header below xl */}
-      <div className="relative flex min-h-screen flex-col items-center justify-center pt-[110px] xl:pt-0">
-        {/* Headline block — reference .mxd-hero-03__headline (max-w 1300px);
-            the small media is sized against THIS block, not the viewport */}
-        <div className="relative flex w-full flex-col items-center justify-center px-[30px] text-center xl:max-w-[1300px] xl:px-0">
-          {/* H1 — white text with difference blend over the video + page bg */}
-          <div className="relative z-[2] mix-blend-difference">
-            <h1 className="anim-load-rise text-center font-sans font-semibold leading-[1.1] tracking-[-0.032em] text-white text-[50px] md:text-[75px] xl:text-[95px] min-[1600px]:text-[120px]"
-            >
-              We build software &amp; AI that runs your business
-            </h1>
-          </div>
+      {/* Text — eyebrow, headline, subline, the two ways to start, proof */}
+      <div className="relative px-[30px] pt-[130px] text-center md:pt-[170px] xl:pt-[min(170px,17vh)]">
+        <p className="anim-load-rise mxd-eyebrow">Software · AI · Web</p>
 
-          {/* Small hero media wrapper — the scaling video starts here.
-              Reference: 60% / aspect 3:4 → md 50% / 16:9 of the headline block */}
-          <div
-            ref={smallWrapRef}
-            className="pointer-events-none absolute left-1/2 top-1/2 z-[1] aspect-[3/4] w-[60%] -translate-x-1/2 -translate-y-1/2 md:aspect-video md:w-1/2"
+        <div className="relative">
+          <h1 className="anim-load-rise mx-auto mt-[22px] max-w-[1300px] text-balance font-sans text-[44px] font-semibold leading-[1.05] tracking-[-0.035em] text-[color:var(--ink)] [--rise-delay:.05s] md:text-[72px] xl:text-[min(95px,10.5vh)]">
+            We build software &amp; AI that runs your business
+          </h1>
+
+          {/* Side labels — btn-line-small at the headline's height, only from
+              1536px: on narrower laptops the headline reaches into them */}
+          <Link
+            href="/services"
+            onClick={() => window.scrollTo(0, 0)}
+            className="absolute left-[30px] top-1/2 hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground min-[1536px]:block min-[1600px]:left-[70px]"
           >
+            [ <ScrambleText text="SERVICES" /> ]
+          </Link>
+          <Link
+            href="/work"
+            onClick={() => window.scrollTo(0, 0)}
+            className="absolute right-[30px] top-1/2 hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground min-[1536px]:block min-[1600px]:right-[70px]"
+          >
+            [ <ScrambleText text="WORKS" /> ]
+          </Link>
+        </div>
+
+        <p className="anim-load-rise mx-auto mt-[28px] max-w-[56ch] font-sans text-[17px] font-medium leading-[1.5] text-[color:var(--body-text)] [--rise-delay:.15s] [--rise-y:24px] md:text-[19px]">
+          A small, focused studio designing and building custom software, web apps and AI automation. You work
+          directly with the people writing the code.
+        </p>
+
+        <div className="anim-load-rise mt-[36px] flex flex-wrap items-center justify-center gap-x-[28px] gap-y-[16px] [--rise-delay:.25s] [--rise-y:24px]">
+          <Link
+            href="/contact"
+            onClick={() => window.scrollTo(0, 0)}
+            className="group inline-flex items-center gap-2.5 rounded-full bg-[color:var(--ink)] px-7 py-3.5 font-sans text-[15px] font-semibold text-[color:var(--background)] transition-[transform,background-color,color] duration-300 hover:-translate-y-0.5 hover:bg-[color:var(--accent-blue)] hover:text-white"
+          >
+            Start a project
+            <ArrowUpRightIcon className="h-[13px] w-[13px] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+          </Link>
+          <a
+            href={`https://wa.me/${WHATSAPP_NUMBER}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-mono text-[15px] font-semibold uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-[color:var(--accent-blue)]"
+          >
+            [ <ScrambleText text="WhatsApp us" triggerOn="hover" /> ]
+          </a>
+        </div>
+
+        {/* From md the list sits in the reel's browser bar instead */}
+        <p className="anim-load-rise mt-[32px] font-mono text-[13px] md:hidden font-semibold uppercase leading-[1.6] tracking-[0.5px] text-muted-foreground [--rise-delay:.3s] [--rise-y:16px]">
+          Recent builds —{" "}
+          {RECENT_BUILDS.map((b, i) => (
+            <span key={b.href}>
+              {i > 0 && " · "}
+              <Link href={b.href} className="text-[color:var(--ink)] transition-colors hover:text-[color:var(--accent-blue)]">
+                <ScrambleText text={b.label} triggerOn="hover" />
+              </Link>
+            </span>
+          ))}
+        </p>
+      </div>
+
+      {/* Product reel stage — reserves the full-width size (16:10 video + bar)
+          so the frame can widen into it without shifting the page */}
+      <div
+        ref={stageRef}
+        className="anim-load-rise relative mx-auto mt-[56px] w-full max-w-[1920px] [--rise-delay:.35s] md:mt-[72px]"
+        style={{ height: `calc(min(100vw, 1920px) * 0.625 + ${BAR}px)` }}
+      >
+        <div
+          ref={frameRef}
+          className="absolute left-1/2 top-0 w-[calc(100%-60px)] -translate-x-1/2 md:w-[min(1120px,calc(100%-120px))]"
+        >
+          <div className="overflow-hidden border border-border bg-[color:var(--card)]">
             <div
-              ref={mediaRef}
-              className="absolute left-0 top-0 flex h-full w-full items-center justify-center overflow-hidden will-change-transform [isolation:isolate]"
+              className="flex items-center justify-between gap-4 border-b border-border px-4 mxd-mono text-[12px] text-muted-foreground"
+              style={{ height: BAR }}
+            >
+              <span className="flex min-w-0 items-center gap-3">
+                <span aria-hidden className="flex shrink-0 gap-[6px]">
+                  <span className="h-[8px] w-[8px] rounded-full border border-current" />
+                  <span className="h-[8px] w-[8px] rounded-full border border-current" />
+                  <span className="h-[8px] w-[8px] rounded-full border border-current" />
+                </span>
+                <span className="truncate">{segment.project.url}</span>
+              </span>
+              {/* Recent builds — the one playing in the reel is highlighted */}
+              <span className="hidden whitespace-nowrap md:inline">
+                Recent builds —{" "}
+                {RECENT_BUILDS.map((b, i) => (
+                  <span key={b.href}>
+                    {i > 0 && " · "}
+                    <Link
+                      href={b.href}
+                      className={
+                        b.href === `/work#${segment.id}`
+                          ? "text-[color:var(--ink)] transition-colors hover:text-[color:var(--accent-blue)]"
+                          : "transition-colors hover:text-[color:var(--ink)]"
+                      }
+                    >
+                      {b.label}
+                    </Link>
+                  </span>
+                ))}
+              </span>
+            </div>
+            <Link
+              href={`/work#${segment.id}`}
+              aria-label={`${segment.project.title} case study`}
+              data-cursor-text="View project"
+              className="relative block aspect-[16/10] overflow-hidden bg-muted"
             >
               <video
-                className="absolute h-full w-full object-cover scale-[1.05]"
+                ref={videoRef}
+                className="absolute inset-0 h-full w-full object-cover object-top"
                 autoPlay
                 loop
                 muted
                 playsInline
                 preload="auto"
-                poster="/images/hero-poster.jpg"
-                src="/videos/hero-section.mp4"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Side labels — btn-line-small, left/right 60px → 100px at 1600. Only
-            from 1536px: on narrower laptops the headline reaches into them.
-            z-[3] keeps them clickable above the headline block's z-[2] layer. */}
-        <Link
-          href="/services"
-          onClick={() => window.scrollTo(0, 0)}
-          className="absolute left-[60px] top-1/2 z-[3] hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground min-[1536px]:block min-[1600px]:left-[100px]"
-        >
-          [ <ScrambleText text="SERVICES" /> ]
-        </Link>
-        <Link
-          href="/work"
-          onClick={() => window.scrollTo(0, 0)}
-          className="absolute right-[60px] top-1/2 z-[3] hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground min-[1536px]:block min-[1600px]:right-[100px]"
-        >
-          [ <ScrambleText text="WORKS" /> ]
-        </Link>
-
-        {/* Bottom dataline — what we do + recent builds (left), the two ways to
-            start (right). Under the headline on small screens, pinned to the
-            bottom of the stage from xl. The top margin clears the media, which
-            reaches above and below the headline (14vw ≈ half its height at md). */}
-        <div className="anim-load-rise relative z-[2] mt-[80px] flex w-full flex-col items-center gap-[28px] px-[30px] pb-[51px] text-center [--rise-delay:.3s] [--rise-y:24px] md:mt-[max(80px,calc(14vw-50px))] xl:absolute xl:inset-x-0 xl:bottom-0 xl:mt-0 xl:flex-row xl:items-end xl:justify-between xl:gap-[60px] xl:px-[60px] xl:pb-[35px] xl:text-left min-[1600px]:px-[100px]">
-          <div className="flex max-w-[520px] flex-col gap-[14px]">
-            <p className="font-mono text-[13px] font-semibold uppercase leading-[1.6] tracking-[0.5px] text-muted-foreground">
-              Recent builds —{" "}
-              {RECENT_BUILDS.map((b, i) => (
-                <span key={b.href}>
-                  {i > 0 && " · "}
-                  <Link href={b.href} className="text-[color:var(--ink)] transition-colors hover:text-[color:var(--accent-blue)]">
-                    <ScrambleText text={b.label} triggerOn="hover" />
-                  </Link>
-                </span>
-              ))}
-            </p>
-            <p className="font-sans text-[16px] font-medium leading-[1.5] text-[color:var(--body-text)] md:text-[17px]">
-              A small, focused studio designing and building custom software, web apps and AI automation —
-              you work directly with the people writing the code.
-            </p>
-          </div>
-
-          <div className="flex shrink-0 flex-wrap items-center justify-center gap-x-[28px] gap-y-[16px]">
-            <Link
-              href="/contact"
-              onClick={() => window.scrollTo(0, 0)}
-              className="group inline-flex items-center gap-2.5 rounded-full bg-[color:var(--ink)] px-7 py-3.5 font-sans text-[15px] font-semibold text-[color:var(--background)] transition-[transform,background-color,color] duration-300 hover:-translate-y-0.5 hover:bg-[color:var(--accent-blue)] hover:text-white"
-            >
-              Start a project
-              <ArrowUpRightIcon className="h-[13px] w-[13px] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+                poster="/images/hero-reel-poster.jpg"
+                onTimeUpdate={onTime}
+              >
+                <source src="/videos/hero-reel.mp4" type='video/mp4; codecs="avc1.640028"' />
+                <source src="/videos/hero-reel.webm" type="video/webm" />
+              </video>
             </Link>
-            <a
-              href={`https://wa.me/${WHATSAPP_NUMBER}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-[15px] font-semibold uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-[color:var(--accent-blue)]"
-            >
-              [ <ScrambleText text="WhatsApp us" triggerOn="hover" /> ]
-            </a>
           </div>
-        </div>
-      </div>
-
-      {/* Large media wrapper — Flip target; placeholder keeps the space */}
-      <div className="relative mx-auto w-full max-w-[1920px]">
-        <div ref={largeWrapRef} className="relative aspect-[3/4] w-full md:aspect-video">
-          <div className="h-full w-full bg-[#afafaf] opacity-0" aria-hidden="true" />
         </div>
       </div>
     </section>
