@@ -49,19 +49,27 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  // When pathname changes, scroll to top immediately
+  // On a new page: jump to the #section in the URL (e.g. /#services from
+  // another page), otherwise to the top. Re-run after ScrollTrigger lays out
+  // pins, which shifts section offsets.
   useEffect(() => {
-    window.scrollTo(0, 0);
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(0, { immediate: true });
-    }
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-      if (lenisRef.current) {
-        lenisRef.current.scrollTo(0, { immediate: true });
+    const land = () => {
+      const id = decodeURIComponent(window.location.hash.slice(1));
+      const target = id ? document.getElementById(id) : null;
+      if (target) {
+        if (lenisRef.current) lenisRef.current.scrollTo(target, { immediate: true });
+        else target.scrollIntoView();
+      } else {
+        window.scrollTo(0, 0);
+        lenisRef.current?.scrollTo(0, { immediate: true });
       }
+    };
+    land();
+    const timer = setTimeout(() => {
       ScrollTrigger.refresh();
+      land();
     }, 50);
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   return <>{children}</>;

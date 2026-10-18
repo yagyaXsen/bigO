@@ -3,16 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap, ScrollTrigger, Flip } from "@/lib/gsap";
-import { ArrowDownIcon } from "@/components/icons";
-import type { SocialLink } from "@/types";
+import { ArrowUpRightIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
+import { WHATSAPP_NUMBER } from "@/lib/contact";
 import { useSplitLines } from "@/hooks/useSplitLines";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 
-const SOCIAL_LINKS: SocialLink[] = [
-  { label: "Instagram", href: "https://www.instagram.com/thebigoteam/" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/company/bigocompany/about/" },
-  { label: "WhatsApp", href: "https://wa.me/918875326549" },
+/* Real, live projects — each links to its case study on /work */
+const RECENT_BUILDS = [
+  { label: "Nexora", href: "/work#nexora" },
+  { label: "Hirearn", href: "/work#hirearn" },
+  { label: "Lumora Dental", href: "/work#lumora" },
 ];
 
 export function HeroSection() {
@@ -96,7 +97,7 @@ export function HeroSection() {
               ref={h1Ref}
               className="text-center font-sans font-semibold leading-[1.1] tracking-[-0.032em] text-white text-[50px] md:text-[75px] xl:text-[95px] min-[1600px]:text-[120px]"
             >
-              We build, run &amp; grow your business online
+              We build software &amp; AI that runs your business
             </h1>
           </div>
 
@@ -117,6 +118,7 @@ export function HeroSection() {
                 muted
                 playsInline
                 preload="auto"
+                poster="/images/hero-poster.jpg"
                 src="/videos/hero-section.mp4"
               />
             </div>
@@ -125,10 +127,10 @@ export function HeroSection() {
 
         {/* Side labels — btn-line-small, left/right 60px → 100px at 1600 */}
         <a
-          href="#about"
+          href="#services"
           className="absolute left-[60px] top-1/2 hidden -translate-y-1/2 font-mono text-[14px] font-medium uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-muted-foreground xl:block min-[1600px]:left-[100px]"
         >
-          [ <ScrambleText text="STUDIO" /> ]
+          [ <ScrambleText text="SERVICES" /> ]
         </a>
         <Link
           href="/work"
@@ -138,37 +140,52 @@ export function HeroSection() {
           [ <ScrambleText text="WORKS" /> ]
         </Link>
 
-        {/* Bottom dataline — pb 51px → 35px at xl; px 30px → 70px at 1600 */}
+        {/* Bottom dataline — what we do + recent builds (left), the two ways to
+            start (right). Under the headline on small screens, pinned to the
+            bottom of the stage from xl. */}
         <div
           className={cn(
-            "absolute inset-x-0 bottom-0 z-[2] flex flex-col items-center gap-[22px] px-[30px] pb-[51px] text-center transition-all duration-[900ms] ease-out xl:flex-row xl:items-center xl:justify-between xl:pb-[35px] xl:text-left min-[1600px]:px-[70px]",
+            "relative z-[2] mt-[56px] flex w-full flex-col items-center gap-[28px] px-[30px] pb-[51px] text-center transition-all duration-[900ms] ease-out",
+            "xl:absolute xl:inset-x-0 xl:bottom-0 xl:mt-0 xl:flex-row xl:items-end xl:justify-between xl:gap-[60px] xl:px-[60px] xl:pb-[35px] xl:text-left min-[1600px]:px-[100px]",
             mounted ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
           )}
         >
-          <ul className="flex min-w-0 flex-wrap items-center justify-center gap-x-6 gap-y-1 xl:justify-start xl:gap-x-[34px]">
-            {SOCIAL_LINKS.map((link) => (
-              <li key={link.label} className="shrink-0">
-                <a
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block overflow-hidden font-mono text-[14px] font-semibold uppercase leading-[1.6] text-[color:var(--body-text)] transition-colors hover:text-[color:var(--ink)]"
-                >
-                  <ScrambleText text={link.label} triggerOn="hover" />
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="flex max-w-[520px] flex-col gap-[14px]">
+            <p className="font-mono text-[13px] font-semibold uppercase leading-[1.6] tracking-[0.5px] text-muted-foreground">
+              Recent builds —{" "}
+              {RECENT_BUILDS.map((b, i) => (
+                <span key={b.href}>
+                  {i > 0 && " · "}
+                  <Link href={b.href} className="text-[color:var(--ink)] transition-colors hover:text-[color:var(--accent-blue)]">
+                    <ScrambleText text={b.label} triggerOn="hover" />
+                  </Link>
+                </span>
+              ))}
+            </p>
+            <p className="font-sans text-[16px] font-medium leading-[1.5] text-[color:var(--body-text)] md:text-[17px]">
+              A small, focused studio designing and building custom software, web apps and AI automation —
+              you work directly with the people writing the code.
+            </p>
+          </div>
 
-          <a
-            href="#about"
-            className="flex shrink-0 items-center gap-[12px] text-[color:var(--ink)] transition-opacity hover:opacity-70"
-          >
-            <span className="hidden whitespace-nowrap font-mono text-[18px] font-bold uppercase tracking-[-0.5px] md:inline">
-              <ScrambleText text="Scroll to explore" />
-            </span>
-            <ArrowDownIcon className="h-[18px] w-[18px]" aria-hidden />
-          </a>
+          <div className="flex shrink-0 flex-wrap items-center justify-center gap-x-[28px] gap-y-[16px]">
+            <Link
+              href="/contact"
+              onClick={() => window.scrollTo(0, 0)}
+              className="group inline-flex items-center gap-2.5 rounded-full bg-[color:var(--ink)] px-7 py-3.5 font-sans text-[15px] font-semibold text-[color:var(--background)] transition-[transform,background-color,color] duration-300 hover:-translate-y-0.5 hover:bg-[color:var(--accent-blue)] hover:text-white"
+            >
+              Start a project
+              <ArrowUpRightIcon className="h-[13px] w-[13px] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true" />
+            </Link>
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMBER}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-[15px] font-semibold uppercase tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-[color:var(--accent-blue)]"
+            >
+              [ <ScrambleText text="WhatsApp us" triggerOn="hover" /> ]
+            </a>
+          </div>
         </div>
       </div>
 

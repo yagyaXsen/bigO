@@ -2,15 +2,6 @@ import type { SVGProps } from "react";
 
 type IconProps = SVGProps<SVGSVGElement>;
 
-/** Cart / say-hello glyph */
-export function CartIcon(props: IconProps) {
-  return (
-    <svg viewBox="0 0 18 18" fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path d="M3.1,15.6h2.4v2.4h-2.4v-2.4ZM10.2,18h2.4v-2.4h-2.4v2.4ZM14.9,4.7H5.5V0H.8v2.4h2.4v11.8h9.4v-2.4h-7.1v-4.7h9.4v2.4h2.4v-4.7h-2.4ZM12.5,11.8h2.4v-2.4h-2.4v2.4Z" />
-    </svg>
-  );
-}
-
 /** Moon (Night / dark-mode toggle) */
 export function MoonIcon(props: IconProps) {
   return (

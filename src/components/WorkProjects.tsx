@@ -1,12 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useInUp } from "@/hooks/useScrollAnimations";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 import { PROJECTS, shot, type WorkProject } from "@/lib/projects";
 
-/* Same tag stagger + bezier as CaseStudies */
+/* Hover stagger for the tag column + the site bezier */
 const TAG_SHIFT = [
   "group-hover:translate-y-[4px]",
   "group-hover:translate-y-[8px]",
@@ -145,20 +146,18 @@ const MEDIA_CLS = cn(
 );
 
 /** Browser-frame preview: the project's looping video when it has one,
- *  otherwise a screenshot of the top of the live site. */
-function ProjectMedia({ project: p }: { project: WorkProject }) {
+ *  otherwise a screenshot of the top of the live site. Opens the live site,
+ *  or `href` (e.g. the /work case study) when given. */
+export function ProjectMedia({ project: p, href }: { project: WorkProject; href?: string }) {
   const [videoOk, setVideoOk] = useState(true);
-  const Frame = p.live ? "a" : "div";
+  const frameCls = "block overflow-hidden border border-border bg-card";
 
-  return (
-    <Frame
-      {...(p.live ? { href: p.live, target: "_blank", rel: "noopener noreferrer", "data-cursor-text": "View live" } : {})}
-      className="block overflow-hidden border border-border bg-card"
-    >
+  const content = (
+    <>
       <div className="flex items-center justify-between gap-4 border-b border-border px-4 py-3 mxd-mono text-[12px] text-muted-foreground">
         <span className="truncate">{p.url}</span>
         <span className="whitespace-nowrap transition-colors group-hover:text-[color:var(--accent-blue)]">
-          {p.live ? "Visit live site ↗" : "In progress · Thailand → Global"}
+          {href ? "Read the case study →" : p.live ? "Visit live site ↗" : "In progress · Thailand → Global"}
         </span>
       </div>
       <div className="relative aspect-[16/10] overflow-hidden bg-muted">
@@ -171,8 +170,24 @@ function ProjectMedia({ project: p }: { project: WorkProject }) {
           <img src={p.video.poster} alt={`${p.title} preview`} className={MEDIA_CLS} />
         ) : null}
       </div>
-    </Frame>
+    </>
   );
+
+  if (href) {
+    return (
+      <Link href={href} aria-label={`${p.title} case study`} data-cursor-text="View project" className={frameCls}>
+        {content}
+      </Link>
+    );
+  }
+  if (p.live) {
+    return (
+      <a href={p.live} target="_blank" rel="noopener noreferrer" data-cursor-text="View live" className={frameCls}>
+        {content}
+      </a>
+    );
+  }
+  return <div className={frameCls}>{content}</div>;
 }
 
 /** Top-of-page screenshot from mshots. Retries while mshots returns its
@@ -251,7 +266,7 @@ function VideoLoop({ src, poster, onFail }: { src: string; poster: string; onFai
   );
 }
 
-function FlowSteps({ label, steps }: { label: string; steps: string[] }) {
+export function FlowSteps({ label, steps }: { label: string; steps: string[] }) {
   const [step, setStep] = useState(0);
   const [pinned, setPinned] = useState<number | null>(null);
 

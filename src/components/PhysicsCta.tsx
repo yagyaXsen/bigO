@@ -13,21 +13,22 @@ interface TagConfig {
   initialAngle?: number;
 }
 
+/* What we build — development and AI terms */
 const TAGS_CONFIG: TagConfig[] = [
-  { text: "WEBSITES", initialX: 6 },
-  { text: "WEB APPS", initialX: 18 },
-  { text: "E-COMMERCE", initialX: 28 },
-  { text: "AI & AUTOMATION", initialX: 36, initialAngle: Math.PI / 2 },
-  { text: "UI/UX DESIGN", initialX: 44 },
-  { text: "BRANDING", initialX: 43 },
-  { text: "LOGO DESIGN", initialX: 54 },
-  { text: "SEO", initialX: 43 },
-  { text: "SOCIAL MEDIA", initialX: 53, initialAngle: Math.PI },
-  { text: "META ADS", initialX: 64 },
-  { text: "GOOGLE ADS", initialX: 77 },
-  { text: "MAINTENANCE", initialX: 75 },
-  { text: "HOSTING", initialX: 86, initialAngle: Math.PI / 2 },
-  { text: "INTEGRATIONS", initialX: 94 },
+  { text: "WEB APPS", initialX: 6 },
+  { text: "SAAS", initialX: 18 },
+  { text: "AUTOMATION", initialX: 28 },
+  { text: "AI ASSISTANTS", initialX: 36, initialAngle: Math.PI / 2 },
+  { text: "DASHBOARDS", initialX: 44 },
+  { text: "BACKENDS", initialX: 43 },
+  { text: "DATA PIPELINES", initialX: 54 },
+  { text: "PWA", initialX: 43 },
+  { text: "INTEGRATIONS", initialX: 53, initialAngle: Math.PI },
+  { text: "PAYMENTS", initialX: 64 },
+  { text: "E-COMMERCE", initialX: 77 },
+  { text: "WEBSITES", initialX: 75 },
+  { text: "PYTHON", initialX: 86, initialAngle: Math.PI / 2 },
+  { text: "NEXT.JS", initialX: 94 },
 ];
 
 const GROUND_THICKNESS = 100;

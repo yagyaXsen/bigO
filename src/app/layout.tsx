@@ -6,7 +6,6 @@ import {
   SITE_NAME,
   SITE_TITLE,
   SITE_URL,
-  PRELOADER_KEY,
   THEME_KEY,
 } from "@/lib/site";
 import "./globals.css";
@@ -46,13 +45,10 @@ export const metadata: Metadata = {
   },
 };
 
-/* Inline in <head> so it runs before first paint: apply the saved Night theme
-   (no light flash) and skip the intro preloader on repeat visits this session.
-   next/script's beforeInteractive waits for the Next runtime, which is too late. */
-const initScript = [
-  `try{if(localStorage.getItem(${JSON.stringify(THEME_KEY)})==="dark")document.documentElement.classList.add("dark")}catch(e){}`,
-  `try{if(sessionStorage.getItem(${JSON.stringify(PRELOADER_KEY)})==="true")document.documentElement.dataset.preloaded="true"}catch(e){}`,
-].join(";");
+/* Inline in <head> so it runs before first paint and the saved Night theme
+   doesn't flash light. next/script's beforeInteractive waits for the Next
+   runtime, which is too late. */
+const initScript = `try{if(localStorage.getItem(${JSON.stringify(THEME_KEY)})==="dark")document.documentElement.classList.add("dark")}catch(e){}`;
 
 export default function RootLayout({
   children,

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { SITE_NAME } from "@/lib/site";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { BlurScrollRoot, BlurSection } from "@/components/providers/BlurScroll";
-import { Preloader } from "@/components/ui/Preloader";
 import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { SiteHeader } from "@/components/SiteHeader";
 import { WorkHero } from "@/components/WorkHero";
@@ -26,7 +25,6 @@ export const metadata: Metadata = {
 export default function WorkPage() {
   return (
     <>
-      <Preloader />
       <GrainOverlay />
       <SmoothScroll>
         <BlurScrollRoot>

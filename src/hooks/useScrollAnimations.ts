@@ -130,54 +130,6 @@ export function useSlideDownLine<T extends HTMLElement = HTMLDivElement>(
 }
 
 /**
- * Reference `mxd-perspective-list` (capabilities rows): as each item scrolls
- * past the viewport top its inner tilts back in 3D and fades out —
- *   set(inner, { rotateX: 0, opacity: 1, blur 0 })
- *   to(inner, { rotateX: 30, opacity: .3, blur 4px, ease "none",
- *     scrollTrigger: { trigger: item, start "5% top", end "bottom 40%", scrub .6 } })
- * Item needs perspective:1000px; inner needs transform-origin:bottom.
- */
-export function usePerspectiveList<T extends HTMLElement = HTMLDivElement>(
-  itemSelector: string,
-  innerSelector: string
-) {
-  const ref = useRef<T>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const items = Array.from(el.querySelectorAll(itemSelector));
-    if (!items.length) return;
-
-    const ctx = gsap.context(() => {
-      items.forEach((item) => {
-        const inner = item.querySelector(innerSelector);
-        if (!inner) return;
-        gsap.set(inner, { rotateX: 0, opacity: 1, filter: "blur(0px)" });
-        gsap.to(inner, {
-          rotateX: 30,
-          opacity: 0.3,
-          filter: "blur(4px)",
-          ease: "none",
-          scrollTrigger: {
-            trigger: item,
-            start: "5% top",
-            end: "bottom 40%",
-            scrub: 0.6,
-          },
-        });
-      });
-    }, el);
-
-    return () => ctx.revert();
-  }, [itemSelector, innerSelector]);
-
-  return ref;
-}
-
-/**
  * Reference `revealType` (.reveal-type — divider H2s): SplitText chars with
  * a scrubbed blur-in —
  *   fromTo(chars, { opacity: 0, filter: blur(10px), xPercent: 12 },

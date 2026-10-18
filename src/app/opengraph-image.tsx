@@ -30,7 +30,7 @@ export default function OpengraphImage() {
             bigO
           </div>
           <div style={{ display: "flex", marginTop: 28, fontSize: 44, color: "#575960" }}>
-            We build, run &amp; grow your business online.
+            We build software &amp; AI that runs your business.
           </div>
         </div>
         <div style={{ display: "flex", height: 8, width: 160, background: "#002bba" }} />

@@ -5,7 +5,6 @@ import {
   BlurScrollRoot,
   BlurSection,
 } from "@/components/providers/BlurScroll";
-import { Preloader } from "@/components/ui/Preloader";
 import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ContactHero } from "@/components/ContactHero";
@@ -31,7 +30,6 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <Preloader />
       <GrainOverlay />
       <SmoothScroll>
         <BlurScrollRoot>

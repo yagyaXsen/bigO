@@ -11,13 +11,11 @@ export const SITE_URL = (
 
 export const SITE_NAME = "bigO";
 
-export const SITE_TITLE = "bigO — Digital Studio | We build, run & grow your business online";
+export const SITE_TITLE = "bigO — Digital Studio | We build software & AI that runs your business";
 
 export const SITE_DESCRIPTION =
-  "bigO is a small, focused digital studio that builds websites, web apps, AI automation, and full digital presence. One team, complete solution.";
+  "bigO is a small, focused studio that designs and builds custom software, web apps and AI automation — you work directly with the people writing the code.";
 
 /** localStorage key for the Night/Day toggle. */
 export const THEME_KEY = "bigo-theme";
 
-/** sessionStorage flag: the intro preloader already ran this session. */
-export const PRELOADER_KEY = "bigo_preloader_shown";

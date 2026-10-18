@@ -1,73 +1,42 @@
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
-import {
-  BlurScrollRoot,
-  BlurSection,
-} from "@/components/providers/BlurScroll";
-import { Preloader } from "@/components/ui/Preloader";
 import { GrainOverlay } from "@/components/ui/GrainOverlay";
 import { SiteHeader } from "@/components/SiteHeader";
 import { HeroSection } from "@/components/HeroSection";
-import { AboutSection } from "@/components/AboutSection";
-import { NicheCards } from "@/components/NicheCards";
-import { CapabilitiesSection } from "@/components/CapabilitiesSection";
-import { ImageDivider } from "@/components/Divider";
-import { CaseStudies } from "@/components/CaseStudies";
+import { ServicesSection } from "@/components/ServicesSection";
+import { SelectedWork } from "@/components/SelectedWork";
+import { WorkProcess } from "@/components/WorkProcess";
 import { TechStack } from "@/components/TechStack";
-import { InsightsSection } from "@/components/InsightsSection";
 import { PhysicsCta } from "@/components/PhysicsCta";
 import { SiteFooter } from "@/components/SiteFooter";
+import { PROCESS_SHORT } from "@/lib/projects";
 
+/* Home: what we build, proof, how we work, stack, then the way to start */
 export default function Home() {
   return (
     <>
-      <Preloader />
       <GrainOverlay />
       <SmoothScroll>
-        <BlurScrollRoot>
-          <SiteHeader />
-          <main className="overflow-x-clip">
-            <HeroSection />
-            <AboutSection />
-            <BlurSection>
-              <NicheCards />
-            </BlurSection>
-            <BlurSection>
-              <CapabilitiesSection />
-            </BlurSection>
-            <BlurSection>
-              <ImageDivider
-                src="/images/dividers/1920x1200_dv04.webp"
-                alt="bigO showcase"
-              />
-            </BlurSection>
-            <CaseStudies />
-            <BlurSection>
-              <ImageDivider
-                src="/images/dividers/1920x1080_dv01.webp"
-                alt="bigO team"
-                cta="Let's meet"
-                title="Small but powerful team"
-              />
-            </BlurSection>
-            <BlurSection>
-              <TechStack />
-            </BlurSection>
-
-            <BlurSection>
-              <ImageDivider
-                src="/images/dividers/1920x1200_dv07.webp"
-                alt="bigO showcase"
-              />
-            </BlurSection>
-            <InsightsSection />
-            <BlurSection>
-              <PhysicsCta />
-            </BlurSection>
-            <BlurSection>
-              <SiteFooter />
-            </BlurSection>
-          </main>
-        </BlurScrollRoot>
+        <SiteHeader />
+        <main className="overflow-x-clip">
+          <HeroSection />
+          <ServicesSection />
+          <SelectedWork />
+          <WorkProcess
+            counter="P/03"
+            title={
+              <>
+                How we
+                <br />
+                work
+              </>
+            }
+            intro="From first call to launch in four clear steps — with the same small team from start to finish, so you always know what's next."
+            steps={PROCESS_SHORT}
+          />
+          <TechStack />
+          <PhysicsCta />
+          <SiteFooter />
+        </main>
       </SmoothScroll>
     </>
   );

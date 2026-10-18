@@ -2,10 +2,20 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { CartIcon, MoonIcon, ArrowUpRightIcon } from "@/components/icons";
+import { MoonIcon, ArrowUpRightIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 import { THEME_KEY } from "@/lib/site";
+
+/* Header nav (xl+) and menu overlay share these; hash links land on home sections */
+const NAV_LINKS = [
+  { label: "Work", href: "/work" },
+  { label: "Services", href: "/#services" },
+  { label: "Process", href: "/#process" },
+  { label: "Contact", href: "/contact" },
+];
+
+const MENU_LINKS = [{ label: "Home", href: "/" }, ...NAV_LINKS];
 
 export function SiteHeader() {
   const [isDark, setIsDark] = useState(false);
@@ -54,6 +64,20 @@ export function SiteHeader() {
     </Link>
   );
 
+  const Nav = (
+    <nav aria-label="Main" className="hidden items-center gap-[30px] xl:flex">
+      {NAV_LINKS.map(({ label, href }) => (
+        <Link
+          key={href}
+          href={href}
+          className="whitespace-nowrap font-mono text-[18px] font-bold uppercase tracking-[-0.5px] text-[color:var(--ink)] transition-colors hover:text-[color:var(--accent-blue)]"
+        >
+          <ScrambleText text={label} />
+        </Link>
+      ))}
+    </nav>
+  );
+
   const Controls = (
     <div className="flex items-center gap-2 pr-[14px] md:gap-[35px] md:pr-[35px]">
       {/* Start Project — caption md+ only, icon always */}
@@ -65,7 +89,7 @@ export function SiteHeader() {
         <span className="hidden whitespace-nowrap font-mono text-[18px] font-bold uppercase tracking-[-0.5px] md:inline-flex">
           <ScrambleText text="Start Project" />
         </span>
-        <CartIcon className="h-[19px] w-[19px] md:h-4 md:w-4" aria-hidden="true" />
+        <ArrowUpRightIcon className="h-[17px] w-[17px] md:h-[15px] md:w-[15px]" aria-hidden="true" />
       </Link>
 
       {/* Night / dark-mode switch — "NIGHT / ☾" */}
@@ -92,7 +116,10 @@ export function SiteHeader() {
           hamburger zone (55px + its offset). */}
       <header className="absolute left-0 top-0 z-40 flex w-full items-start justify-between pl-[30px] pr-[85px] pt-[30px] md:pl-[60px] md:pr-[115px] min-[1600px]:pl-[100px] min-[1600px]:pr-[155px]">
         {Logo}
-        {Controls}
+        <div className="flex items-center gap-[50px] min-[1600px]:gap-[70px]">
+          {Nav}
+          {Controls}
+        </div>
       </header>
 
       {/* Hamburger — fixed, mix-blend-difference, two 50px lines (.mxd-menu__hamburger) */}
@@ -142,33 +169,17 @@ export function SiteHeader() {
                 / 01 NAVIGATION
               </span>
               <ul className="flex flex-col gap-4">
-                <li>
-                  <Link
-                    href="/"
-                    onClick={() => setMenuOpen(false)}
-                    className="group inline-flex items-center gap-4 text-[color:var(--ink)] text-[clamp(32px,4vw,64px)] font-bold tracking-[-2px] transition-colors hover:text-[color:var(--accent-blue)]"
-                  >
-                    <span>Home</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/work"
-                    onClick={() => setMenuOpen(false)}
-                    className="group inline-flex items-center gap-4 text-[color:var(--ink)] text-[clamp(32px,4vw,64px)] font-bold tracking-[-2px] transition-colors hover:text-[color:var(--accent-blue)]"
-                  >
-                    <span>Work</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/contact"
-                    onClick={() => setMenuOpen(false)}
-                    className="group inline-flex items-center gap-4 text-[color:var(--ink)] text-[clamp(32px,4vw,64px)] font-bold tracking-[-2px] transition-colors hover:text-[color:var(--accent-blue)]"
-                  >
-                    <span>Contact</span>
-                  </Link>
-                </li>
+                {MENU_LINKS.map(({ label, href }) => (
+                  <li key={href}>
+                    <Link
+                      href={href}
+                      onClick={() => setMenuOpen(false)}
+                      className="group inline-flex items-center gap-4 text-[color:var(--ink)] text-[clamp(32px,4vw,64px)] font-bold tracking-[-2px] transition-colors hover:text-[color:var(--accent-blue)]"
+                    >
+                      <span>{label}</span>
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 

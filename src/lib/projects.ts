@@ -10,6 +10,8 @@ export interface WorkProject {
   url: string;
   live?: string;
   tags: string[];
+  /** One sentence for the home page's Selected work */
+  summary?: string;
   description: string;
   flowLabel?: string;
   flow?: string[];
@@ -34,6 +36,8 @@ export const PROJECTS: WorkProject[] = [
     url: "nexora-8y5.pages.dev",
     live: "https://nexora-8y5.pages.dev/",
     tags: ["Automation", "Backend", "AI extraction", "Search"],
+    summary:
+      "An AI pipeline that finds scholarships, grants, fellowships and accelerators across hundreds of sites, turns them into clean records and keeps them up to date on its own.",
     description:
       "Students, researchers and early founders lose hours hunting for scholarships, fellowships, accelerators, hackathons and grants spread across hundreds of sites. Nexora does the hunting for them. An automated pipeline crawls sources on a schedule, turns messy pages into clean structured records, keeps them up to date and publishes only what passes strict quality checks — then helps each user track their applications through to the deadline.",
     flowLabel: "/ PIPELINE",
@@ -62,6 +66,7 @@ export const PROJECTS: WorkProject[] = [
     url: "hirearn.com",
     live: "https://hirearn.com/",
     tags: ["Marketplace", "Web platform", "PWA"],
+    summary: "A two-sided marketplace and installable app that connects people with local jobs and services.",
     description:
       "Finding someone nearby for a job — or finding nearby work — usually means word of mouth and scattered groups. Hirearn brings both sides into one place: people post what they need, local providers discover it and take it up. Our freelance development team architected and built the full product: a complete web platform with installable PWA/app capabilities, structured as a marketplace that can scale to more categories and cities.",
     flowLabel: "/ HOW IT WORKS",
@@ -105,6 +110,7 @@ export const PROJECTS: WorkProject[] = [
     url: "yagyaxsen.github.io/lumora-dental",
     live: "https://yagyaxsen.github.io/lumora-dental/",
     tags: ["Website", "Healthcare", "Booking", "Motion"],
+    summary: "A calm, image-led clinic website with treatment pages, online booking and a callback form.",
     description:
       "A dental clinic has to feel calm and trustworthy before a patient ever walks in. Lumora Dental's website does that work: a warm, image-led home page, clear pages for preventive, cosmetic, restorative and orthodontic care, the team, patient stories and a blog — with every appointment button leading straight to online booking and a quick callback form right in the hero.",
     flowLabel: "/ PATIENT JOURNEY",
@@ -120,6 +126,14 @@ export const PROJECTS: WorkProject[] = [
     // Scroll-through recording of the live home page
     video: { src: "/videos/work/lumora.mp4", poster: "/images/work/lumora-poster.jpg" },
   },
+];
+
+/* Home page: the same process in four steps */
+export const PROCESS_SHORT: [string, string][] = [
+  ["Discover & plan", "We learn the business, goals and requirements, then agree scope, structure and technical approach."],
+  ["Design", "Structure, visual direction and user experience — shaped and approved before development starts."],
+  ["Build & test", "The approved design becomes a fast, production-ready product, tested across devices, integrations and security."],
+  ["Launch & grow", "Hosting, domains, SSL and analytics configured — then maintenance and improvements after launch."],
 ];
 
 export const PROCESS: [string, string][] = [

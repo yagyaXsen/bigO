@@ -266,11 +266,6 @@
   mask-image: linear-gradient(to bottom, transparent 70%, #000 100%);
 }
 
-/* Intro preloader already played this session (set by the head script) */
-html[data-preloaded] .preloader {
-  display: none;
-}
-
 /* Lenis smooth-scroll base styles */
 html.lenis,
 html.lenis body {
