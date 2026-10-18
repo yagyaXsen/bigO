@@ -166,3 +166,86 @@ export const MORE_SERVICES: MoreService[] = [
     ],
   },
 ];
+
+/* ---------- Working with bigO ----------
+   Terms confirmed by the team: a free first call with no set length, a
+   written fixed-price proposal, milestone payments, client ownership of code
+   and designs once paid, NDAs on request, 30 days of free fixes after launch
+   and optional monthly care plans. Keep the copy below within those. */
+
+/** Home page "How a project starts" */
+export const START_STEPS: [string, string][] = [
+  [
+    "A free call",
+    "Tell us what you want to build. We talk it through for as long as it takes, at no cost and with no obligation.",
+  ],
+  [
+    "A fixed-price proposal",
+    "You get it in writing before any work starts: the scope, the timeline and one fixed price.",
+  ],
+  [
+    "Build, launch, support",
+    "We build in milestones you can review, launch, and fix any bugs free for 30 days. A monthly care plan can keep it running after that.",
+  ],
+];
+
+export const ENGAGEMENTS: { title: string; text: string; points: string[] }[] = [
+  {
+    title: "Fixed-price project",
+    text: "For new software, AI systems and websites. Scope, timeline and one price agreed in writing up front, then paid in milestones.",
+    points: ["Free first call", "Written proposal", "Milestone payments", "30 days of free fixes"],
+  },
+  {
+    title: "Monthly care plan",
+    text: "For what we've launched together. Updates, backups, monitoring and small changes, for a monthly fee.",
+    points: ["Security updates", "Backups and monitoring", "Bug fixes and small changes", "Performance checks"],
+  },
+];
+
+export const PROMISES = [
+  "Free first call",
+  "Fixed price in writing",
+  "You own the code and designs",
+  "NDA on request",
+  "30 days of free fixes",
+];
+
+export const FAQ: [string, string][] = [
+  [
+    "How does a project start?",
+    "With a free call. There's no set length: we talk until we understand what you need. After that you get a written proposal with the scope, timeline and a fixed price.",
+  ],
+  [
+    "How much will it cost?",
+    "It depends on what you need built, so we don't publish a price list. After the call you get one fixed price in writing. If you want to add something later, we agree the change in writing before starting on it.",
+  ],
+  [
+    "How long does it take?",
+    "That depends on the scope too. Your proposal includes the timeline, split into milestones so you can see progress as it happens.",
+  ],
+  [
+    "How do payments work?",
+    "In milestones agreed in the proposal: usually one payment to start, one at a midpoint such as design sign-off or a beta, and the last at launch.",
+  ],
+  [
+    "Who owns the code and designs?",
+    "You do. Once the project is paid in full, the code, designs and accounts are yours.",
+  ],
+  ["Will you sign an NDA?", "Yes. We're happy to sign one before you share any details."],
+  [
+    "What happens after launch?",
+    "Any bugs are fixed free for 30 days. After that, a monthly care plan covers updates, backups, monitoring and small changes, if you want one.",
+  ],
+  [
+    "Do you work with clients outside India?",
+    "Yes. We're based in Delhi NCR and work with clients online, including an ongoing project for a catering business in Thailand.",
+  ],
+  [
+    "Can you work on a website or app we already have?",
+    "Yes. We usually start with an audit, then fix, improve or extend what's there.",
+  ],
+  [
+    "Which technologies do you use?",
+    "Mostly React, Next.js, TypeScript, Node.js and Python, with PostgreSQL or Supabase for data. The full list is in our tech stack above.",
+  ],
+];

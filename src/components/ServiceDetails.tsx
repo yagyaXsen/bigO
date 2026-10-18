@@ -13,7 +13,7 @@ const BRACKET_LINK =
   "mxd-mono inline-flex gap-[8px] text-[14px] font-semibold uppercase leading-[1.6] tracking-[0.5px] text-[color:var(--ink)] transition-colors hover:text-[color:var(--accent-blue)] before:content-['['] after:content-[']'] before:transition-transform after:transition-transform hover:before:-translate-x-[2px] hover:after:translate-x-[2px]";
 
 /** Counter + h2 grid shared by every section title on the site */
-function SectionTitle({ counter, title, intro }: { counter: string; title: string; intro?: string }) {
+export function SectionTitle({ counter, title, intro }: { counter: string; title: string; intro?: string }) {
   const counterRef = useInUp<HTMLDivElement>();
   const titleRef = useSplitLines<HTMLHeadingElement>();
   return (

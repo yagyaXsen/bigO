@@ -8,6 +8,7 @@ const DISCOVER_LINKS = [
   { label: "Services", href: "/services" },
   { label: "Work", href: "/work" },
   { label: "Process", href: "/services#process" },
+  { label: "FAQ", href: "/services#faq" },
   { label: "Contact", href: "/contact" },
 ];
 
