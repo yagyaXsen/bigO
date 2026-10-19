@@ -81,6 +81,7 @@ export function Problems() {
   return (
     <Section
       id="problems"
+      tone="muted"
       num="01"
       label="Problems we solve"
       title="If this sounds familiar, we can help."
@@ -155,6 +156,7 @@ export function SelectedWork() {
   return (
     <Section
       id="work"
+      tone="muted"
       num="03"
       label="Selected work"
       title="Recent projects."
@@ -221,6 +223,7 @@ export function Stack() {
   return (
     <Section
       id="stack"
+      tone="muted"
       num="05"
       label="Tech stack"
       title="Mainstream tools, no lock-in."
@@ -281,6 +284,7 @@ export function HomeFaq() {
   return (
     <Section
       id="faq"
+      tone="muted"
       num="07"
       label="Questions"
       title="Common questions."

@@ -72,10 +72,10 @@ export default function ServicesPage() {
           </nav>
         </PageHeader>
 
-        {SERVICES.map((s) => {
+        {SERVICES.map((s, i) => {
           const example = s.example ? PROJECTS.find((p) => p.id === s.example) : undefined;
           return (
-            <Section key={s.id} id={s.id} num={s.num} label="Service" title={s.title} intro={s.short}>
+            <Section key={s.id} id={s.id} tone={i % 2 ? "default" : "muted"} num={s.num} label="Service" title={s.title} intro={s.short}>
               <div className="md:grid md:grid-cols-12 md:gap-8">
                 <div className="space-y-12 md:col-span-8 md:col-start-5">
                   <List label="A good fit if" items={s.fit} />
@@ -101,6 +101,7 @@ export default function ServicesPage() {
 
         <Section
           id="also"
+          tone="muted"
           num="05"
           label="Also available"
           title="The pieces around your software."

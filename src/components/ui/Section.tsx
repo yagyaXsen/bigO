@@ -9,8 +9,8 @@ interface SectionProps {
   intro?: ReactNode;
   /** A link or note under the intro, e.g. "All work →" */
   aside?: ReactNode;
-  /** "invert" = the page's one dark section */
-  tone?: "default" | "invert";
+  /** "muted" = alternating grey section; "invert" = a dark section */
+  tone?: "default" | "muted" | "invert";
   className?: string;
   children?: ReactNode;
 }
@@ -19,7 +19,10 @@ interface SectionProps {
  *  right (stacked on phones), content below. Divided by a thin top line. */
 export function Section({ id, num, label, title, intro, aside, tone = "default", className, children }: SectionProps) {
   return (
-    <section id={id} className={cn(tone === "invert" ? "tone-invert" : "border-t border-line", className)}>
+    <section
+      id={id}
+      className={cn(tone === "invert" ? "tone-invert" : "border-t border-line", tone === "muted" && "tone-muted", className)}
+    >
       <div className="container-page py-20 md:py-28">
         {(label || title) && <SectionHeader num={num} label={label} title={title} intro={intro} aside={aside} />}
         {children}

@@ -35,7 +35,7 @@ export default function ContactPage() {
           lead="Share a few details and we'll reply within a day with next steps. The first call is free."
         />
 
-        <section className="border-t border-line">
+        <section className="tone-muted border-t border-line">
           <div className="container-page grid gap-16 py-16 md:grid-cols-12 md:gap-8 md:py-24">
             <div className="md:col-span-7">
               <p className="label mb-8">Project details</p>

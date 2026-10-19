@@ -58,7 +58,7 @@ export default function WorkPage() {
         </PageHeader>
 
         {PROJECTS.map((p, i) => (
-          <article key={p.id} id={p.id} className="border-t border-line">
+          <article key={p.id} id={p.id} className={i % 2 ? "border-t border-line" : "tone-muted border-t border-line"}>
             <div className="container-page grid gap-10 py-20 md:grid-cols-12 md:gap-8 md:py-28">
               <header className="md:col-span-4">
                 <p className="label">

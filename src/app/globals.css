@@ -3,47 +3,50 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ---------- Design tokens ----------
-   Warm cream paper, near-black ink, one quiet accent (a softened version of
-   the bigO brand blue). The "invert" set is the one dark section per page. */
+   Clean white page with alternating soft warm-grey sections, near-black ink
+   and one crisp blue accent (close to the bigO brand blue). The "invert"
+   set is for a dark section; "bg-alt" is the grey used by .tone-muted. */
 :root {
-  --bg: #f4efe6;
-  --surface: #faf7f1;
-  --ink: #1b1915;
-  --text: #3d3931;
-  --muted: #6d675c;
-  --line: #ddd5c6;
-  --line-strong: #c4baa8;
-  --accent: #2e4c8c;
-  --accent-soft: rgba(46, 76, 140, 0.08);
-  --invert-bg: #1b1915;
-  --invert-ink: #f4efe6;
-  --invert-text: #cfc7b8;
-  --invert-muted: #9a9182;
-  --invert-line: #38332b;
-  --invert-accent: #a9bbe6;
-  --danger: #a33a2a;
-  --pattern: rgba(27, 25, 21, 0.07);
+  --bg: #ffffff;
+  --bg-alt: #f6f6f3;
+  --surface: #ffffff;
+  --ink: #111111;
+  --text: #3d3d3d;
+  --muted: #6b6b6b;
+  --line: #e6e6e1;
+  --line-strong: #cfcfc9;
+  --accent: #2f50ca;
+  --accent-soft: rgba(47, 80, 202, 0.08);
+  --invert-bg: #111111;
+  --invert-ink: #f5f5f3;
+  --invert-text: #d0d0cc;
+  --invert-muted: #9a9a96;
+  --invert-line: #2c2c2a;
+  --invert-accent: #93a8f0;
+  --danger: #b3261e;
+  --pattern: rgba(17, 17, 17, 0.05);
   color-scheme: light;
 }
 
 .dark {
-  --bg: #15130f;
-  --surface: #1c1a16;
-  --ink: #efe9dd;
-  --text: #cfc7b8;
-  --muted: #9a9182;
-  --line: #2f2b25;
-  --line-strong: #433d34;
-  --accent: #a9bbe6;
-  --accent-soft: rgba(169, 187, 230, 0.1);
-  --invert-bg: #201d18;
-  --invert-ink: #efe9dd;
-  --invert-text: #cfc7b8;
-  --invert-muted: #9a9182;
-  --invert-line: #3a352d;
-  --invert-accent: #a9bbe6;
-  --danger: #e08a7a;
-  --pattern: rgba(239, 233, 221, 0.06);
+  --bg: #111111;
+  --bg-alt: #181817;
+  --surface: #1c1c1b;
+  --ink: #f5f5f3;
+  --text: #d0d0cc;
+  --muted: #9a9a96;
+  --line: #262625;
+  --line-strong: #3a3a38;
+  --accent: #93a8f0;
+  --accent-soft: rgba(147, 168, 240, 0.1);
+  --invert-bg: #1c1c1b;
+  --invert-ink: #f5f5f3;
+  --invert-text: #d0d0cc;
+  --invert-muted: #9a9a96;
+  --invert-line: #333331;
+  --invert-accent: #93a8f0;
+  --danger: #f2a49b;
+  --pattern: rgba(245, 245, 243, 0.05);
   color-scheme: dark;
 }
 
@@ -150,9 +153,16 @@
     --line: var(--invert-line);
     --line-strong: var(--invert-line);
     --accent: var(--invert-accent);
-    --accent-soft: rgba(169, 187, 230, 0.12);
+    --accent-soft: rgba(147, 168, 240, 0.12);
     background: var(--bg);
     color: var(--text);
+  }
+
+  /* Alternating grey section, as in the reference design. Re-pointing --bg
+     makes grid cells and fills inside the section follow it. */
+  .tone-muted {
+    --bg: var(--bg-alt);
+    background: var(--bg);
   }
 
   /* Faint graph-paper grid behind the hero and closing call to action.
