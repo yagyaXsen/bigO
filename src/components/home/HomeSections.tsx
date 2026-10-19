@@ -6,6 +6,7 @@ import { ArrowLink, ButtonLink } from "@/components/ui/Button";
 import { Ph } from "@/components/ui/Placeholder";
 import { FaqList } from "@/components/ui/FaqList";
 import { Photo } from "@/components/ui/Photo";
+import { HeroWorkflow } from "@/components/home/HeroWorkflow";
 import {
   COMMITMENTS,
   FOUNDER,
@@ -25,29 +26,35 @@ export function Hero() {
     <>
       <div className="relative isolate">
         <div aria-hidden className="pattern-grid absolute inset-x-0 -top-px bottom-0 -z-10" />
-        <section className="container-page pt-14 pb-14 md:pt-24 md:pb-20 lg:pt-28">
-          <p className="label">{HERO.label}</p>
-          <h1 className="mt-6 max-w-[19ch] font-serif text-[42px] font-normal leading-[1.04] tracking-[-0.02em] md:text-[64px] lg:text-[80px]">
-            {HERO.title}
-          </h1>
-          <p className="mt-7 max-w-[58ch] text-[18px] leading-[1.55] md:text-[20px]">{HERO.lead}</p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <ButtonLink href="/contact">Book a free call</ButtonLink>
-            <ButtonLink href="/work" variant="secondary">
-              See our work
-            </ButtonLink>
+        {/* Text left, a live example workflow right (stacked below lg) */}
+        <section className="container-page grid gap-14 pt-14 pb-14 md:pt-24 md:pb-20 lg:grid-cols-12 lg:items-center lg:gap-10 lg:pt-28">
+          <div className="lg:col-span-7">
+            <p className="label">{HERO.label}</p>
+            <h1 className="mt-6 max-w-[19ch] font-serif text-[42px] font-normal leading-[1.04] tracking-[-0.02em] md:text-[64px] lg:text-[60px] xl:text-[68px]">
+              {HERO.title}
+            </h1>
+            <p className="mt-7 max-w-[58ch] text-[18px] leading-[1.55] md:text-[20px]">{HERO.lead}</p>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <ButtonLink href="/contact">Book a free call</ButtonLink>
+              <ButtonLink href="/work" variant="secondary">
+                See our work
+              </ButtonLink>
+            </div>
+            <p className="mt-8 text-[14px] text-muted">
+              Recent work:{" "}
+              {recent.map((p, i) => (
+                <span key={p.id}>
+                  {i > 0 && ", "}
+                  <Link href={`/work#${p.id}`} className="link">
+                    {p.name}
+                  </Link>
+                </span>
+              ))}
+            </p>
           </div>
-          <p className="mt-8 text-[14px] text-muted">
-            Recent work:{" "}
-            {recent.map((p, i) => (
-              <span key={p.id}>
-                {i > 0 && ", "}
-                <Link href={`/work#${p.id}`} className="link">
-                  {p.name}
-                </Link>
-              </span>
-            ))}
-          </p>
+          <div className="lg:col-span-5">
+            <HeroWorkflow />
+          </div>
         </section>
       </div>
 

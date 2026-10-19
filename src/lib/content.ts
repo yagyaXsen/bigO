@@ -11,6 +11,46 @@ export const HERO = {
   lead: "We replace spreadsheets, inbox juggling and copy-paste work with web apps, client portals, AI assistants and automated workflows. Built by a small team you talk to directly.",
 };
 
+/** Hero panel: example automations of the kind we build, shown step by step */
+export const WORKFLOWS: { name: string; trigger: string; steps: string[]; note: string }[] = [
+  {
+    name: "Enquiries",
+    trigger: "new enquiry",
+    steps: [
+      "Email or form enquiry arrives",
+      "AI reads it and sorts it by type and priority",
+      "Contact and details saved to your CRM",
+      "Reply drafted for a person to approve",
+      "Right team member notified",
+    ],
+    note: "Workflow automation and an AI assistant, connected to the tools you already use.",
+  },
+  {
+    name: "Client portal",
+    trigger: "client login",
+    steps: [
+      "Client signs in securely",
+      "Sees project status and next steps",
+      "Downloads documents and approves work",
+      "Pays the invoice online",
+      "Your team is notified automatically",
+    ],
+    note: "A client portal with your branding, logins and online payments.",
+  },
+  {
+    name: "Documents",
+    trigger: "new document",
+    steps: [
+      "PDF or email attachment arrives",
+      "AI extracts the key fields",
+      "Values checked against your rules",
+      "Clean record saved to your database",
+      "Anything unusual flagged for review",
+    ],
+    note: "AI data extraction with checks and human review where it matters.",
+  },
+];
+
 /** Four engineering basics every project gets, shown under the hero */
 export const COMMITMENTS: [string, string][] = [
   ["Secure by default", "Logins, roles and encrypted connections from day one"],
