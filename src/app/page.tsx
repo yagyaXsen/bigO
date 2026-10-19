@@ -8,11 +8,12 @@ import {
   Problems,
   SelectedWork,
   Stack,
+  Standards,
   WhatWeBuild,
 } from "@/components/home/HomeSections";
 
 /* Home: what we do and for whom, then the problems we solve, services,
-   proof, tech stack, the founder and common questions */
+   proof, engineering standards, tech stack, the founder and common questions */
 export default function Home() {
   return (
     <>
@@ -22,6 +23,7 @@ export default function Home() {
         <Problems />
         <WhatWeBuild />
         <SelectedWork />
+        <Standards />
         <Stack />
         <FounderNote />
         <HomeFaq />

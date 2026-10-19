@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 const NEXT_STEPS = [
   "We reply within a day.",
   "A free call to understand what you need. There's no set length.",
-  "A written proposal with the scope, timeline and one fixed price.",
+  "A written proposal with the scope, timeline and technical approach.",
 ];
 
 export default function ContactPage() {

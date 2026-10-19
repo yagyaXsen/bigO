@@ -13,7 +13,7 @@ import { FaqList } from "@/components/ui/FaqList";
 
 const title = "Services — bigO";
 const description =
-  "Web apps and internal tools, client portals, AI chatbots and assistants, and workflow automation and integrations, built at a fixed price by a small engineering studio.";
+  "Web apps and internal tools, client portals, AI chatbots and assistants, and workflow automation and integrations, built by a small engineering studio.";
 
 export const metadata: Metadata = {
   title,

@@ -11,12 +11,48 @@ export const HERO = {
   lead: "We replace spreadsheets, inbox juggling and copy-paste work with web apps, client portals, AI assistants and automated workflows. Built by a small team you talk to directly.",
 };
 
-/** The four commitments every client gets, shown under the hero */
+/** Four engineering basics every project gets, shown under the hero */
 export const COMMITMENTS: [string, string][] = [
-  ["Fixed price", "Agreed in writing before any work starts"],
-  ["Your code", "You own the code and designs once paid"],
-  ["Direct access", "You talk to the people building it"],
-  ["Support", "30 days of free fixes after launch"],
+  ["Secure by default", "Logins, roles and encrypted connections from day one"],
+  ["Tested end to end", "Checked on phones, tablets and desktops before launch"],
+  ["Built to scale", "Mainstream tools that grow with your business"],
+  ["Code you own", "Full source, accounts and documentation handed over"],
+];
+
+/** 04 — how we build: the engineering standards behind every project */
+export const STANDARDS: [string, string][] = [
+  [
+    "Security built in",
+    "Authentication, role-based access, encrypted connections and secrets kept out of the code. Your data is only visible to the people who should see it.",
+  ],
+  [
+    "Tested before every launch",
+    "Forms, integrations, payments and permissions are checked end to end, on phones, tablets and desktops and in every major browser.",
+  ],
+  [
+    "Fast on any connection",
+    "Server-rendered pages, optimised images and lean code, so your app stays quick on mobile networks and older devices.",
+  ],
+  [
+    "Version control and previews",
+    "All code lives in Git. Every change gets its own preview link you can try before it goes live, and any release can be rolled back.",
+  ],
+  [
+    "AI with guardrails",
+    "Validation, fallbacks and hand-off to a person where accuracy matters, with usage and running costs kept visible.",
+  ],
+  [
+    "Monitoring and backups",
+    "Once live, uptime monitoring, error alerts and regular database backups mean problems are caught and fixed early.",
+  ],
+  [
+    "Clean, documented handover",
+    "Readable code, written documentation, and admin access and accounts in your name, so any developer can pick it up.",
+  ],
+  [
+    "Architecture that grows",
+    "A clear separation between front end, back end and data, so adding features, users or integrations doesn't mean starting again.",
+  ],
 ];
 
 /** 01 — problems we solve: [problem, what we build, what changes] */
@@ -187,7 +223,7 @@ export const STACK: [string, string][] = [
 export const FOUNDER = {
   note: [
     "I started bigO because good software shouldn't need a big agency.",
-    "We keep the team small on purpose. The people on your first call are the people who design and write your code, so nothing gets lost in hand-offs. We agree a fixed price before we start, we show you progress as we go, and we stay around after launch to keep things working.",
+    "We keep the team small on purpose. The people on your first call are the people who design and write your code, so nothing gets lost in hand-offs. We agree the scope in writing before we start, we show you progress as we go, and we stay around after launch to keep things working.",
   ],
   name: "Alok Kumar",
   role: "Founder, bigO",
@@ -196,16 +232,8 @@ export const FOUNDER = {
 
 export const FAQ: [string, string][] = [
   [
-    "How much does a project cost?",
-    "It depends on what you need built, so we quote each project separately. After the first call you get one fixed price in writing. If you want to add something later, we agree the change in writing before starting on it.",
-  ],
-  [
     "How long does it take?",
     "That depends on the scope. Your proposal includes the timeline, split into milestones so you can see progress as it happens.",
-  ],
-  [
-    "How do payments work?",
-    "In milestones agreed in the proposal: usually one payment to start, one at a midpoint such as design sign-off or a beta, and the last at launch.",
   ],
   [
     "Who owns the code and designs?",
@@ -231,4 +259,4 @@ export const FAQ: [string, string][] = [
 ];
 
 /** The five questions shown on the home page */
-export const HOME_FAQ = [0, 1, 3, 4, 5].map((i) => FAQ[i]);
+export const HOME_FAQ = [0, 1, 2, 3, 4].map((i) => FAQ[i]);

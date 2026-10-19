@@ -14,6 +14,7 @@ import {
   PROBLEMS,
   SERVICES,
   STACK,
+  STANDARDS,
 } from "@/lib/content";
 import { PROJECTS } from "@/lib/projects";
 
@@ -187,12 +188,37 @@ export function SelectedWork() {
   );
 }
 
-/* 04 — tech stack, grouped, no logos */
+/* 04 — how we build: engineering standards, two columns of thin-ruled items */
+export function Standards() {
+  return (
+    <Section
+      id="standards"
+      num="04"
+      label="How we build"
+      title="Engineering standards on every project."
+      intro="The same technical basics go into everything we ship, whether it's a small automation or a full platform."
+    >
+      <ol className="grid gap-x-8 border-t border-line md:grid-cols-2">
+        {STANDARDS.map(([title, text], i) => (
+          <li key={title} className="flex gap-5 border-b border-line py-7">
+            <span className="label pt-1.5 text-accent">{String(i + 1).padStart(2, "0")}</span>
+            <div>
+              <h3 className="font-serif text-[22px] font-normal leading-tight md:text-[24px]">{title}</h3>
+              <p className="mt-2 max-w-[52ch] text-[15px] leading-[1.6] md:text-[16px]">{text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </Section>
+  );
+}
+
+/* 05 — tech stack, grouped, no logos */
 export function Stack() {
   return (
     <Section
       id="stack"
-      num="04"
+      num="05"
       label="Tech stack"
       title="Mainstream tools, no lock-in."
       intro="We build with widely used, well-supported technology, so your system is easy to maintain, by us or anyone else."
@@ -209,14 +235,14 @@ export function Stack() {
   );
 }
 
-/* 05 — a short note from the founder: label and photo left, the note right */
+/* 06 — a short note from the founder: label and photo left, the note right */
 export function FounderNote() {
   return (
     <Section id="founder">
       <figure className="grid gap-6 md:grid-cols-12 md:gap-8">
         <div className="md:col-span-4">
           <p className="label md:pt-3">
-            <span className="text-ink">05</span>
+            <span className="text-ink">06</span>
             <span className="mx-2">—</span>
             From the founder
           </p>
@@ -247,12 +273,12 @@ export function FounderNote() {
   );
 }
 
-/* 06 — the questions business owners ask first */
+/* 07 — the questions business owners ask first */
 export function HomeFaq() {
   return (
     <Section
       id="faq"
-      num="06"
+      num="07"
       label="Questions"
       title="Common questions."
       aside={<ArrowLink href="/services#faq">All questions</ArrowLink>}
