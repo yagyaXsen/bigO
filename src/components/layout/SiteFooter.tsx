@@ -4,8 +4,6 @@ import { CONTACT_EMAIL, PHONE_DISPLAY, SOCIAL } from "@/lib/contact";
 const STUDIO = [
   { label: "Services", href: "/services" },
   { label: "Work", href: "/work" },
-  { label: "Process", href: "/#process" },
-  { label: "Pricing", href: "/#pricing" },
   { label: "Contact", href: "/contact" },
 ];
 

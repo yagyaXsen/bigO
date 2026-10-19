@@ -83,19 +83,11 @@ export default function ServicesPage() {
                     <List label="What we build" items={s.builds} />
                     <List label="What's included" items={s.included} />
                   </div>
-                  <dl className="grid grid-cols-2 gap-px border-y border-line bg-line">
-                    <div className="bg-bg py-5 pr-4">
-                      <dt className="label">Typical timeline</dt>
-                      <dd className="mt-2 font-serif text-[24px] text-ink">
-                        <Ph text={s.timeline} />
-                      </dd>
-                    </div>
-                    <div className="bg-bg py-5 pl-5">
-                      <dt className="label">Starting at</dt>
-                      <dd className="mt-2 font-serif text-[24px] text-ink">
-                        <Ph text={s.price} />
-                      </dd>
-                    </div>
+                  <dl className="border-y border-line py-5">
+                    <dt className="label">Typical timeline</dt>
+                    <dd className="mt-2 font-serif text-[24px] text-ink">
+                      <Ph text={s.timeline} />
+                    </dd>
                   </dl>
                   <div className="flex flex-wrap gap-x-8 gap-y-3">
                     <ArrowLink href="/contact">Discuss your project</ArrowLink>

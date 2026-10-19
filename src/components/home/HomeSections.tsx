@@ -11,9 +11,7 @@ import {
   FOUNDER,
   HERO,
   HOME_FAQ,
-  PLANS,
   PROBLEMS,
-  PROCESS,
   SERVICES,
   STACK,
 } from "@/lib/content";
@@ -189,42 +187,12 @@ export function SelectedWork() {
   );
 }
 
-/* 04 — how we work: the page's one dark section */
-export function Process() {
-  return (
-    <Section
-      id="process"
-      tone="invert"
-      num="04"
-      label="How we work"
-      title="A simple process, agreed in writing."
-      intro="You know the price, the timeline and what you'll get before we start."
-    >
-      <ol className="grid gap-px border-y border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
-        {PROCESS.map(([title, text], i) => (
-          <li
-            key={title}
-            className={cn("bg-bg py-8 sm:pr-8", i % 2 ? "sm:pl-8" : "sm:pl-0", i === 0 ? "lg:pl-0" : "lg:pl-8")}
-          >
-            <p className="label text-accent">{String(i + 1).padStart(2, "0")}</p>
-            <h3 className="mt-4 font-serif text-[24px] font-normal leading-tight">{title}</h3>
-            <p className="mt-3 text-[15px] leading-[1.6]">{text}</p>
-          </li>
-        ))}
-      </ol>
-      <p className="mt-8 max-w-[70ch] text-[15px] text-muted">
-        You own the code and designs once the project is paid in full. We sign an NDA on request.
-      </p>
-    </Section>
-  );
-}
-
-/* 05 — tech stack, grouped, no logos */
+/* 04 — tech stack, grouped, no logos */
 export function Stack() {
   return (
     <Section
       id="stack"
-      num="05"
+      num="04"
       label="Tech stack"
       title="Mainstream tools, no lock-in."
       intro="We build with widely used, well-supported technology, so your system is easy to maintain, by us or anyone else."
@@ -241,57 +209,14 @@ export function Stack() {
   );
 }
 
-/* 06 — pricing and engagement options */
-export function Pricing() {
-  return (
-    <Section
-      id="pricing"
-      num="06"
-      label="Pricing"
-      title="Clear prices, agreed up front."
-      intro="Every project gets a fixed quote after the first call. These starting points help you plan."
-    >
-      <div className="grid gap-px border-y border-line bg-line lg:grid-cols-3">
-        {PLANS.map((plan) => (
-          <article key={plan.name} className="flex flex-col bg-bg py-8 lg:p-8 lg:first:pl-0">
-            <h3 className="label text-ink">{plan.name}</h3>
-            <p className="mt-5 font-serif text-[34px] leading-none text-ink">
-              <Ph text={plan.price} />
-            </p>
-            <p className="label mt-3">{plan.unit}</p>
-            <p className="mt-5 text-[16px]">{plan.text}</p>
-            <ul className="mt-6 space-y-2 border-t border-line pt-5 text-[15px]">
-              {plan.points.map((pt) => (
-                <li key={pt} className="flex gap-3">
-                  <span aria-hidden className="mt-[11px] h-px w-3 shrink-0 bg-accent" />
-                  <span>
-                    <Ph text={pt} />
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))}
-      </div>
-      <div className="mt-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <p className="max-w-[62ch] text-[15px] text-muted">
-          The final price is confirmed in writing after the first call. It only changes if you ask for something
-          new, and we agree that in writing too.
-        </p>
-        <ArrowLink href="/contact">Get a quote</ArrowLink>
-      </div>
-    </Section>
-  );
-}
-
-/* 07 — a short note from the founder: label and photo left, the note right */
+/* 05 — a short note from the founder: label and photo left, the note right */
 export function FounderNote() {
   return (
     <Section id="founder">
       <figure className="grid gap-6 md:grid-cols-12 md:gap-8">
         <div className="md:col-span-4">
           <p className="label md:pt-3">
-            <span className="text-ink">07</span>
+            <span className="text-ink">05</span>
             <span className="mx-2">—</span>
             From the founder
           </p>
@@ -322,12 +247,12 @@ export function FounderNote() {
   );
 }
 
-/* 08 — the questions business owners ask first */
+/* 06 — the questions business owners ask first */
 export function HomeFaq() {
   return (
     <Section
       id="faq"
-      num="08"
+      num="06"
       label="Questions"
       title="Common questions."
       aside={<ArrowLink href="/services#faq">All questions</ArrowLink>}

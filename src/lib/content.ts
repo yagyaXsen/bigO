@@ -2,7 +2,7 @@
    length, a written fixed-price proposal, milestone payments, client
    ownership of code and designs once paid in full, NDAs on request, 30 days
    of free fixes after launch and optional monthly care plans. Anything not
-   confirmed (prices, timelines, results, names) is a [bracketed placeholder]
+   confirmed (timelines, results) is a [bracketed placeholder]
    rendered by <Ph>, so it's easy to find and replace. */
 
 export const HERO = {
@@ -58,7 +58,6 @@ export interface Service {
   builds: string[];
   included: string[];
   timeline: string;
-  price: string;
   /** A project on /work that shows this kind of work */
   example?: string;
 }
@@ -88,7 +87,6 @@ export const SERVICES: Service[] = [
       "Logins, roles, payments and security",
     ],
     timeline: "[— weeks]",
-    price: "[₹ —]",
     example: "hirearn",
   },
   {
@@ -114,7 +112,6 @@ export const SERVICES: Service[] = [
       "Testing on phones, tablets and desktops",
     ],
     timeline: "[— weeks]",
-    price: "[₹ —]",
   },
   {
     id: "ai-assistants",
@@ -139,7 +136,6 @@ export const SERVICES: Service[] = [
       "Running costs kept visible",
     ],
     timeline: "[— weeks]",
-    price: "[₹ —]",
     example: "nexora",
   },
   {
@@ -165,7 +161,6 @@ export const SERVICES: Service[] = [
       "Documentation your team can follow",
     ],
     timeline: "[— weeks]",
-    price: "[₹ —]",
     example: "nexora",
   },
 ];
@@ -179,15 +174,7 @@ export const ALSO: [string, string][] = [
   ["Digital marketing", "SEO, social media, ads and email for clients who want help being found."],
 ];
 
-/** 04 — how we work */
-export const PROCESS: [string, string][] = [
-  ["Free call", "We talk through what you need, for as long as it takes. No cost and no obligation."],
-  ["Fixed-price proposal", "You get the scope, timeline and one fixed price in writing before any work starts."],
-  ["Build in milestones", "We build in stages you can review and test, with payments tied to each milestone."],
-  ["Launch and support", "We launch, fix any bugs free for 30 days, and offer a monthly care plan after that."],
-];
-
-/** 05 — tech stack, grouped */
+/** 04 — tech stack, grouped */
 export const STACK: [string, string][] = [
   ["Front end", "React, Next.js, TypeScript, Tailwind CSS"],
   ["Back end", "Node.js, Python, FastAPI, Hono"],
@@ -196,40 +183,7 @@ export const STACK: [string, string][] = [
   ["Hosting and payments", "Vercel, Stripe"],
 ];
 
-export interface Plan {
-  name: string;
-  price: string;
-  unit: string;
-  text: string;
-  points: string[];
-}
-
-/** 06 — pricing. Prices and timelines are placeholders until confirmed. */
-export const PLANS: Plan[] = [
-  {
-    name: "Automation or integration",
-    price: "From [₹ —]",
-    unit: "Fixed price",
-    text: "Connect your tools, automate a manual process or add an AI assistant to your website.",
-    points: ["Free first call", "Written scope and fixed price", "Typical timeline: [— weeks]", "30 days of free fixes"],
-  },
-  {
-    name: "Web app or client portal",
-    price: "From [₹ —]",
-    unit: "Fixed price",
-    text: "A custom system built around your business, with logins, roles and admin tools.",
-    points: ["Free first call", "Milestone payments", "Typical timeline: [— weeks]", "30 days of free fixes"],
-  },
-  {
-    name: "Care plan",
-    price: "[₹ —]",
-    unit: "Per month",
-    text: "Hosting, updates, backups, monitoring and small changes after launch.",
-    points: ["Security updates", "Backups and monitoring", "Bug fixes and small changes", "Performance checks"],
-  },
-];
-
-/** 07 — founder note */
+/** 05 — founder note */
 export const FOUNDER = {
   note: [
     "I started bigO because good software shouldn't need a big agency.",
