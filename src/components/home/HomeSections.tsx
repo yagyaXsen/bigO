@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Section } from "@/components/ui/Section";
 import { ArrowLink, ButtonLink } from "@/components/ui/Button";
@@ -266,16 +267,25 @@ export function Pricing() {
   );
 }
 
-/* 07 — a short note from the founder: label left, the note right */
+/* 07 — a short note from the founder: label and photo left, the note right */
 export function FounderNote() {
   return (
     <Section id="founder">
       <figure className="grid gap-6 md:grid-cols-12 md:gap-8">
-        <p className="label md:col-span-4 md:pt-3">
-          <span className="text-ink">07</span>
-          <span className="mx-2">—</span>
-          From the founder
-        </p>
+        <div className="md:col-span-4">
+          <p className="label md:pt-3">
+            <span className="text-ink">07</span>
+            <span className="mx-2">—</span>
+            From the founder
+          </p>
+          <Image
+            src={FOUNDER.photo}
+            alt={`${FOUNDER.name}, ${FOUNDER.role}`}
+            width={480}
+            height={480}
+            className="mt-6 h-auto w-32 border border-line md:mt-8 md:w-48"
+          />
+        </div>
         <div className="md:col-span-8">
           <blockquote className="space-y-5 font-serif text-[24px] leading-[1.4] text-ink md:text-[30px]">
             {FOUNDER.note.map((p) => (
@@ -285,9 +295,7 @@ export function FounderNote() {
           <figcaption className="mt-8 flex items-center gap-4">
             <span aria-hidden className="h-px w-10 bg-line-strong" />
             <span className="text-[15px]">
-              <span className="font-medium text-ink">
-                <Ph text={FOUNDER.name} />
-              </span>
+              <span className="font-medium text-ink">{FOUNDER.name}</span>
               <span className="text-muted">, {FOUNDER.role}</span>
             </span>
           </figcaption>

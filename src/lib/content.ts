@@ -229,14 +229,15 @@ export const PLANS: Plan[] = [
   },
 ];
 
-/** 07 — founder note. A draft for the founder to edit and sign. */
+/** 07 — founder note */
 export const FOUNDER = {
   note: [
     "I started bigO because good software shouldn't need a big agency.",
     "We keep the team small on purpose. The people on your first call are the people who design and write your code, so nothing gets lost in hand-offs. We agree a fixed price before we start, we show you progress as we go, and we stay around after launch to keep things working.",
   ],
-  name: "[Founder name]",
+  name: "Alok Kumar",
   role: "Founder, bigO",
+  photo: "/images/team/alok-kumar.jpg",
 };
 
 export const FAQ: [string, string][] = [
