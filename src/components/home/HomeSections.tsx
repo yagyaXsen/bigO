@@ -23,30 +23,33 @@ export function Hero() {
   const recent = PROJECTS.filter((p) => p.status === "Live");
   return (
     <>
-      <section className="container-page pt-14 pb-14 md:pt-24 md:pb-20 lg:pt-28">
-        <p className="label">{HERO.label}</p>
-        <h1 className="mt-6 max-w-[19ch] font-serif text-[42px] font-normal leading-[1.04] tracking-[-0.02em] md:text-[64px] lg:text-[80px]">
-          {HERO.title}
-        </h1>
-        <p className="mt-7 max-w-[58ch] text-[18px] leading-[1.55] md:text-[20px]">{HERO.lead}</p>
-        <div className="mt-9 flex flex-wrap gap-3">
-          <ButtonLink href="/contact">Book a free call</ButtonLink>
-          <ButtonLink href="/work" variant="secondary">
-            See our work
-          </ButtonLink>
-        </div>
-        <p className="mt-8 text-[14px] text-muted">
-          Recent work:{" "}
-          {recent.map((p, i) => (
-            <span key={p.id}>
-              {i > 0 && ", "}
-              <Link href={`/work#${p.id}`} className="link">
-                {p.name}
-              </Link>
-            </span>
-          ))}
-        </p>
-      </section>
+      <div className="relative isolate">
+        <div aria-hidden className="pattern-grid absolute inset-x-0 -top-px bottom-0 -z-10" />
+        <section className="container-page pt-14 pb-14 md:pt-24 md:pb-20 lg:pt-28">
+          <p className="label">{HERO.label}</p>
+          <h1 className="mt-6 max-w-[19ch] font-serif text-[42px] font-normal leading-[1.04] tracking-[-0.02em] md:text-[64px] lg:text-[80px]">
+            {HERO.title}
+          </h1>
+          <p className="mt-7 max-w-[58ch] text-[18px] leading-[1.55] md:text-[20px]">{HERO.lead}</p>
+          <div className="mt-9 flex flex-wrap gap-3">
+            <ButtonLink href="/contact">Book a free call</ButtonLink>
+            <ButtonLink href="/work" variant="secondary">
+              See our work
+            </ButtonLink>
+          </div>
+          <p className="mt-8 text-[14px] text-muted">
+            Recent work:{" "}
+            {recent.map((p, i) => (
+              <span key={p.id}>
+                {i > 0 && ", "}
+                <Link href={`/work#${p.id}`} className="link">
+                  {p.name}
+                </Link>
+              </span>
+            ))}
+          </p>
+        </section>
+      </div>
 
       <div className="container-page pb-20 md:pb-28">
         <Photo

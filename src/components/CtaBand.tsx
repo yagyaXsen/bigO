@@ -4,7 +4,8 @@ import { SOCIAL } from "@/lib/contact";
 /** Closing call to action on Home, Services and Work */
 export function CtaBand() {
   return (
-    <section className="border-t border-line">
+    <section className="relative isolate border-t border-line">
+      <div aria-hidden className="pattern-grid absolute inset-0 -z-10" />
       <div className="container-page grid gap-10 py-20 md:grid-cols-12 md:gap-8 md:py-28">
         <div className="md:col-span-8">
           <p className="label">Start a project</p>
