@@ -30,10 +30,14 @@ function Icon({ name, className }: { name: WorkflowIcon; className?: string }) {
   );
 }
 
-/* Each workflow sets --wf to its own colour (lighter in dark mode) */
+/* Each workflow sets --wf to its own colour. The panel is an ink block, so
+   it uses the light variant on the light page and the deep one in dark mode
+   (where ink sections flip to paper). */
 const colorVars = (c: [string, string]) => ({ "--wf-l": c[0], "--wf-d": c[1] }) as CSSProperties;
-const WF = "[--wf:var(--wf-l)] dark:[--wf:var(--wf-d)]";
-const tint = (pct: number) => `color-mix(in srgb, var(--wf) ${pct}%, transparent)`;
+const WF = "[--wf:var(--wf-d)] dark:[--wf:var(--wf-l)]";
+
+/* Illustrative elapsed time per step, to read like a run log */
+const elapsed = (i: number) => `+${(0.4 + i * 0.8).toFixed(1)}s`;
 
 /** Hero panel: an example automation running step by step, with the
  *  result building up in a "live output" card. Tabs switch workflows; it
@@ -72,7 +76,6 @@ export function HeroWorkflow() {
 
   const shown = reduced ? n : Math.min(step, n);
   const done = shown >= n;
-  const fill = n > 1 ? Math.min(shown, n - 1) / (n - 1) : 1;
 
   return (
     <div
@@ -81,10 +84,10 @@ export function HeroWorkflow() {
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
-      className={cn(WF, "w-full min-w-0 overflow-hidden rounded-lg border border-line bg-surface shadow-[0_24px_48px_-32px_rgba(17,17,17,0.25)]")}
+      className={cn(WF, "tone-ink relative w-full min-w-0")}
     >
-      {/* Tabs — each shows its own colour */}
-      <div role="tablist" aria-label="Example workflows" className="flex border-b border-line bg-bg-alt/60">
+      {/* Workflow switcher */}
+      <div role="tablist" aria-label="Example workflows" className="flex border-b border-line">
         {WORKFLOWS.map((w, i) => (
           <button
             key={w.name}
@@ -98,100 +101,67 @@ export function HeroWorkflow() {
             style={colorVars(w.color)}
             className={cn(
               WF,
-              "relative flex flex-1 cursor-pointer items-center gap-2 px-3 py-3 font-mono text-[11px] uppercase tracking-[0.06em] transition-colors",
-              i === tab ? "bg-surface text-ink" : "text-muted hover:text-ink",
+              "relative flex flex-1 cursor-pointer items-center gap-2 px-4 py-3.5 text-left text-[13px] font-semibold transition-colors",
+              i === tab ? "text-ink" : "text-muted hover:text-ink",
             )}
           >
-            <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: "var(--wf)" }} />
+            <span aria-hidden className="h-2 w-2 shrink-0" style={{ background: "var(--wf)" }} />
             <span className="truncate">{w.name}</span>
-            {i === tab && <span aria-hidden className="absolute inset-x-0 bottom-[-1px] h-0.5" style={{ background: "var(--wf)" }} />}
+            {i === tab && <span aria-hidden className="absolute inset-x-0 -bottom-px h-[2px]" style={{ background: "var(--wf)" }} />}
           </button>
         ))}
       </div>
 
-      <div className="flex items-center justify-between gap-4 px-5 pt-4 font-mono text-[11px] text-muted">
-        <span>example workflow · {flow.trigger}</span>
-        <span
-          className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 transition-colors"
-          style={{ color: "var(--wf)", background: tint(done ? 16 : 9) }}
-        >
+      <div className="flex items-center justify-between gap-4 px-5 pt-4 mono text-[12px] text-muted">
+        <span className="truncate">example · on {flow.trigger}</span>
+        <span className="inline-flex shrink-0 items-center gap-2" style={{ color: done ? "var(--wf)" : undefined }}>
           <span
             aria-hidden
             className={cn("h-1.5 w-1.5 rounded-full", !done && "animate-pulse motion-reduce:animate-none")}
-            style={{ background: "var(--wf)" }}
+            style={{ background: done ? "var(--wf)" : "var(--signal)" }}
           />
-          {done ? "complete" : "running"}
+          {done ? "done" : "running"}
         </span>
       </div>
 
-      {/* Pipeline: nodes joined by a line that fills with the workflow colour */}
-      <ol className="relative px-5 pt-3" aria-live="polite">
-        <span aria-hidden className="absolute top-[30px] bottom-[18px] left-[35px] w-px bg-line" />
-        <span
-          aria-hidden
-          className="absolute top-[30px] left-[35px] w-px transition-[height] duration-700 ease-out"
-          style={{ background: "var(--wf)", height: `calc((100% - 48px) * ${fill})` }}
-        />
+      {/* Run log: each step completes in turn */}
+      <ol className="px-5 pt-3 pb-1" aria-live="polite">
         {flow.steps.map((s, i) => {
           const state = i < shown ? "done" : i === shown ? "active" : "pending";
           return (
-            <li key={s.text} className="relative flex items-center gap-4 py-[7px]">
+            <li key={s.text} className="flex items-center gap-3 border-b border-line py-2.5 last:border-b-0">
+              <span className="mono w-11 shrink-0 text-[12px] text-muted">{state === "pending" ? "" : elapsed(i)}</span>
               <span
-                className={cn(
-                  "relative z-10 flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full border transition-all duration-300",
-                  state === "pending" && "border-line bg-surface text-muted/60",
-                  state === "active" && "scale-110 bg-surface",
-                  state === "done" && "border-transparent text-surface",
-                )}
-                style={
-                  state === "done"
-                    ? { background: "var(--wf)" }
-                    : state === "active"
-                      ? { borderColor: "var(--wf)", color: "var(--wf)", boxShadow: `0 0 0 4px ${tint(14)}` }
-                      : undefined
-                }
+                className={cn("flex h-6 w-6 shrink-0 items-center justify-center transition-colors duration-300", state === "pending" && "text-muted/50")}
+                style={state === "done" ? { background: "var(--wf)", color: "var(--paper)" } : state === "active" ? { color: "var(--wf)", boxShadow: "inset 0 0 0 1px var(--wf)" } : undefined}
               >
-                <Icon name={s.icon} className="h-[15px] w-[15px]" />
+                <Icon name={s.icon} className="h-[14px] w-[14px]" />
               </span>
-              <span
-                className={cn(
-                  "text-[14.5px] leading-snug transition-colors duration-300",
-                  state === "pending" ? "text-muted/70" : "text-ink",
-                  state === "active" && "font-medium",
-                )}
-              >
+              <span className={cn("flex-1 text-[14.5px] leading-snug transition-colors duration-300", state === "pending" ? "text-muted/60" : "text-ink")}>
                 {s.text}
+                {state === "active" && (
+                  <span aria-hidden className="ml-1 inline-block h-3.5 w-[7px] translate-y-0.5 animate-pulse motion-reduce:animate-none" style={{ background: "var(--wf)" }} />
+                )}
               </span>
             </li>
           );
         })}
       </ol>
 
-      {/* Live output: the result builds up as steps finish */}
-      <div className="m-5 mt-4 rounded-md border p-4" style={{ borderColor: tint(28), background: tint(5) }}>
-        <div className="flex items-center justify-between gap-3">
-          <p className="font-mono text-[11px] uppercase tracking-[0.06em]" style={{ color: "var(--wf)" }}>
-            Live output
-          </p>
-          <p className="truncate font-mono text-[11px] text-muted">{flow.output.title}</p>
-        </div>
-        <p className="mt-2 truncate font-serif text-[17px] text-ink">{flow.output.preview}</p>
-        <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2">
-          {flow.steps.map((s, i) => {
-            const ready = i < shown;
-            return (
-              <div key={s.text} className={cn("min-w-0", i === n - 1 && n % 2 === 1 && "col-span-2")}>
-                <dt className="font-mono text-[10px] uppercase tracking-[0.06em] text-muted">{s.out[0]}</dt>
-                <dd className="mt-0.5 h-5 text-[13px] text-ink">
-                  {ready ? (
-                    <span className="block truncate transition-opacity duration-500">{s.out[1]}</span>
-                  ) : (
-                    <span aria-hidden className="mt-1.5 block h-2 w-3/4 rounded-full bg-line" />
-                  )}
-                </dd>
-              </div>
-            );
-          })}
+      {/* The record the run produces, filling in as steps finish */}
+      <div className="m-5 mt-3 border-t-2 pt-4" style={{ borderColor: "var(--wf)" }}>
+        <p className="truncate text-[13px] font-semibold text-ink">
+          {flow.output.title} <span className="font-normal text-muted">· {flow.output.preview}</span>
+        </p>
+        <dl className="mono mt-3 grid grid-cols-[auto_1fr] gap-x-5 gap-y-1.5 text-[12.5px]">
+          {flow.steps.map((s, i) => (
+            <div key={s.text} className="contents">
+              <dt className="text-muted">{s.out[0].toLowerCase()}</dt>
+              <dd className="min-w-0 truncate text-ink">
+                {i < shown ? s.out[1] : <span aria-hidden className="inline-block h-2 w-20 bg-line align-middle" />}
+              </dd>
+            </div>
+          ))}
         </dl>
       </div>
     </div>

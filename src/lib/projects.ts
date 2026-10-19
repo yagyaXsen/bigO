@@ -1,6 +1,5 @@
-/** Case studies for the Work page and the home page's Selected work.
- *  `result` and missing screenshots are placeholders until real numbers and
- *  images are available — they render as clearly marked placeholders. */
+/** Case studies for the Work page and the home page. `result` is optional:
+ *  it only renders when there is a real, confirmed number to show. */
 export interface Project {
   id: string;
   name: string;
@@ -15,11 +14,13 @@ export interface Project {
   problem: string;
   built: string;
   features: string[];
-  /** Placeholder until a measured result is available */
-  result: string;
+  /** A confirmed, measured result. Leave out until there is one. */
+  result?: string;
   stack: string[];
-  /** A real screenshot; projects without one show a screenshot placeholder */
+  /** A real screenshot; projects without one are shown as text only */
   image?: { src: string; alt: string };
+  /** A short muted screen recording, shown in place of the image when present */
+  video?: string;
   links: { label: string; href: string }[];
 }
 
@@ -43,7 +44,6 @@ export const PROJECTS: Project[] = [
       "Records that re-verify and expire on their own",
       "Plain-language search and an application tracker",
     ],
-    result: "[Result: e.g. number of listings processed, or hours of manual research saved]",
     image: { src: "/images/work/nexora.jpg", alt: "Nexora home page: Discover the world's next opportunity before everyone else" },
     stack: ["Python", "FastAPI", "PostgreSQL", "React", "Groq", "GitHub Actions"],
     links: [
@@ -69,7 +69,6 @@ export const PROJECTS: Project[] = [
       "Installable on phones (PWA), built mobile-first",
       "Architecture ready for new categories and regions",
     ],
-    result: "[Result: e.g. registered users, jobs posted or cities live]",
     image: { src: "/images/work/hirearn.jpg", alt: "Hirearn home page: daily wage hiring for employers" },
     stack: [],
     links: [{ label: "Live site", href: "https://hirearn.com/" }],
@@ -92,9 +91,9 @@ export const PROJECTS: Project[] = [
       "Privacy, terms and cookie pages",
       "Static, fast build hosted on GitHub Pages",
     ],
-    result: "[Result: e.g. online bookings per month, or calls saved for front-desk staff]",
     stack: ["HTML", "CSS", "JavaScript", "GSAP", "GitHub Pages"],
     image: { src: "/images/work/lumora.jpg", alt: "Lumora Dental website home page" },
+    video: "/videos/lumora.mp4",
     links: [{ label: "Live site", href: "https://yagyaxsen.github.io/lumora-dental/" }],
   },
   {
@@ -113,7 +112,6 @@ export const PROJECTS: Project[] = [
       "Presence planned for several markets",
       "Month-by-month improvements",
     ],
-    result: "[Result: to be added as the engagement progresses]",
     stack: [],
     links: [],
   },

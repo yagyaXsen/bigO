@@ -110,7 +110,7 @@ const mailtoUrl = (d: Enquiry) =>
   )}&body=${encodeURIComponent(buildBrief(d).replace(/\*/g, ""))}`;
 
 const inputCls =
-  "w-full rounded-md border border-line-strong bg-surface px-4 py-3 text-[16px] text-ink placeholder:text-muted/80 outline-none transition-colors focus:border-accent";
+  "w-full rounded-[2px] border-0 border-b border-line-strong bg-transparent px-0 py-3 text-[17px] text-ink placeholder:text-muted/70 outline-none transition-colors focus:border-blue";
 
 function Field({
   id,
@@ -236,8 +236,8 @@ export function ContactForm() {
   return (
     <form noValidate onSubmit={submitForm} className="relative w-full">
       {status === "success" && (
-        <div role="status" className="mb-8 border border-line-strong bg-surface p-6">
-          <p className="font-serif text-[22px] text-ink">Thanks{submittedData?.name ? `, ${submittedData.name}` : ""}. We have your message.</p>
+        <div role="status" className="mb-8 border-l-2 border-blue bg-raised p-6">
+          <p className="t-3">Thanks{submittedData?.name ? `, ${submittedData.name}` : ""}. We have your message.</p>
           <p className="mt-2 text-[15px]">
             We&apos;ll reply to <span className="font-medium text-ink">{submittedData?.email}</span> within a day with
             next steps.
@@ -257,8 +257,8 @@ export function ContactForm() {
       )}
 
       {status === "error" && submittedData && (
-        <div role="alert" className="mb-8 border border-danger/50 bg-surface p-6">
-          <p className="font-serif text-[22px] text-ink">We couldn&apos;t send your message.</p>
+        <div role="alert" className="mb-8 border-l-2 border-danger bg-raised p-6">
+          <p className="t-3">We couldn&apos;t send your message.</p>
           <p className="mt-2 text-[15px]">
             Something went wrong on our side. Your details are still in the form. Send them on WhatsApp or by email
             and we&apos;ll get straight back to you.
@@ -303,8 +303,8 @@ export function ContactForm() {
                 aria-pressed={on}
                 onClick={() => toggleType(t.id)}
                 className={cn(
-                  "inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[14px] transition-colors",
-                  on ? "border-accent bg-accent text-surface" : "border-line-strong bg-surface text-ink hover:border-ink",
+                  "inline-flex min-h-10 cursor-pointer items-center gap-2 border px-3.5 py-2 text-[14.5px] transition-colors",
+                  on ? "border-ink bg-ink text-paper" : "border-line-strong text-ink hover:border-ink",
                 )}
               >
                 {on && (
@@ -393,14 +393,14 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex h-11 cursor-pointer items-center justify-center rounded-md bg-ink px-6 text-[15px] font-medium text-bg transition-colors hover:bg-accent disabled:cursor-wait disabled:opacity-70"
+          className="inline-flex h-12 cursor-pointer items-center justify-center bg-ink px-6 text-[15px] font-semibold text-paper transition-colors hover:bg-blue disabled:cursor-wait disabled:opacity-70"
         >
           {isPending ? "Sending…" : "Send message"}
         </button>
         <button
           type="button"
           onClick={sendDirectWhatsApp}
-          className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-md border border-line-strong px-5 text-[15px] font-medium text-ink transition-colors hover:border-ink"
+          className="inline-flex h-12 cursor-pointer items-center justify-center gap-2 border border-line-strong px-5 text-[15px] font-semibold text-ink transition-colors hover:border-ink"
         >
           <WhatsAppIcon className="h-4 w-4" />
           Send on WhatsApp instead

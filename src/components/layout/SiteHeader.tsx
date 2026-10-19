@@ -6,24 +6,25 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { THEME_KEY } from "@/lib/site";
 import { CONTACT_EMAIL, PHONE_DISPLAY, SOCIAL } from "@/lib/contact";
-import { ButtonLink } from "@/components/ui/Button";
-import { MoonIcon, SunIcon } from "@/components/icons";
+import { Logo } from "@/components/ui/Logo";
+import { ArrowRightIcon, MoonIcon, SunIcon } from "@/components/icons";
 
+/* Work first: evidence is what a careful buyer looks for */
 const NAV = [
-  { label: "Services", href: "/services" },
   { label: "Work", href: "/work" },
+  { label: "Services", href: "/services" },
   { label: "Contact", href: "/contact" },
 ];
 
 /* The icon follows the .dark class through CSS, so it is right on first
    paint (the theme is applied in <head> before React loads) */
-function ThemeToggle({ className }: { className?: string }) {
+function ThemeToggle() {
   const toggle = () => {
     const dark = document.documentElement.classList.toggle("dark");
     try {
       localStorage.setItem(THEME_KEY, dark ? "dark" : "light");
     } catch {
-      // private mode — the theme still switches for this visit
+      // private mode: the theme still switches for this visit
     }
   };
   return (
@@ -31,10 +32,7 @@ function ThemeToggle({ className }: { className?: string }) {
       type="button"
       onClick={toggle}
       aria-label="Switch between light and dark theme"
-      className={cn(
-        "inline-flex h-10 w-10 items-center justify-center rounded-md text-ink transition-colors hover:bg-accent-soft",
-        className,
-      )}
+      className="inline-flex h-11 w-11 cursor-pointer items-center justify-center text-ink transition-colors hover:text-blue"
     >
       <MoonIcon className="h-[18px] w-[18px] dark:hidden" />
       <SunIcon className="hidden h-[18px] w-[18px] dark:block" />
@@ -45,6 +43,15 @@ function ThemeToggle({ className }: { className?: string }) {
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // A hairline and solid background appear once the page moves under it
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // While the menu is open: no page scroll behind it, Escape closes it
   useEffect(() => {
@@ -58,84 +65,96 @@ export function SiteHeader() {
     };
   }, [open]);
 
-  const isActive = (href: string) => !href.includes("#") && pathname === href;
+  const isActive = (href: string) => pathname === href;
 
   return (
-    <header id="top" className="sticky top-0 z-50 border-b border-line bg-bg">
-      <div className="container-page flex h-16 items-center justify-between gap-6 md:h-[72px]">
-        <Link
-          href="/"
-          onClick={() => setOpen(false)}
-          className="font-serif text-[26px] font-medium leading-none tracking-[-0.02em] text-ink"
-        >
-          bigO
+    <header
+      id="top"
+      className={cn(
+        "sticky top-0 z-50 transition-[background-color,border-color] duration-300",
+        /* No backdrop blur while the menu is open: backdrop-filter would make the
+           header the containing block of the fixed full-screen menu */
+        open ? "border-b border-line bg-paper" : scrolled ? "border-b border-line bg-paper/95 backdrop-blur-sm" : "border-b border-transparent bg-paper",
+      )}
+    >
+      <div className="frame flex h-16 items-center justify-between gap-6 md:h-[72px]">
+        <Link href="/" onClick={() => setOpen(false)} aria-label="bigO, home" className="text-[28px] leading-none">
+          <Logo />
         </Link>
 
-        <nav aria-label="Main" className="hidden lg:block">
-          <ul className="flex items-center gap-8">
+        <nav aria-label="Main" className="hidden md:block">
+          <ul className="flex items-center gap-9">
             {NAV.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
                   aria-current={isActive(item.href) ? "page" : undefined}
                   className={cn(
-                    "text-[15px] transition-colors hover:text-ink",
-                    isActive(item.href) ? "text-ink underline decoration-line-strong underline-offset-[6px]" : "text-text",
+                    "relative py-2 text-[15px] font-medium transition-colors hover:text-ink",
+                    isActive(item.href) ? "text-ink" : "text-muted",
                   )}
                 >
                   {item.label}
+                  {isActive(item.href) && <span aria-hidden className="absolute inset-x-0 -bottom-0.5 h-[2px] bg-blue" />}
                 </Link>
               </li>
             ))}
           </ul>
         </nav>
 
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center gap-1">
           <ThemeToggle />
-          <ButtonLink href="/contact" className="hidden h-10 sm:inline-flex">
-            Book a call
-          </ButtonLink>
+          <Link
+            href="/contact"
+            className="group ml-2 hidden h-10 items-center gap-2 bg-ink px-4 text-[14px] font-semibold text-paper transition-colors hover:bg-blue md:inline-flex"
+          >
+            Start a project
+            <ArrowRightIcon className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+          </Link>
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
             aria-controls="mobile-menu"
-            className="label inline-flex h-10 items-center px-2 text-ink lg:hidden"
+            className="inline-flex h-11 cursor-pointer items-center gap-2.5 pl-2 text-[15px] font-semibold text-ink md:hidden"
           >
             {open ? "Close" : "Menu"}
+            <span aria-hidden className="relative h-3 w-5">
+              <span className={cn("absolute left-0 h-[1.5px] w-5 bg-ink transition-transform duration-300", open ? "top-1.5 rotate-45" : "top-0.5")} />
+              <span className={cn("absolute left-0 h-[1.5px] w-5 bg-ink transition-transform duration-300", open ? "top-1.5 -rotate-45" : "top-2.5")} />
+            </span>
           </button>
         </div>
       </div>
 
       {open && (
-        <div id="mobile-menu" className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto bg-bg md:top-[72px] lg:hidden">
-          <nav aria-label="Mobile" className="container-page py-6">
-            <ul className="border-t border-line">
-              {[{ label: "Home", href: "/" }, ...NAV].map((item) => (
+        <div id="mobile-menu" className="fixed inset-x-0 bottom-0 top-16 z-40 flex flex-col overflow-y-auto bg-paper md:hidden">
+          <nav aria-label="Mobile" className="frame flex-1 pt-6">
+            <ul>
+              {[{ label: "Home", href: "/" }, ...NAV].map((item, i) => (
                 <li key={item.href} className="border-b border-line">
                   <Link
                     href={item.href}
                     onClick={() => setOpen(false)}
                     aria-current={isActive(item.href) ? "page" : undefined}
-                    className="block py-4 font-serif text-[28px] leading-tight text-ink"
+                    className="flex items-baseline justify-between py-4"
                   >
-                    {item.label}
+                    <span className={cn("t-1", isActive(item.href) && "text-blue")}>{item.label}</span>
+                    <span className="mono text-muted">{String(i + 1).padStart(2, "0")}</span>
                   </Link>
                 </li>
               ))}
             </ul>
-            <ButtonLink href="/contact" className="mt-8 w-full">
-              Book a free call
-            </ButtonLink>
-            <div className="mt-8 space-y-1 text-[15px]">
-              <a href={`mailto:${CONTACT_EMAIL}`} className="link block w-fit">
-                {CONTACT_EMAIL}
-              </a>
-              <a href={SOCIAL.whatsapp} target="_blank" rel="noopener noreferrer" className="link block w-fit">
-                WhatsApp {PHONE_DISPLAY}
-              </a>
-            </div>
           </nav>
+          <div className="frame space-y-1 pb-10 pt-8 text-[16px]">
+            <p className="mb-3 text-[14px] text-muted">Talk to us directly</p>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="link block w-fit break-all">
+              {CONTACT_EMAIL}
+            </a>
+            <a href={SOCIAL.whatsapp} target="_blank" rel="noopener noreferrer" className="link block w-fit">
+              WhatsApp {PHONE_DISPLAY}
+            </a>
+          </div>
         </div>
       )}
     </header>

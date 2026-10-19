@@ -1,15 +1,25 @@
-/* Site copy. Terms the team has confirmed: a free first call with no set
-   length, a written fixed-price proposal, milestone payments, client
+/* Site copy. Only confirmed facts: a free first call with no set length, a
+   written proposal agreed before work starts, milestone payments, client
    ownership of code and designs once paid in full, NDAs on request, 30 days
-   of free fixes after launch and optional monthly care plans. Anything not
-   confirmed (timelines, results) is a [bracketed placeholder]
-   rendered by <Ph>, so it's easy to find and replace. */
+   of free fixes after launch and optional monthly care plans. Where real
+   numbers (results, timelines) are missing, the design leaves them out
+   rather than showing placeholders. */
 
 export const HERO = {
-  label: "Software and AI automation studio · Delhi NCR",
-  title: "Custom software and AI automation for growing businesses.",
-  lead: "We replace spreadsheets, inbox juggling and copy-paste work with web apps, client portals, AI assistants and automated workflows. Built by a small team you talk to directly.",
+  kicker: "bigO · software studio · Delhi NCR",
+  title: "Every business has a slow part. We write the software that fixes it.",
+  lead: "Web apps, client portals, AI assistants and automations for growing businesses that have outgrown spreadsheets and copy-paste. You talk directly to the people writing the code.",
+  /* Why the name: one quiet line, never jargon-heavy */
+  name: "In engineering, Big O describes how work grows as a business grows. We take the jobs that grow with every order, client or message, and make them stay small.",
 };
+
+/** The terms every client gets, in the order people ask about them */
+export const TERMS: [string, string][] = [
+  ["Free first call", "No set length, no obligation"],
+  ["Scope in writing", "Agreed before any work starts"],
+  ["You own the code", "Code, designs and accounts are yours once paid"],
+  ["30 days of fixes", "Any bug after launch, fixed free"],
+];
 
 /** Hero panel: example automations of the kind we build. Each step has an
  *  icon and reveals one field of the "live output" card. Sample data is
@@ -69,47 +79,31 @@ export const WORKFLOWS: Workflow[] = [
   },
 ];
 
-/** Four engineering basics every project gets, shown under the hero */
-export const COMMITMENTS: [string, string][] = [
-  ["Secure by default", "Logins, roles and encrypted connections from day one"],
-  ["Tested end to end", "Checked on phones, tablets and desktops before launch"],
-  ["Built to scale", "Mainstream tools that grow with your business"],
-  ["Code you own", "Full source, accounts and documentation handed over"],
-];
-
-/** 04 — how we build: the engineering standards behind every project */
+/** How we build: the engineering standards behind every project */
 export const STANDARDS: [string, string][] = [
   [
-    "Security built in",
-    "Authentication, role-based access, encrypted connections and secrets kept out of the code. Your data is only visible to the people who should see it.",
+    "Security from day one",
+    "Logins, role-based access, encrypted connections and secrets kept out of the code. People only see what their role needs.",
   ],
   [
     "Tested before every launch",
-    "Forms, integrations, payments and permissions are checked end to end, on phones, tablets and desktops and in every major browser.",
+    "Forms, integrations, payments and permissions are checked end to end, on phones, tablets and desktops.",
   ],
   [
-    "Fast on any connection",
-    "Server-rendered pages, optimised images and lean code, so your app stays quick on mobile networks and older devices.",
+    "Fast on real phones",
+    "Server-rendered pages, compressed images and lean code, so it stays quick on mobile data and older devices.",
   ],
   [
-    "Version control and previews",
-    "All code lives in Git. Every change gets its own preview link you can try before it goes live, and any release can be rolled back.",
+    "Every change previewed",
+    "All code lives in Git. Each change gets its own preview link you can try before it goes live, and any release can be rolled back.",
   ],
   [
     "AI with guardrails",
-    "Validation, fallbacks and hand-off to a person where accuracy matters, with usage and running costs kept visible.",
+    "Validation, fallbacks and a hand-off to a person where accuracy matters, with running costs kept visible.",
   ],
   [
-    "Monitoring and backups",
-    "Once live, uptime monitoring, error alerts and regular database backups mean problems are caught and fixed early.",
-  ],
-  [
-    "Clean, documented handover",
-    "Readable code, written documentation, and admin access and accounts in your name, so any developer can pick it up.",
-  ],
-  [
-    "Architecture that grows",
-    "A clear separation between front end, back end and data, so adding features, users or integrations doesn't mean starting again.",
+    "Yours to keep",
+    "Readable code, written documentation, and every account in your name, so any developer can pick it up later.",
   ],
 ];
 
@@ -182,7 +176,6 @@ export interface Service {
   fit: string[];
   builds: string[];
   included: string[];
-  timeline: string;
   /** A project on /work that shows this kind of work */
   example?: string;
 }
@@ -211,7 +204,6 @@ export const SERVICES: Service[] = [
       "Front end, back end, database and hosting",
       "Logins, roles, payments and security",
     ],
-    timeline: "[— weeks]",
     example: "hirearn",
   },
   {
@@ -236,7 +228,6 @@ export const SERVICES: Service[] = [
       "Admin tools for your team",
       "Testing on phones, tablets and desktops",
     ],
-    timeline: "[— weeks]",
   },
   {
     id: "ai-assistants",
@@ -260,7 +251,6 @@ export const SERVICES: Service[] = [
       "Checks, fallbacks and hand-off to a person where accuracy matters",
       "Running costs kept visible",
     ],
-    timeline: "[— weeks]",
     example: "nexora",
   },
   {
@@ -285,7 +275,6 @@ export const SERVICES: Service[] = [
       "Error alerts and a simple way to retry",
       "Documentation your team can follow",
     ],
-    timeline: "[— weeks]",
     example: "nexora",
   },
 ];
@@ -299,7 +288,7 @@ export const ALSO: [string, string][] = [
   ["Digital marketing", "SEO, social media, ads and email for clients who want help being found."],
 ];
 
-/** 04 — tech stack, grouped */
+/** Tech stack, grouped */
 export const STACK: [string, string[]][] = [
   ["Front end", ["React", "Next.js", "TypeScript", "Tailwind CSS"]],
   ["Back end", ["Node.js", "Python", "FastAPI", "Hono"]],
@@ -308,7 +297,7 @@ export const STACK: [string, string[]][] = [
   ["Hosting and payments", ["Vercel", "Stripe"]],
 ];
 
-/** 05 — founder note */
+/** Founder note */
 export const FOUNDER = {
   note: [
     "I started bigO because good software shouldn't need a big agency.",
@@ -347,8 +336,8 @@ export const FAQ: [string, string][] = [
   ],
 ];
 
-/** The five questions shown on the home page */
-export const HOME_FAQ = [0, 1, 2, 3, 4].map((i) => FAQ[i]);
+/** The four questions shown on the home page */
+export const HOME_FAQ = [0, 1, 3, 4].map((i) => FAQ[i]);
 
 /** Project types for the contact form chips; ids match /contact?type= */
 export const PROJECT_TYPES: { id: string; label: string }[] = [

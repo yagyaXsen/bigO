@@ -3,53 +3,59 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/icons";
 
-const VARIANTS = {
-  primary: "bg-ink text-bg hover:bg-accent",
-  secondary: "border border-line-strong text-ink hover:border-ink",
-};
-
-interface ButtonLinkProps {
+interface LinkProps {
   href: string;
-  variant?: keyof typeof VARIANTS;
   external?: boolean;
   className?: string;
   children: ReactNode;
 }
 
-export function ButtonLink({ href, variant = "primary", external, className, children }: ButtonLinkProps) {
-  const cls = cn(
-    "inline-flex h-11 items-center justify-center gap-2 rounded-md px-5 text-[15px] font-medium transition-colors duration-200",
-    VARIANTS[variant],
-    className,
-  );
+function Anchor({ href, external, className, children }: LinkProps) {
   return external ? (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
+    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
       {children}
     </a>
   ) : (
-    <Link href={href} className={cls}>
+    <Link href={href} className={className}>
       {children}
     </Link>
   );
 }
 
-/** Text link with an arrow, e.g. "All work →". External links get ↗. */
-export function ArrowLink({ href, external, className, children }: Omit<ButtonLinkProps, "variant">) {
-  const cls = cn(
-    "group inline-flex items-center gap-1.5 text-[15px] font-medium text-ink transition-colors hover:text-accent",
-    className,
+/** The one solid button: square ink block, arrow nudges on hover */
+export function ButtonLink({ href, external, className, children, tone = "ink" }: LinkProps & { tone?: "ink" | "blue" }) {
+  return (
+    <Anchor
+      href={href}
+      external={external}
+      className={cn(
+        "group inline-flex h-12 items-center gap-3 px-5 text-[15px] font-semibold transition-colors duration-200",
+        /* text-paper, not white: inside ink sections the colours invert, and
+           paper keeps the label readable on either button */
+        tone === "ink" ? "bg-ink text-paper hover:bg-blue" : "bg-blue text-paper hover:bg-ink",
+        className,
+      )}
+    >
+      {children}
+      <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+    </Anchor>
   );
+}
+
+/** Secondary action: text with a hairline underline and an arrow */
+export function ArrowLink({ href, external, className, children }: LinkProps) {
   const Icon = external ? ArrowUpRightIcon : ArrowRightIcon;
-  const icon = <Icon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />;
-  return external ? (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
+  return (
+    <Anchor
+      href={href}
+      external={external}
+      className={cn(
+        "group inline-flex items-center gap-2 border-b border-line-strong pb-1 text-[15px] font-semibold text-ink transition-colors hover:border-blue hover:text-blue",
+        className,
+      )}
+    >
       {children}
-      {icon}
-    </a>
-  ) : (
-    <Link href={href} className={cls}>
-      {children}
-      {icon}
-    </Link>
+      <Icon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+    </Anchor>
   );
 }

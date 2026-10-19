@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { SITE_NAME } from "@/lib/site";
-import { PROJECTS } from "@/lib/projects";
+import { PROJECTS, projectById, type Project } from "@/lib/projects";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { CtaBand } from "@/components/CtaBand";
-import { PageHeader } from "@/components/ui/Section";
 import { ArrowLink } from "@/components/ui/Button";
-import { Ph, ScreenshotPlaceholder } from "@/components/ui/Placeholder";
+import { Reveal } from "@/components/ui/Reveal";
+import { Shot } from "@/components/ui/Shot";
+import { cn } from "@/lib/utils";
 
-const title = "Work — bigO";
+const title = "Work — Nexora, Hirearn, Lumora Dental and more | bigO";
 const description =
-  "Case studies from bigO: Nexora, an AI data pipeline; Hirearn, a local jobs marketplace; Lumora Dental, a clinic website with booking; and an ongoing engagement with a catering business in Thailand.";
+  "Projects bigO has designed, built and shipped: Nexora, an AI data pipeline; Hirearn, a local jobs marketplace; Lumora Dental, a clinic website with booking; and an ongoing engagement for a catering business in Thailand.";
 
 export const metadata: Metadata = {
   title,
@@ -21,102 +20,139 @@ export const metadata: Metadata = {
   twitter: { title, description },
 };
 
-function Row({ term, children }: { term: string; children: React.ReactNode }) {
+/** Heading, problem, what we built, features, stack and links */
+function Story({ p, num, className }: { p: Project; num: number; className?: string }) {
   return (
-    <div className="grid gap-2 border-b border-line py-5 sm:grid-cols-[160px_1fr] sm:gap-6">
-      <dt className="label sm:pt-1">{term}</dt>
-      <dd className="text-[16px] md:text-[17px]">{children}</dd>
+    <div className={className}>
+      <p className="mono text-muted">
+        {String(num).padStart(2, "0")} · {p.kind}
+      </p>
+      <h2 id={`${p.id}-title`} className="t-1 mt-4">
+        {p.name}
+      </h2>
+      <p className="mt-3 inline-flex items-center gap-2 text-[14px] text-muted">
+        <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-signal" />
+        {p.status}
+        {p.url && <span>· {p.url}</span>}
+      </p>
+      <p className="mt-8 font-display text-[21px] leading-snug tracking-[-0.01em] text-ink">{p.problem}</p>
+      <p className="mt-5 text-[16px]">{p.built}</p>
+      <ul className="mt-8 border-t border-line">
+        {p.features.map((f) => (
+          <li key={f} className="border-b border-line py-2.5 text-[15px]">
+            {f}
+          </li>
+        ))}
+      </ul>
+      {p.result && <p className="mt-6 text-[16px] font-semibold text-ink">{p.result}</p>}
+      {p.stack.length > 0 && <p className="mono mt-6 text-[12px] text-muted">{p.stack.join("  /  ")}</p>}
+      {p.links.length > 0 && (
+        <div className="mt-8 flex flex-wrap gap-x-7 gap-y-3">
+          {p.links.map((l) => (
+            <ArrowLink key={l.href} href={l.href} external>
+              {l.label}
+            </ArrowLink>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
 export default function WorkPage() {
+  const nexora = projectById("nexora")!;
+  const hirearn = projectById("hirearn")!;
+  const lumora = projectById("lumora")!;
+  const catering = projectById("catering")!;
+  const n = (p: Project) => PROJECTS.indexOf(p) + 1;
+
   return (
     <>
       <SiteHeader />
-      <main id="main">
-        <PageHeader
-          label="Work"
-          title="Systems we've designed, built and shipped."
-          lead="Each project starts with a business problem. Here is what we built for it, and what it does today."
-        >
-          <nav aria-label="Projects" className="mt-12 border-t border-line">
-            {PROJECTS.map((p, i) => (
-              <a
-                key={p.id}
-                href={`#${p.id}`}
-                className="group flex items-baseline justify-between gap-6 border-b border-line py-4"
-              >
-                <span className="flex items-baseline gap-5">
-                  <span className="label">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="text-[17px] font-medium text-ink transition-colors group-hover:text-accent">{p.name}</span>
-                </span>
-                <span className="label hidden sm:inline">{p.kind}</span>
-              </a>
-            ))}
+      <main id="main" className="tone-ink">
+        {/* Opening + index */}
+        <section className="frame grid gap-12 pt-16 pb-20 md:pt-24 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <h1 className="t-hero">Work we&apos;ve shipped.</h1>
+            <p className="t-lead mt-8 max-w-[44ch]">
+              Every project here started with a business problem. Below is the problem, what we built for it, and the
+              live product.
+            </p>
+          </div>
+          <nav aria-label="Projects" className="self-end lg:col-span-5">
+            <ol className="border-t border-ink">
+              {PROJECTS.map((p, i) => (
+                <li key={p.id}>
+                  <a href={`#${p.id}`} className="group grid grid-cols-[32px_1fr_auto] items-baseline gap-3 border-b border-line py-3.5">
+                    <span className="mono text-muted">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="text-[17px] font-semibold text-ink transition-colors group-hover:text-blue">{p.name}</span>
+                    <span className="text-[13px] text-muted">{p.status}</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
           </nav>
-        </PageHeader>
+        </section>
 
-        {PROJECTS.map((p, i) => (
-          <article key={p.id} id={p.id} className={i % 2 ? "border-t border-line" : "tone-muted border-t border-line"}>
-            <div className="container-page grid gap-10 py-20 md:grid-cols-12 md:gap-8 md:py-28">
-              <header className="md:col-span-4">
-                <p className="label">
-                  <span className="text-ink">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="mx-2">—</span>
-                  {p.kind}
-                </p>
-                <h2 className="mt-5 font-serif text-[36px] font-normal leading-[1.08] tracking-[-0.015em] md:text-[44px]">
-                  {p.name}
-                </h2>
-                <p className="mt-4 inline-flex items-center gap-2 text-[14px] text-muted">
-                  <span aria-hidden className={p.status === "Live" ? "h-1.5 w-1.5 rounded-full bg-accent" : "h-1.5 w-1.5 rounded-full border border-muted"} />
-                  {p.url ? `${p.status} · ${p.url}` : p.status}
-                </p>
-                {p.links.length > 0 && (
-                  <div className="mt-6 flex flex-col gap-2">
-                    {p.links.map((l) => (
-                      <ArrowLink key={l.href} href={l.href} external>
-                        {l.label}
-                      </ArrowLink>
-                    ))}
-                  </div>
-                )}
-              </header>
+        {/* Nexora: the screen leads, full width; the story runs in three columns under it */}
+        <article id={nexora.id} aria-labelledby={`${nexora.id}-title`} className="border-t border-line">
+          <div className="frame py-20 md:py-28">
+            <Reveal>
+              <Shot project={nexora} sizes="(min-width: 1320px) 1210px, 100vw" priority />
+            </Reveal>
+            <Story p={nexora} num={n(nexora)} className="mt-14 lg:max-w-[760px]" />
+          </div>
+        </article>
 
-              <div className="md:col-span-8">
-                {p.image ? (
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-md border border-line bg-surface">
-                    <Image src={p.image.src} alt={p.image.alt} fill sizes="(min-width: 1024px) 800px, 100vw" className="object-cover object-top" />
-                  </div>
-                ) : p.status === "Live" ? (
-                  <ScreenshotPlaceholder caption={`${p.name}: main screen`} />
-                ) : null}
+        {/* Hirearn: story left, screen right */}
+        <article id={hirearn.id} aria-labelledby={`${hirearn.id}-title`} className="border-t border-line">
+          <div className="frame grid gap-12 py-20 md:py-28 lg:grid-cols-12 lg:gap-10">
+            <Story p={hirearn} num={n(hirearn)} className="lg:col-span-4" />
+            <Reveal className="lg:col-span-8 lg:pt-14">
+              <Shot project={hirearn} sizes="(min-width: 1024px) 800px, 100vw" />
+            </Reveal>
+          </div>
+        </article>
 
-                <dl className={p.status === "Live" ? "mt-10 border-t border-line" : "border-t border-line"}>
-                  <Row term="The problem">{p.problem}</Row>
-                  <Row term="What we built">{p.built}</Row>
-                  <Row term="Key features">
-                    <ul className="space-y-1.5">
-                      {p.features.map((f) => (
-                        <li key={f} className="flex gap-3">
-                          <span aria-hidden className="mt-[13px] h-px w-3 shrink-0 bg-accent" />
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </Row>
-                  <Row term="Result">
-                    <Ph text={p.result} />
-                  </Row>
-                  {p.stack.length > 0 && <Row term="Stack">{p.stack.join(", ")}</Row>}
-                </dl>
-              </div>
+        {/* Lumora: a real scroll-through recording, then the story */}
+        <article id={lumora.id} aria-labelledby={`${lumora.id}-title`} className="border-t border-line">
+          <div className="frame grid gap-12 py-20 md:py-28 lg:grid-cols-12 lg:gap-10">
+            <Reveal className="lg:col-span-7">
+              <Shot project={lumora} sizes="(min-width: 1024px) 700px, 100vw" />
+              <p className="mt-3 text-[13px] text-muted">Screen recording of the live site.</p>
+            </Reveal>
+            <Story p={lumora} num={n(lumora)} className="lg:col-span-5" />
+          </div>
+        </article>
+
+        {/* Thailand: no public screens yet, so it's told as a short note */}
+        <article id={catering.id} aria-labelledby={`${catering.id}-title`} className="border-t border-line">
+          <div className="frame grid gap-10 py-20 md:py-28 lg:grid-cols-12">
+            <div className="lg:col-span-4">
+              <p className="mono text-muted">
+                {String(n(catering)).padStart(2, "0")} · {catering.kind}
+              </p>
+              <h2 id={`${catering.id}-title`} className="t-2 mt-4">
+                {catering.name}
+              </h2>
+              <p className="mt-3 inline-flex items-center gap-2 text-[14px] text-muted">
+                <span aria-hidden className="h-1.5 w-1.5 animate-pulse rounded-full bg-signal motion-reduce:animate-none" />
+                In progress
+              </p>
             </div>
-          </article>
-        ))}
-
-        <CtaBand />
+            <div className="lg:col-span-7 lg:col-start-6">
+              <p className="t-2 font-medium">{catering.problem}</p>
+              <p className="mt-6 text-[17px]">{catering.built}</p>
+              <ul className={cn("mt-8 grid gap-x-8 border-t border-line sm:grid-cols-2")}>
+                {catering.features.map((f) => (
+                  <li key={f} className="border-b border-line py-3 text-[15px]">
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </article>
       </main>
       <SiteFooter />
     </>

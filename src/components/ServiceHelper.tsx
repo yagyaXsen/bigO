@@ -4,25 +4,32 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { HELPER, SERVICES } from "@/lib/content";
 import { ArrowLink, ButtonLink } from "@/components/ui/Button";
-import { ServiceIcon } from "@/components/ui/ServiceIcon";
 
-function Choice({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
+/** One answer row: a square radio mark + label (real radio semantics) */
+function Option({ name, value, checked, onChange, children }: { name: string; value: string; checked: boolean; onChange: (v: string) => void; children: React.ReactNode }) {
   return (
-    <button
-      type="button"
-      aria-pressed={on}
-      onClick={onClick}
+    <label
       className={cn(
-        "cursor-pointer rounded-full border px-4 py-2 text-left text-[15px] transition-colors",
-        on ? "border-accent bg-accent text-surface" : "border-line-strong bg-surface text-ink hover:border-ink",
+        "flex cursor-pointer items-center gap-4 border-b border-line py-3.5 text-[16px] transition-colors",
+        checked ? "text-ink" : "text-text hover:text-ink",
       )}
     >
+      <input type="radio" name={name} value={value} checked={checked} onChange={() => onChange(value)} className="peer sr-only" />
+      <span
+        aria-hidden
+        className={cn(
+          "flex h-4 w-4 shrink-0 items-center justify-center border transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-blue",
+          checked ? "border-blue bg-blue" : "border-line-strong",
+        )}
+      >
+        {checked && <span className="h-1.5 w-1.5 bg-white" />}
+      </span>
       {children}
-    </button>
+    </label>
   );
 }
 
-/** Two questions → the service that fits, with a link to discuss it */
+/** "Find the service that fits": two questions, one honest suggestion */
 export function ServiceHelper() {
   const [problem, setProblem] = useState<string | null>(null);
   const [users, setUsers] = useState<string | null>(null);
@@ -31,56 +38,48 @@ export function ServiceHelper() {
   const also = result?.[2] ? SERVICES.find((s) => s.id === result[2]) : null;
 
   return (
-    <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
-      <div className="space-y-8 lg:col-span-7">
-        <div>
-          <p className="label">
-            <span className="text-ink">1</span>
-            <span className="mx-2">—</span>
-            What&apos;s the main problem?
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {HELPER.problems.map((o) => (
-              <Choice key={o.id} on={problem === o.id} onClick={() => setProblem(o.id)}>
-                {o.label}
-              </Choice>
-            ))}
-          </div>
+    <div className="grid gap-10 lg:grid-cols-12 lg:gap-10">
+      <fieldset className="lg:col-span-5">
+        <legend className="mb-3 text-[14px] font-semibold text-ink">
+          <span className="mono mr-3 text-blue">1</span>What&apos;s the main problem?
+        </legend>
+        <div className="border-t border-ink">
+          {HELPER.problems.map((o) => (
+            <Option key={o.id} name="helper-problem" value={o.id} checked={problem === o.id} onChange={setProblem}>
+              {o.label}
+            </Option>
+          ))}
         </div>
-        <div className={cn("transition-opacity", !problem && "pointer-events-none opacity-40")}>
-          <p className="label">
-            <span className="text-ink">2</span>
-            <span className="mx-2">—</span>
-            Who will use it?
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {HELPER.users.map((o) => (
-              <Choice key={o.id} on={users === o.id} onClick={() => setUsers(o.id)}>
-                {o.label}
-              </Choice>
-            ))}
-          </div>
+      </fieldset>
+      <fieldset disabled={!problem} className={cn("transition-opacity lg:col-span-3", !problem && "opacity-40")}>
+        <legend className="mb-3 text-[14px] font-semibold text-ink">
+          <span className="mono mr-3 text-blue">2</span>Who will use it?
+        </legend>
+        <div className="border-t border-ink">
+          {HELPER.users.map((o) => (
+            <Option key={o.id} name="helper-users" value={o.id} checked={users === o.id} onChange={setUsers}>
+              {o.label}
+            </Option>
+          ))}
         </div>
-      </div>
-
-      <div className="lg:col-span-5" aria-live="polite">
+      </fieldset>
+      <div className="lg:col-span-4" aria-live="polite">
         {main && result ? (
-          <div className="rounded-lg border border-accent/40 bg-surface p-6">
-            <p className="label text-accent">Our suggestion</p>
-            <div className="mt-4 flex items-center gap-3">
-              <ServiceIcon id={main.id} />
-              <h3 className="font-serif text-[24px] leading-tight">{main.title}</h3>
-            </div>
+          <div className="tone-ink h-full p-6 md:p-7">
+            <p className="text-[13px] font-semibold text-blue">Start here</p>
+            <h3 className="t-2 mt-3">{main.title}</h3>
             <p className="mt-4 text-[15.5px]">{result[1]}</p>
-            {also && <p className="mt-3 text-[14px] text-muted">Often paired with: {also.title.toLowerCase()}.</p>}
-            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-              <ButtonLink href={`/contact?type=${main.id}`}>Discuss this</ButtonLink>
+            {also && <p className="mt-3 text-[14px] text-muted">Often paired with {also.title.charAt(0).toLowerCase() + also.title.slice(1)}.</p>}
+            <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4">
+              <ButtonLink href={`/contact?type=${main.id}`} tone="blue">
+                Discuss this
+              </ButtonLink>
               <ArrowLink href={`#${main.id}`}>Read more</ArrowLink>
             </div>
           </div>
         ) : (
-          <div className="flex h-full min-h-[220px] items-center justify-center rounded-lg border border-dashed border-line-strong p-6 text-center">
-            <p className="max-w-[28ch] text-[15px] text-muted">Answer the two questions and we&apos;ll suggest where to start.</p>
+          <div className="flex h-full min-h-[200px] items-end border border-dashed border-line-strong p-6">
+            <p className="max-w-[26ch] text-[15px] text-muted">Answer both and we&apos;ll point you to where most clients like you start.</p>
           </div>
         )}
       </div>

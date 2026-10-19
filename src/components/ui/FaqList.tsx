@@ -1,18 +1,19 @@
-import { PlusIcon } from "@/components/icons";
-
-/** Questions as native <details>, so they open without any script */
+/** Questions as native <details>, so they work without scripts. The mark
+ *  turns from + to − when open. */
 export function FaqList({ items }: { items: [string, string][] }) {
   return (
-    <div className="border-t border-line">
-      {items.map(([q, a]) => (
+    <div className="border-t border-ink">
+      {items.map(([q, a], i) => (
         <details key={q} className="group border-b border-line">
-          <summary className="flex cursor-pointer items-start justify-between gap-6 py-5 md:py-6">
-            <span className="font-serif text-[20px] leading-[1.35] text-ink transition-colors group-hover:text-accent md:text-[22px]">
-              {q}
+          <summary className="flex cursor-pointer items-baseline gap-5 py-5 md:py-6">
+            <span className="mono w-6 shrink-0 text-muted">{String(i + 1).padStart(2, "0")}</span>
+            <span className="t-3 flex-1 transition-colors group-hover:text-blue">{q}</span>
+            <span aria-hidden className="relative h-3.5 w-3.5 shrink-0 self-center">
+              <span className="absolute inset-x-0 top-1/2 h-[1.5px] -translate-y-1/2 bg-ink" />
+              <span className="absolute inset-y-0 left-1/2 w-[1.5px] -translate-x-1/2 bg-ink transition-transform duration-300 group-open:scale-y-0" />
             </span>
-            <PlusIcon className="mt-1.5 h-4 w-4 shrink-0 text-muted transition-transform duration-200 group-open:rotate-45" />
           </summary>
-          <p className="max-w-[65ch] pb-6 pr-10 text-[16px] md:text-[17px]">{a}</p>
+          <p className="max-w-[62ch] pb-6 pl-11 pr-8 text-[16px] md:text-[17px]">{a}</p>
         </details>
       ))}
     </div>
