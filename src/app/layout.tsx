@@ -1,26 +1,29 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
+import localFont from "next/font/local";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL, THEME_KEY } from "@/lib/site";
 import "./globals.css";
 
-const newsreader = Newsreader({
+/* Fonts are bundled with the site (variable woff2, Latin, SIL Open Font
+   License) rather than fetched from Google Fonts at build time — those
+   downloads sometimes fail on Vercel and stop the whole build. */
+const newsreader = localFont({
+  src: "./fonts/newsreader-latin-wght-normal.woff2",
   variable: "--font-newsreader",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  style: ["normal", "italic"],
+  weight: "200 800",
   display: "swap",
 });
 
-const inter = Inter({
+const inter = localFont({
+  src: "./fonts/inter-latin-wght-normal.woff2",
   variable: "--font-inter",
-  subsets: ["latin"],
+  weight: "100 900",
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const jetbrainsMono = localFont({
+  src: "./fonts/jetbrains-mono-latin-wght-normal.woff2",
   variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: "100 800",
   display: "swap",
 });
 
