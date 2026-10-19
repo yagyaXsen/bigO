@@ -44,6 +44,7 @@ export const PROJECTS: Project[] = [
       "Plain-language search and an application tracker",
     ],
     result: "[Result: e.g. number of listings processed, or hours of manual research saved]",
+    image: { src: "/images/work/nexora.jpg", alt: "Nexora home page: Discover the world's next opportunity before everyone else" },
     stack: ["Python", "FastAPI", "PostgreSQL", "React", "Groq", "GitHub Actions"],
     links: [
       { label: "Live site", href: "https://nexora-8y5.pages.dev/" },
@@ -69,6 +70,7 @@ export const PROJECTS: Project[] = [
       "Architecture ready for new categories and regions",
     ],
     result: "[Result: e.g. registered users, jobs posted or cities live]",
+    image: { src: "/images/work/hirearn.jpg", alt: "Hirearn home page: daily wage hiring for employers" },
     stack: [],
     links: [{ label: "Live site", href: "https://hirearn.com/" }],
   },

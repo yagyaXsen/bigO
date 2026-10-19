@@ -3,7 +3,6 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Section } from "@/components/ui/Section";
 import { ArrowLink, ButtonLink } from "@/components/ui/Button";
-import { Ph } from "@/components/ui/Placeholder";
 import { FaqList } from "@/components/ui/FaqList";
 import { Photo } from "@/components/ui/Photo";
 import { HeroWorkflow } from "@/components/home/HeroWorkflow";
@@ -171,28 +170,37 @@ export function SelectedWork() {
       intro="A few of the systems we've designed, built and shipped."
       aside={<ArrowLink href="/work">All work</ArrowLink>}
     >
-      <ul className="border-t border-line">
+      {/* Screenshot cards; the screenshot opens the case study */}
+      <ul className="grid gap-10 md:grid-cols-3 md:gap-8">
         {featured.map((p) => (
-          <li key={p.id} className="grid gap-4 border-b border-line py-8 md:grid-cols-12 md:gap-8 md:py-10">
-            <div className="md:col-span-4">
-              <h3 className="font-serif text-[28px] font-normal leading-tight md:text-[32px]">{p.name}</h3>
-              <p className="label mt-2">
-                {p.kind} · {p.status}
-              </p>
-            </div>
-            <div className="md:col-span-8">
-              <p className="max-w-[60ch] text-[17px]">{p.summary}</p>
-              <p className="mt-3 text-[14px] text-muted">
-                <Ph text={p.result} />
-              </p>
-              <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
-                <ArrowLink href={`/work#${p.id}`}>Case study</ArrowLink>
-                {p.live && (
-                  <ArrowLink href={p.live} external>
-                    Live site
-                  </ArrowLink>
-                )}
-              </div>
+          <li key={p.id} className="flex flex-col">
+            {p.image && (
+              <Link
+                href={`/work#${p.id}`}
+                aria-label={`${p.name} case study`}
+                className="group relative block aspect-[16/10] overflow-hidden rounded-md border border-line bg-surface"
+              >
+                <Image
+                  src={p.image.src}
+                  alt={p.image.alt}
+                  fill
+                  sizes="(min-width: 768px) 400px, 100vw"
+                  className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                />
+              </Link>
+            )}
+            <h3 className="mt-6 font-serif text-[26px] font-normal leading-tight">{p.name}</h3>
+            <p className="label mt-2">
+              {p.kind} · {p.status}
+            </p>
+            <p className="mt-4 text-[16px]">{p.summary}</p>
+            <div className="mt-auto flex flex-wrap gap-x-6 gap-y-2 pt-5">
+              <ArrowLink href={`/work#${p.id}`}>Case study</ArrowLink>
+              {p.live && (
+                <ArrowLink href={p.live} external>
+                  Live site
+                </ArrowLink>
+              )}
             </div>
           </li>
         ))}

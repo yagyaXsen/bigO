@@ -86,8 +86,8 @@ export default function WorkPage() {
 
               <div className="md:col-span-8">
                 {p.image ? (
-                  <div className="overflow-hidden border border-line">
-                    <Image src={p.image.src} alt={p.image.alt} width={1280} height={800} className="h-auto w-full" />
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-md border border-line bg-surface">
+                    <Image src={p.image.src} alt={p.image.alt} fill sizes="(min-width: 1024px) 800px, 100vw" className="object-cover object-top" />
                   </div>
                 ) : p.status === "Live" ? (
                   <ScreenshotPlaceholder caption={`${p.name}: main screen`} />
