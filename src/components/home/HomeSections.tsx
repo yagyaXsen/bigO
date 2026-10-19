@@ -5,6 +5,7 @@ import { Section } from "@/components/ui/Section";
 import { ArrowLink, ButtonLink } from "@/components/ui/Button";
 import { Ph } from "@/components/ui/Placeholder";
 import { FaqList } from "@/components/ui/FaqList";
+import { Photo } from "@/components/ui/Photo";
 import {
   COMMITMENTS,
   FOUNDER,
@@ -48,8 +49,14 @@ export function Hero() {
         </p>
       </section>
 
-      {/* What every client gets — thin lines between cells */}
       <div className="container-page pb-20 md:pb-28">
+        <Photo
+          src="/images/site/workspace.jpg"
+          alt="A laptop showing code on a quiet desk in morning light"
+          priority
+          className="mb-12 aspect-[16/10] md:mb-16 md:aspect-[21/9]"
+        />
+        {/* What every client gets — thin lines between cells */}
         <dl className="grid grid-cols-2 gap-px border-y border-line bg-line lg:grid-cols-4">
           {/* Padding by position: 2 columns on phones, 4 from lg */}
           {COMMITMENTS.map(([term, detail], i) => (
@@ -77,6 +84,11 @@ export function Problems() {
       title="If this sounds familiar, we can help."
       intro="Most of our projects start with a process that eats hours every week. We find the slow part and build the software that fixes it."
     >
+      <Photo
+        src="/images/site/planning.jpg"
+        alt="Mapping a workflow on a wall with notes and diagrams"
+        className="mb-14 aspect-[16/10] md:mb-16 md:aspect-[21/8]"
+      />
       <div className="hidden border-b border-line pb-3 md:grid md:grid-cols-12 md:gap-8">
         <p className="label md:col-span-5">The problem</p>
         <p className="label md:col-span-3">What we build</p>
@@ -108,6 +120,11 @@ export function WhatWeBuild() {
       title="Software that fits how your business works."
       intro="We focus on four kinds of work and do them properly. Everything else we offer supports these."
     >
+      <Photo
+        src="/images/site/dashboard.jpg"
+        alt="A business dashboard with charts open on a laptop"
+        className="mb-14 aspect-[16/10] md:mb-16 md:aspect-[21/8]"
+      />
       <div className="grid gap-px border-y border-line bg-line md:grid-cols-2">
         {SERVICES.map((s) => (
           <article key={s.id} className="flex flex-col bg-bg py-8 md:p-10 md:odd:pl-0">
