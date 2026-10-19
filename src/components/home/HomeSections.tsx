@@ -5,13 +5,15 @@ import { Section } from "@/components/ui/Section";
 import { ArrowLink, ButtonLink } from "@/components/ui/Button";
 import { FaqList } from "@/components/ui/FaqList";
 import { Photo } from "@/components/ui/Photo";
+import { ServiceIcon } from "@/components/ui/ServiceIcon";
+import { TechLogo } from "@/components/ui/TechLogo";
 import { HeroWorkflow } from "@/components/home/HeroWorkflow";
+import { ProblemPicker } from "@/components/home/ProblemPicker";
 import {
   COMMITMENTS,
   FOUNDER,
   HERO,
   HOME_FAQ,
-  PROBLEMS,
   SERVICES,
   STACK,
   STANDARDS,
@@ -92,30 +94,14 @@ export function Problems() {
       num="01"
       label="Problems we solve"
       title="If this sounds familiar, we can help."
-      intro="Most of our projects start with a process that eats hours every week. We find the slow part and build the software that fixes it."
+      intro="Most of our projects start with a process that eats hours every week. Pick the one that sounds like you to see what changes."
     >
       <Photo
         src="/images/site/planning.jpg"
         alt="Mapping a workflow on a wall with notes and diagrams"
         className="mb-14 aspect-[16/10] md:mb-16 md:aspect-[21/8]"
       />
-      <div className="hidden border-b border-line pb-3 md:grid md:grid-cols-12 md:gap-8">
-        <p className="label md:col-span-5">The problem</p>
-        <p className="label md:col-span-3">What we build</p>
-        <p className="label md:col-span-4">What changes</p>
-      </div>
-      <ul>
-        {PROBLEMS.map(([problem, build, change]) => (
-          <li key={build} className="grid gap-3 border-b border-line py-7 md:grid-cols-12 md:gap-8 md:py-8">
-            <p className="font-serif text-[21px] leading-[1.35] text-ink md:col-span-5 md:text-[23px]">{problem}</p>
-            <p className="text-[15px] font-medium text-accent md:col-span-3 md:pt-1">
-              <span className="label mr-2 md:hidden">We build:</span>
-              {build}
-            </p>
-            <p className="text-[16px] md:col-span-4 md:pt-0.5">{change}</p>
-          </li>
-        ))}
-      </ul>
+      <ProblemPicker />
     </Section>
   );
 }
@@ -138,8 +124,11 @@ export function WhatWeBuild() {
       <div className="grid gap-px border-y border-line bg-line md:grid-cols-2">
         {SERVICES.map((s) => (
           <article key={s.id} className="flex flex-col bg-bg py-8 md:p-10 md:odd:pl-0">
-            <p className="label">{s.num}</p>
-            <h3 className="mt-4 font-serif text-[26px] font-normal leading-[1.2] md:text-[30px]">{s.title}</h3>
+            <div className="flex items-center justify-between">
+              <ServiceIcon id={s.id} />
+              <p className="label">{s.num}</p>
+            </div>
+            <h3 className="mt-5 font-serif text-[26px] font-normal leading-[1.2] md:text-[30px]">{s.title}</h3>
             <p className="mt-3 max-w-[48ch] text-[16px]">{s.short}</p>
             <ArrowLink href={`/services#${s.id}`} className="mt-6">
               How we do it
@@ -248,8 +237,12 @@ export function Stack() {
       <dl className="border-t border-line">
         {STACK.map(([group, tools]) => (
           <div key={group} className="grid gap-1 border-b border-line py-5 md:grid-cols-12 md:gap-8">
-            <dt className="label md:col-span-4 md:pt-1">{group}</dt>
-            <dd className="text-[17px] text-ink md:col-span-8">{tools}</dd>
+            <dt className="label md:col-span-4 md:pt-3">{group}</dt>
+            <dd className="mt-2 flex flex-wrap gap-2 md:col-span-8 md:mt-0">
+              {tools.map((t) => (
+                <TechLogo key={t} name={t} />
+              ))}
+            </dd>
           </div>
         ))}
       </dl>

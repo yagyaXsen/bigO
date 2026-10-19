@@ -70,6 +70,14 @@ export function SiteFooter() {
       <div className="container-page">
         <div className="flex flex-col gap-2 border-t border-line py-6 text-[13px] text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} bigO. All rights reserved.</p>
+          <nav aria-label="Legal" className="flex gap-5">
+            <Link href="/privacy" className="transition-colors hover:text-ink">
+              Privacy
+            </Link>
+            <Link href="/terms" className="transition-colors hover:text-ink">
+              Terms
+            </Link>
+          </nav>
           <a href="#top" className="w-fit transition-colors hover:text-ink">
             Back to top ↑
           </a>

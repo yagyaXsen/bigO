@@ -61,3 +61,45 @@ export function WhatsAppIcon(props: IconProps) {
     </svg>
   );
 }
+
+/* Service icons (24px grid, 1.5px line) for the four core services */
+const svc = { ...base, viewBox: "0 0 24 24" };
+
+export function WebAppIcon(props: IconProps) {
+  return (
+    <svg {...svc} {...props}>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <path d="M3 8.5h18M7.5 12.5h4M7.5 15.5h7M15.5 12.5h1" />
+    </svg>
+  );
+}
+
+export function PortalIcon(props: IconProps) {
+  return (
+    <svg {...svc} {...props}>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <circle cx="9" cy="11" r="2" />
+      <path d="M6 16.5c.6-1.6 1.7-2.5 3-2.5s2.4.9 3 2.5M14.5 10h3.5M14.5 13h3.5" />
+    </svg>
+  );
+}
+
+export function AssistantIcon(props: IconProps) {
+  return (
+    <svg {...svc} {...props}>
+      <path d="M4 5.5h16v10H10l-4 3.5v-3.5H4z" />
+      <path d="M12 7.8l.8 1.7 1.7.8-1.7.8-.8 1.7-.8-1.7-1.7-.8 1.7-.8z" />
+    </svg>
+  );
+}
+
+export function AutomationIcon(props: IconProps) {
+  return (
+    <svg {...svc} {...props}>
+      <rect x="3" y="4" width="6" height="6" rx="1.5" />
+      <rect x="15" y="4" width="6" height="6" rx="1.5" />
+      <rect x="9" y="14" width="6" height="6" rx="1.5" />
+      <path d="M9 7h6M6 10v2.5a1.5 1.5 0 0 0 1.5 1.5H9M18 10v2.5a1.5 1.5 0 0 1-1.5 1.5H15" />
+    </svg>
+  );
+}

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ArrowUpRightIcon, WhatsAppIcon } from "@/components/icons";
+import { PROJECT_TYPES } from "@/lib/content";
 import {
   CONTACT_EMAIL,
   EMAIL_RE,
@@ -146,6 +147,7 @@ export function ContactForm() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
+  const [types, setTypes] = useState<string[]>([]);
   // Honeypot: hidden from people, bots fill it in
   const [botcheck, setBotcheck] = useState("");
   const [errors, setErrors] = useState<Errors>({});
@@ -153,7 +155,27 @@ export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [submittedData, setSubmittedData] = useState<Enquiry | null>(null);
 
-  const current = (): Enquiry => ({ name, company, email, phone, message });
+  // Preselect a project type from /contact?type=… (e.g. the Services helper)
+  useEffect(() => {
+    const preselect = () => {
+      const t = new URLSearchParams(window.location.search).get("type");
+      if (t && PROJECT_TYPES.some((p) => p.id === t)) setTypes([t]);
+    };
+    preselect();
+  }, []);
+
+  const toggleType = (id: string) =>
+    setTypes((cur) => (cur.includes(id) ? cur.filter((t) => t !== id) : [...cur, id]));
+
+  // The chosen types travel at the top of the message, so every delivery
+  // channel (email, WhatsApp) carries them without a new field
+  const withTypes = (text: string) => {
+    if (!types.length) return text;
+    const labels = PROJECT_TYPES.filter((p) => types.includes(p.id)).map((p) => p.label);
+    return `Project type: ${labels.join(", ")}\n\n${text}`.slice(0, FIELD_LIMITS.message);
+  };
+
+  const current = (): Enquiry => ({ name, company, email, phone, message: withTypes(message) });
 
   const validate = (): Errors => {
     const next: Errors = {};
@@ -177,6 +199,7 @@ export function ContactForm() {
     setEmail("");
     setPhone("");
     setMessage("");
+    setTypes([]);
   };
 
   const submitForm = async (e: React.FormEvent) => {
@@ -190,7 +213,7 @@ export function ContactForm() {
       company: company.trim(),
       email: email.trim(),
       phone: phone.trim(),
-      message: message.trim(),
+      message: withTypes(message.trim()),
     };
 
     setIsPending(true);
@@ -265,6 +288,36 @@ export function ContactForm() {
           onChange={(e) => setBotcheck(e.target.value)}
         />
       </div>
+
+      <fieldset className="mb-8">
+        <legend className="mb-3 text-[14px] font-medium text-ink">
+          What do you need? <span className="font-normal text-muted">Choose any that apply</span>
+        </legend>
+        <div className="flex flex-wrap gap-2">
+          {PROJECT_TYPES.map((t) => {
+            const on = types.includes(t.id);
+            return (
+              <button
+                key={t.id}
+                type="button"
+                aria-pressed={on}
+                onClick={() => toggleType(t.id)}
+                className={cn(
+                  "inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[14px] transition-colors",
+                  on ? "border-accent bg-accent text-surface" : "border-line-strong bg-surface text-ink hover:border-ink",
+                )}
+              >
+                {on && (
+                  <svg viewBox="0 0 16 16" aria-hidden className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="m3.5 8.5 3 3 6-7" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+                {t.label}
+              </button>
+            );
+          })}
+        </div>
+      </fieldset>
 
       <div className="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
         <Field id="cf-name" label="Name" error={errors.name}>

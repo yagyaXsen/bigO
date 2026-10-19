@@ -113,33 +113,64 @@ export const STANDARDS: [string, string][] = [
   ],
 ];
 
-/** 01 — problems we solve: [problem, what we build, what changes] */
-export const PROBLEMS: [string, string, string][] = [
-  [
-    "Your team copies the same data between spreadsheets, email and other tools.",
-    "Workflow automation and integrations",
-    "Data moves between your systems on its own, without retyping or mistakes.",
-  ],
-  [
-    "Customers keep calling and emailing to ask where things stand.",
-    "A client portal",
-    "Clients log in to see progress, documents and invoices for themselves.",
-  ],
-  [
-    "The same questions arrive all day on WhatsApp, email and your website.",
-    "An AI assistant trained on your own information",
-    "Common questions are answered instantly, and anything complex goes to a person.",
-  ],
-  [
-    "The business runs on spreadsheets that break, get overwritten and can't grow.",
-    "A custom web app or internal tool",
-    "One reliable system, with the right access for each person and a full history.",
-  ],
-  [
-    "Useful information is stuck in PDFs, emails and other websites.",
-    "AI data extraction",
-    "Clean, structured records you can search, filter and report on.",
-  ],
+/** 01 — problems we solve. `service` is the matching id on /services;
+ *  before/after describe the work in plain steps (no invented numbers). */
+export interface Problem {
+  short: string;
+  problem: string;
+  build: string;
+  service: string;
+  change: string;
+  before: string[];
+  after: string[];
+}
+
+export const PROBLEMS: Problem[] = [
+  {
+    short: "Copy-paste between tools",
+    problem: "Your team copies the same data between spreadsheets, email and other tools.",
+    build: "Workflow automation and integrations",
+    service: "automation",
+    change: "Data moves between your systems on its own, without retyping or mistakes.",
+    before: ["Order arrives by email", "Someone copies it into a spreadsheet", "Then re-types it into invoicing", "Mistakes are found later, by customers"],
+    after: ["Order arrives by email", "Saved to your sheet and invoicing automatically", "Checked for missing details", "Your team gets a short summary"],
+  },
+  {
+    short: "Customers chasing updates",
+    problem: "Customers keep calling and emailing to ask where things stand.",
+    build: "A client portal",
+    service: "client-portals",
+    change: "Clients log in to see progress, documents and invoices for themselves.",
+    before: ["Client calls to ask for an update", "Someone finds the file and checks progress", "Documents go back and forth by email", "Invoices get chased by phone"],
+    after: ["Client logs in to their own portal", "Sees status and next steps at any time", "Downloads and approves documents", "Pays the invoice online"],
+  },
+  {
+    short: "Same questions all day",
+    problem: "The same questions arrive all day on WhatsApp, email and your website.",
+    build: "An AI assistant trained on your own information",
+    service: "ai-assistants",
+    change: "Common questions are answered instantly, and anything complex goes to a person.",
+    before: ["The same questions arrive all day", "Staff stop work to answer each one", "Replies wait until office hours", "Answers vary by who replies"],
+    after: ["Questions are answered instantly, day and night", "Answers come from your own information", "Anything complex is passed to a person", "Your team handles only what needs them"],
+  },
+  {
+    short: "Spreadsheets that break",
+    problem: "The business runs on spreadsheets that break, get overwritten and can't grow.",
+    build: "A custom web app or internal tool",
+    service: "web-apps",
+    change: "One reliable system, with the right access for each person and a full history.",
+    before: ["Several versions of the same spreadsheet", "Formulas break and data gets overwritten", "Everyone can see and edit everything", "No record of who changed what"],
+    after: ["One system everyone works in", "Each person sees what their role needs", "Every change is recorded", "Reports are ready when you need them"],
+  },
+  {
+    short: "Data stuck in documents",
+    problem: "Useful information is stuck in PDFs, emails and other websites.",
+    build: "AI data extraction",
+    service: "ai-assistants",
+    change: "Clean, structured records you can search, filter and report on.",
+    before: ["Information sits in PDFs and inboxes", "Someone reads and re-types it", "Nothing can be searched or compared", "Details get missed"],
+    after: ["Documents are read as they arrive", "Key fields are extracted and checked", "Saved as clean, searchable records", "Unusual cases are flagged for review"],
+  },
 ];
 
 export interface Service {
@@ -269,12 +300,12 @@ export const ALSO: [string, string][] = [
 ];
 
 /** 04 — tech stack, grouped */
-export const STACK: [string, string][] = [
-  ["Front end", "React, Next.js, TypeScript, Tailwind CSS"],
-  ["Back end", "Node.js, Python, FastAPI, Hono"],
-  ["Data", "PostgreSQL, Supabase, MongoDB"],
-  ["AI and automation", "LLM APIs, vector search, scheduled jobs on GitHub Actions"],
-  ["Hosting and payments", "Vercel, Stripe"],
+export const STACK: [string, string[]][] = [
+  ["Front end", ["React", "Next.js", "TypeScript", "Tailwind CSS"]],
+  ["Back end", ["Node.js", "Python", "FastAPI", "Hono"]],
+  ["Data", ["PostgreSQL", "Supabase", "MongoDB"]],
+  ["AI and automation", ["LLM APIs", "Vector search", "GitHub Actions"]],
+  ["Hosting and payments", ["Vercel", "Stripe"]],
 ];
 
 /** 05 — founder note */
@@ -318,3 +349,46 @@ export const FAQ: [string, string][] = [
 
 /** The five questions shown on the home page */
 export const HOME_FAQ = [0, 1, 2, 3, 4].map((i) => FAQ[i]);
+
+/** Project types for the contact form chips; ids match /contact?type= */
+export const PROJECT_TYPES: { id: string; label: string }[] = [
+  { id: "web-apps", label: "Web app or internal tool" },
+  { id: "client-portals", label: "Client portal" },
+  { id: "ai-assistants", label: "AI assistant or chatbot" },
+  { id: "automation", label: "Automation or integration" },
+  { id: "website", label: "Website" },
+  { id: "not-sure", label: "Not sure yet" },
+];
+
+/** "Which service do I need?" helper on /services */
+export const HELPER = {
+  problems: [
+    { id: "copy", label: "We copy data between tools by hand" },
+    { id: "questions", label: "We answer the same questions all day" },
+    { id: "updates", label: "Customers keep asking for updates" },
+    { id: "spreadsheets", label: "We've outgrown our spreadsheets" },
+    { id: "documents", label: "Information is stuck in PDFs and emails" },
+  ],
+  users: [
+    { id: "team", label: "Our team" },
+    { id: "customers", label: "Our customers" },
+    { id: "both", label: "Both" },
+  ],
+  /** problem → who uses it → [main service id, why, also consider] */
+  pick(problem: string, users: string): [string, string, string | null] {
+    switch (problem) {
+      case "copy":
+        return ["automation", "Connecting your tools removes the retyping and the mistakes that come with it.", users === "team" ? null : "client-portals"];
+      case "questions":
+        return ["ai-assistants", "An assistant trained on your own information answers instantly and hands complex cases to a person.", null];
+      case "updates":
+        return ["client-portals", "A portal lets customers see progress, documents and invoices without calling you.", "automation"];
+      case "spreadsheets":
+        return users === "customers"
+          ? ["client-portals", "Customers get their own secure view, and your team gets one reliable system behind it.", "web-apps"]
+          : ["web-apps", "One proper system replaces the fragile spreadsheets, with the right access for each person.", users === "both" ? "client-portals" : null];
+      default:
+        return ["ai-assistants", "AI data extraction reads documents as they arrive and turns them into clean records.", "automation"];
+    }
+  },
+};

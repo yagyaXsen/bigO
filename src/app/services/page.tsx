@@ -8,8 +8,10 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { CtaBand } from "@/components/CtaBand";
 import { PageHeader, Section } from "@/components/ui/Section";
 import { ArrowLink } from "@/components/ui/Button";
+import { ServiceIcon } from "@/components/ui/ServiceIcon";
 import { Ph } from "@/components/ui/Placeholder";
 import { FaqList } from "@/components/ui/FaqList";
+import { ServiceHelper } from "@/components/ServiceHelper";
 
 const title = "Services — bigO";
 const description =
@@ -63,8 +65,11 @@ export default function ServicesPage() {
                 href={`#${s.id}`}
                 className={cn("group bg-bg py-5 sm:pr-6", i % 2 ? "sm:pl-6" : "sm:pl-0", i === 0 ? "lg:pl-0" : "lg:pl-6")}
               >
-                <span className="label">{s.num}</span>
-                <span className="mt-2 block text-[16px] font-medium text-ink transition-colors group-hover:text-accent">
+                <span className="flex items-center gap-3">
+                  <ServiceIcon id={s.id} className="h-9 w-9" />
+                  <span className="label">{s.num}</span>
+                </span>
+                <span className="mt-3 block text-[16px] font-medium text-ink transition-colors group-hover:text-accent">
                   {s.title}
                 </span>
               </a>
@@ -72,10 +77,20 @@ export default function ServicesPage() {
           </nav>
         </PageHeader>
 
+        <Section
+          id="helper"
+          tone="muted"
+          label="Not sure where to start?"
+          title="Find the service that fits."
+          intro="Two quick questions. There's no form to fill in."
+        >
+          <ServiceHelper />
+        </Section>
+
         {SERVICES.map((s, i) => {
           const example = s.example ? PROJECTS.find((p) => p.id === s.example) : undefined;
           return (
-            <Section key={s.id} id={s.id} tone={i % 2 ? "default" : "muted"} num={s.num} label="Service" title={s.title} intro={s.short}>
+            <Section key={s.id} id={s.id} tone={i % 2 ? "muted" : "default"} num={s.num} label="Service" title={s.title} intro={s.short}>
               <div className="md:grid md:grid-cols-12 md:gap-8">
                 <div className="space-y-12 md:col-span-8 md:col-start-5">
                   <List label="A good fit if" items={s.fit} />
@@ -101,7 +116,6 @@ export default function ServicesPage() {
 
         <Section
           id="also"
-          tone="muted"
           num="05"
           label="Also available"
           title="The pieces around your software."
@@ -117,7 +131,7 @@ export default function ServicesPage() {
           </dl>
         </Section>
 
-        <Section id="faq" num="06" label="Questions" title="Common questions.">
+        <Section id="faq" tone="muted" num="06" label="Questions" title="Common questions.">
           <div className="md:grid md:grid-cols-12 md:gap-8">
             <div className="md:col-span-8 md:col-start-5">
               <FaqList items={FAQ} />
