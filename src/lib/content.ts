@@ -11,43 +11,61 @@ export const HERO = {
   lead: "We replace spreadsheets, inbox juggling and copy-paste work with web apps, client portals, AI assistants and automated workflows. Built by a small team you talk to directly.",
 };
 
-/** Hero panel: example automations of the kind we build, shown step by step */
-export const WORKFLOWS: { name: string; trigger: string; steps: string[]; note: string }[] = [
+/** Hero panel: example automations of the kind we build. Each step has an
+ *  icon and reveals one field of the "live output" card. Sample data is
+ *  fictional and the panel is labelled as an example. */
+export type WorkflowIcon =
+  | "mail" | "ai" | "database" | "pen" | "bell"
+  | "lock" | "chart" | "file" | "card" | "scan" | "shield" | "flag";
+
+export interface Workflow {
+  name: string;
+  trigger: string;
+  /** Light / dark accent for this workflow */
+  color: [string, string];
+  steps: { text: string; icon: WorkflowIcon; out: [string, string] }[];
+  output: { title: string; preview: string };
+}
+
+export const WORKFLOWS: Workflow[] = [
   {
     name: "Enquiries",
     trigger: "new enquiry",
+    color: ["#2f50ca", "#93a8f0"],
+    output: { title: "New enquiry · website form", preview: "“Hi, could you quote for 200 lunch boxes next Friday?”" },
     steps: [
-      "Email or form enquiry arrives",
-      "AI reads it and sorts it by type and priority",
-      "Contact and details saved to your CRM",
-      "Reply drafted for a person to approve",
-      "Right team member notified",
+      { text: "Email or form enquiry arrives", icon: "mail", out: ["From", "Priya S., Northwind Foods"] },
+      { text: "AI reads it and sorts it", icon: "ai", out: ["Type", "Quote request · High priority"] },
+      { text: "Contact saved to your CRM", icon: "database", out: ["CRM", "New lead created"] },
+      { text: "Reply drafted for approval", icon: "pen", out: ["Draft", "Ready for review"] },
+      { text: "Right person notified", icon: "bell", out: ["Assigned", "Sales team"] },
     ],
-    note: "Workflow automation and an AI assistant, connected to the tools you already use.",
   },
   {
     name: "Client portal",
     trigger: "client login",
+    color: ["#0f8a62", "#5fd3a6"],
+    output: { title: "Client portal · Acme Interiors", preview: "Project: Showroom website" },
     steps: [
-      "Client signs in securely",
-      "Sees project status and next steps",
-      "Downloads documents and approves work",
-      "Pays the invoice online",
-      "Your team is notified automatically",
+      { text: "Client signs in securely", icon: "lock", out: ["Access", "Two-step sign-in"] },
+      { text: "Sees status and next steps", icon: "chart", out: ["Progress", "Design approved · 60%"] },
+      { text: "Approves documents", icon: "file", out: ["Approved", "Homepage design v3"] },
+      { text: "Pays the invoice online", icon: "card", out: ["Invoice #1042", "Paid"] },
+      { text: "Your team is notified", icon: "bell", out: ["Team", "Next milestone started"] },
     ],
-    note: "A client portal with your branding, logins and online payments.",
   },
   {
     name: "Documents",
     trigger: "new document",
+    color: ["#c2620a", "#f2b05e"],
+    output: { title: "Supplier invoice · PDF", preview: "invoice_INV-2041.pdf" },
     steps: [
-      "PDF or email attachment arrives",
-      "AI extracts the key fields",
-      "Values checked against your rules",
-      "Clean record saved to your database",
-      "Anything unusual flagged for review",
+      { text: "PDF attachment arrives", icon: "file", out: ["File", "invoice_INV-2041.pdf"] },
+      { text: "AI extracts the key fields", icon: "scan", out: ["Supplier", "Blue River Traders"] },
+      { text: "Checked against your rules", icon: "shield", out: ["Check", "Amount matches PO"] },
+      { text: "Saved to your database", icon: "database", out: ["Record", "Added to payables"] },
+      { text: "Exceptions flagged", icon: "flag", out: ["Review", "1 line needs a look"] },
     ],
-    note: "AI data extraction with checks and human review where it matters.",
   },
 ];
 

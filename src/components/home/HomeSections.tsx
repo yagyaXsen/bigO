@@ -28,7 +28,7 @@ export function Hero() {
         <div aria-hidden className="pattern-grid absolute inset-x-0 -top-px bottom-0 -z-10" />
         {/* Text left, a live example workflow right (stacked below lg) */}
         <section className="container-page grid gap-14 pt-14 pb-14 md:pt-24 md:pb-20 lg:grid-cols-12 lg:items-center lg:gap-10 lg:pt-28">
-          <div className="lg:col-span-7">
+          <div className="min-w-0 lg:col-span-7">
             <p className="label">{HERO.label}</p>
             <h1 className="mt-6 max-w-[19ch] font-serif text-[42px] font-normal leading-[1.04] tracking-[-0.02em] md:text-[64px] lg:text-[60px] xl:text-[68px]">
               {HERO.title}
@@ -52,7 +52,8 @@ export function Hero() {
               ))}
             </p>
           </div>
-          <div className="lg:col-span-5">
+          {/* min-w-0: lets the panel shrink so its truncated text never widens the page */}
+          <div className="min-w-0 lg:col-span-5">
             <HeroWorkflow />
           </div>
         </section>
