@@ -8,9 +8,9 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Shot } from "@/components/ui/Shot";
 import { cn } from "@/lib/utils";
 
-const title = "Work — Nexora, Hirearn, Lumora Dental and more | bigO";
+const title = "Work — Nexora, Hirearn, OyeExpress, Lumora Dental and more | bigO";
 const description =
-  "Projects bigO has designed, built and shipped: Nexora, an AI data pipeline; Hirearn, a local jobs marketplace; Lumora Dental, a clinic website with booking; and an ongoing engagement for a catering business in Thailand.";
+  "Projects bigO has designed, built and shipped: Nexora, an AI data pipeline; Hirearn, a local jobs marketplace; Lumora Dental, a clinic website with booking; OyeExpress, a furniture sourcing website; and an ongoing engagement for a catering business in Thailand.";
 
 export const metadata: Metadata = {
   title,
@@ -63,6 +63,7 @@ export default function WorkPage() {
   const nexora = projectById("nexora")!;
   const hirearn = projectById("hirearn")!;
   const lumora = projectById("lumora")!;
+  const oye = projectById("oyeexpress")!;
   const catering = projectById("catering")!;
   const n = (p: Project) => PROJECTS.indexOf(p) + 1;
 
@@ -122,6 +123,16 @@ export default function WorkPage() {
               <p className="mt-3 text-[13px] text-muted">Screen recording of the live site.</p>
             </Reveal>
             <Story p={lumora} num={n(lumora)} className="lg:col-span-5" />
+          </div>
+        </article>
+
+        {/* OyeExpress: story left, screen right */}
+        <article id={oye.id} aria-labelledby={`${oye.id}-title`} className="border-t border-line">
+          <div className="frame grid gap-12 py-20 md:py-28 lg:grid-cols-12 lg:gap-10">
+            <Story p={oye} num={n(oye)} className="lg:col-span-4" />
+            <Reveal className="lg:col-span-8 lg:pt-14">
+              <Shot project={oye} sizes="(min-width: 1024px) 800px, 100vw" />
+            </Reveal>
           </div>
         </article>
 

@@ -97,6 +97,29 @@ export const PROJECTS: Project[] = [
     links: [{ label: "Live site", href: "https://yagyaxsen.github.io/lumora-dental/" }],
   },
   {
+    id: "oyeexpress",
+    name: "OyeExpress",
+    kind: "Furniture sourcing website",
+    status: "Live",
+    url: "oyeexpress.vercel.app",
+    live: "https://oyeexpress.vercel.app/",
+    summary:
+      "A website for a furniture sourcing company that takes bespoke pieces from the makers of Foshan, China to homes, hotels and offices worldwide.",
+    problem:
+      "Buying furniture direct from Foshan, China's furniture capital, means finding the right makers, checking quality from far away and handling export and shipping. Clients need to trust one team with all of it.",
+    built:
+      "A brand website that walks clients from first idea to delivery: collections by room, a custom sourcing section where you compare a reference photo with the finished piece, a six-step process from brief to doorstep, and enquiry points throughout.",
+    features: [
+      "Collections for living, bedroom, dining, outdoor, lighting and wardrobes",
+      "Drag-to-compare slider: client reference against the finished piece",
+      "Six-step journey from brief and sourcing to inspection, shipping and delivery",
+      "Project and custom sourcing enquiries, with smooth scroll-led motion",
+    ],
+    stack: ["React", "Vite", "Tailwind CSS", "GSAP", "Lenis", "Vercel"],
+    image: { src: "/images/work/oyeexpress.jpg", alt: "OyeExpress home page: Premium furniture, sourced in Foshan" },
+    links: [{ label: "Live site", href: "https://oyeexpress.vercel.app/" }],
+  },
+  {
     id: "catering",
     name: "Catering business, Thailand",
     kind: "Ongoing client engagement",
