@@ -9,9 +9,9 @@ import { Shot } from "@/components/ui/Shot";
 import { TechLogo } from "@/components/ui/TechLogo";
 import { cn } from "@/lib/utils";
 
-const title = "Work — Nexora, Hirearn, OyeExpress, Mahanakorn and more | bigO";
+const title = "Work — Nexora, OyeExpress, Lumora Dental, Mahanakorn and more | bigO";
 const description =
-  "Projects bigO has designed, built and shipped: Nexora, an AI data pipeline; Hirearn, a local jobs marketplace; Lumora Dental, a clinic website with booking; OyeExpress, a furniture sourcing website; two open-source email automations; and Mahanakorn, an ongoing engagement for a Thai caterer from Bangkok.";
+  "Projects bigO has designed, built and shipped: Nexora, an AI data pipeline; Lumora Dental, a clinic website with booking; OyeExpress, a furniture sourcing website; two open-source email automations; and Mahanakorn, an ongoing engagement for a Thai caterer from Bangkok.";
 
 export const metadata: Metadata = {
   title,

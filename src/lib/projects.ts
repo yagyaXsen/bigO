@@ -56,29 +56,7 @@ export const PROJECTS: Project[] = [
       { label: "Source code", href: "https://github.com/yagyaXsen/Nexora" },
     ],
   },
-  {
-    id: "hirearn",
-    name: "Hirearn",
-    kind: "Marketplace web app",
-    status: "Live",
-    services: ["Web app", "Marketplace", "Installable app (PWA)"],
-    url: "hirearn.com",
-    live: "https://hirearn.com/",
-    summary: "A two-sided marketplace and installable app that connects people with local jobs and services.",
-    problem:
-      "Finding someone nearby for a job, or finding nearby work, usually depends on word of mouth and scattered groups.",
-    built:
-      "A complete web platform where people post what they need and local providers find it and take it up. It installs on phones like an app and is structured to add more categories and cities.",
-    features: [
-      "One platform for both sides of the marketplace",
-      "Requirements and work shown by what's nearby",
-      "Installable on phones (PWA), built mobile-first",
-      "Architecture ready for new categories and regions",
-    ],
-    image: { src: "/images/work/hirearn.jpg", alt: "Hirearn home page: daily wage hiring for employers" },
-    stack: [],
-    links: [{ label: "Live site", href: "https://hirearn.com/" }],
-  },
+
   {
     id: "lumora",
     name: "Lumora Dental",

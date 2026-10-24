@@ -204,7 +204,6 @@ export const SERVICES: Service[] = [
       "Front end, back end, database and hosting",
       "Logins, roles, payments and security",
     ],
-    example: "hirearn",
   },
   {
     id: "client-portals",

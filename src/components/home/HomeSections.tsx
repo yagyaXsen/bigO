@@ -47,7 +47,7 @@ export function Hero() {
 
 /* Evidence first: real, live products, one large and two supporting */
 export function WorkProof() {
-  const [lead, ...rest] = ["nexora", "hirearn", "lumora"].map((id) => projectById(id)!);
+  const [lead, ...rest] = ["nexora", "oyeexpress", "lumora"].map((id) => projectById(id)!);
   return (
     <section aria-labelledby="work-title" className="border-t border-line">
       <div className="frame py-20 md:py-28">
