@@ -5,7 +5,7 @@ export interface Project {
   name: string;
   /** What kind of system it is, e.g. "AI data pipeline" */
   kind: string;
-  status: "Live" | "Ongoing";
+  status: "Live" | "Ongoing" | "Open source";
   /** Short address shown on cards */
   url?: string;
   live?: string;
@@ -118,6 +118,45 @@ export const PROJECTS: Project[] = [
     stack: ["React", "Vite", "Tailwind CSS", "GSAP", "Lenis", "Vercel"],
     image: { src: "/images/work/oyeexpress.jpg", alt: "OyeExpress home page: Premium furniture, sourced in Foshan" },
     links: [{ label: "Live site", href: "https://oyeexpress.vercel.app/" }],
+  },
+  {
+    id: "outreach",
+    name: "AI outreach system",
+    kind: "Multi-agent AI automation",
+    status: "Open source",
+    summary:
+      "Ten AI agents that research prospects, write grounded emails and send them only after every safety check passes.",
+    problem:
+      "Cold outreach done badly can't be taken back: generic emails, invented facts, and messages to people who already said no.",
+    built:
+      "Built for bigO's own outreach. Agents find prospects, research them from public pages, score the fit and write a personal email from that research. Every email then passes an adversarial quality review, a send gate and, by default, a person's approval before it leaves Gmail.",
+    features: [
+      "Every claim in an email must cite a page the system actually fetched",
+      "Send gate enforces daily limits, suppression lists and a kill switch",
+      "Dry run and human approval on by default",
+      "Reply tracking, follow-ups and a dashboard, covered by 160 automated tests",
+    ],
+    stack: ["Python", "FastAPI", "PostgreSQL", "Redis", "Claude API", "Gmail API", "React", "Docker"],
+    links: [{ label: "Source code", href: "https://github.com/yagyaXsen/outreach-automation" }],
+  },
+  {
+    id: "job-outreach",
+    name: "Job outreach",
+    kind: "Gmail email automation",
+    status: "Open source",
+    summary: "Slow, personal job-search emails from your own Gmail, with reply and bounce detection.",
+    problem:
+      "Bulk emails to HR contacts land in spam, reach the same company twice and keep going to people who already replied.",
+    built:
+      "A small Python tool, standard library only, that sends personal emails from your own Gmail once a day. It reads the inbox before every run, and anyone who replies, auto-replies or bounces is never emailed again.",
+    features: [
+      "15 to 30 emails a day, with a random 1.5 to 5 minute gap between each",
+      "One contact per company and one follow-up in the same thread after 5 days",
+      "Pauses itself if more than 8% of emails bounce",
+      "Verified-list import, PDF to CSV conversion and a resumable send log",
+    ],
+    stack: ["Python", "Gmail SMTP and IMAP", "macOS launchd"],
+    links: [{ label: "Source code", href: "https://github.com/yagyaXsen/job-outreach" }],
   },
   {
     id: "catering",

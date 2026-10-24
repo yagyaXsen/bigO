@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 const title = "Work — Nexora, Hirearn, OyeExpress, Lumora Dental and more | bigO";
 const description =
-  "Projects bigO has designed, built and shipped: Nexora, an AI data pipeline; Hirearn, a local jobs marketplace; Lumora Dental, a clinic website with booking; OyeExpress, a furniture sourcing website; and an ongoing engagement for a catering business in Thailand.";
+  "Projects bigO has designed, built and shipped: Nexora, an AI data pipeline; Hirearn, a local jobs marketplace; Lumora Dental, a clinic website with booking; OyeExpress, a furniture sourcing website; two open-source email automations; and an ongoing engagement for a catering business in Thailand.";
 
 export const metadata: Metadata = {
   title,
@@ -64,6 +64,7 @@ export default function WorkPage() {
   const hirearn = projectById("hirearn")!;
   const lumora = projectById("lumora")!;
   const oye = projectById("oyeexpress")!;
+  const tools = [projectById("outreach")!, projectById("job-outreach")!];
   const catering = projectById("catering")!;
   const n = (p: Project) => PROJECTS.indexOf(p) + 1;
 
@@ -135,6 +136,17 @@ export default function WorkPage() {
             </Reveal>
           </div>
         </article>
+
+        {/* Open-source automations: no screens, so two stories side by side */}
+        <section aria-label="Open-source automations" className="border-t border-line">
+          <div className="frame grid gap-16 py-20 md:py-28 lg:grid-cols-2 lg:gap-10">
+            {tools.map((p) => (
+              <article key={p.id} id={p.id} aria-labelledby={`${p.id}-title`}>
+                <Story p={p} num={n(p)} />
+              </article>
+            ))}
+          </div>
+        </section>
 
         {/* Thailand: no public screens yet, so it's told as a short note */}
         <article id={catering.id} aria-labelledby={`${catering.id}-title`} className="border-t border-line">
