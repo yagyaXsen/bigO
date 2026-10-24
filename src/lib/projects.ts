@@ -14,6 +14,10 @@ export interface Project {
   problem: string;
   built: string;
   features: string[];
+  /** What we delivered, in the words of our service list */
+  services: string[];
+  /** Steps of how it works, drawn as a cover when there is no screenshot */
+  flow?: string[];
   /** A confirmed, measured result. Leave out until there is one. */
   result?: string;
   stack: string[];
@@ -30,6 +34,7 @@ export const PROJECTS: Project[] = [
     name: "Nexora",
     kind: "AI data pipeline",
     status: "Live",
+    services: ["AI data extraction", "Automation", "Web app"],
     url: "nexora-8y5.pages.dev",
     live: "https://nexora-8y5.pages.dev/",
     summary:
@@ -56,6 +61,7 @@ export const PROJECTS: Project[] = [
     name: "Hirearn",
     kind: "Marketplace web app",
     status: "Live",
+    services: ["Web app", "Marketplace", "Installable app (PWA)"],
     url: "hirearn.com",
     live: "https://hirearn.com/",
     summary: "A two-sided marketplace and installable app that connects people with local jobs and services.",
@@ -78,6 +84,7 @@ export const PROJECTS: Project[] = [
     name: "Lumora Dental",
     kind: "Clinic website with booking",
     status: "Live",
+    services: ["Website", "Online booking"],
     url: "yagyaxsen.github.io/lumora-dental",
     live: "https://yagyaxsen.github.io/lumora-dental/",
     summary: "A calm, trustworthy clinic website with treatment pages, online booking and a callback form.",
@@ -101,6 +108,7 @@ export const PROJECTS: Project[] = [
     name: "OyeExpress",
     kind: "Furniture sourcing website",
     status: "Live",
+    services: ["Website", "Interactive design"],
     url: "oyeexpress.vercel.app",
     live: "https://oyeexpress.vercel.app/",
     summary:
@@ -124,6 +132,8 @@ export const PROJECTS: Project[] = [
     name: "AI outreach system",
     kind: "Multi-agent AI automation",
     status: "Open source",
+    services: ["AI agents", "Workflow automation", "Dashboard"],
+    flow: ["Discover", "Research", "Score", "Write", "Quality review", "Approve", "Send"],
     summary:
       "Ten AI agents that research prospects, write grounded emails and send them only after every safety check passes.",
     problem:
@@ -144,6 +154,8 @@ export const PROJECTS: Project[] = [
     name: "Job outreach",
     kind: "Gmail email automation",
     status: "Open source",
+    services: ["Workflow automation", "Email integration"],
+    flow: ["Read the inbox", "Skip replies and bounces", "Pick today's contacts", "Send slowly, one by one", "Follow up after 5 days"],
     summary: "Slow, personal job-search emails from your own Gmail, with reply and bounce detection.",
     problem:
       "Bulk emails to HR contacts land in spam, reach the same company twice and keep going to people who already replied.",
@@ -163,6 +175,8 @@ export const PROJECTS: Project[] = [
     name: "Catering business, Thailand",
     kind: "Ongoing client engagement",
     status: "Ongoing",
+    services: ["Development", "Integrations", "Online presence"],
+    flow: ["Technical foundation", "Connected touchpoints", "Presence in new markets"],
     summary: "Technical foundation and digital growth for a catering business expanding beyond its home market.",
     problem:
       "A Thailand-based catering business wants to operate and be found across several countries, not just one local market.",

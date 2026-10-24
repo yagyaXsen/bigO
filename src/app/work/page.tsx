@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { SITE_NAME } from "@/lib/site";
-import { PROJECTS, projectById, type Project } from "@/lib/projects";
+import { PROJECTS, type Project } from "@/lib/projects";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { ArrowLink } from "@/components/ui/Button";
+import { ArrowLink, ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { Shot } from "@/components/ui/Shot";
+import { TechLogo } from "@/components/ui/TechLogo";
 import { cn } from "@/lib/utils";
 
 const title = "Work — Nexora, Hirearn, OyeExpress, Lumora Dental and more | bigO";
@@ -20,75 +21,186 @@ export const metadata: Metadata = {
   twitter: { title, description },
 };
 
-/** Heading, problem, what we built, features, stack and links */
-function Story({ p, num, className }: { p: Project; num: number; className?: string }) {
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/** For projects with no public screens: how it works, drawn as numbered
+ *  steps on a dark panel the same shape as a screenshot */
+function Cover({ p }: { p: Project }) {
+  const steps = p.flow ?? [];
+  // Up to four steps a row, so short and long flows both fill the panel
+  const cols = steps.length <= 3 ? "sm:grid-cols-3" : steps.length === 5 ? "sm:grid-cols-5" : "sm:grid-cols-4";
   return (
-    <div className={className}>
-      <p className="mono text-muted">
-        {String(num).padStart(2, "0")} · {p.kind}
-      </p>
-      <h2 id={`${p.id}-title`} className="t-1 mt-4">
-        {p.name}
-      </h2>
-      <p className="mt-3 inline-flex items-center gap-2 text-[14px] text-muted">
-        <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-signal" />
-        {p.status}
-        {p.url && <span>· {p.url}</span>}
-      </p>
-      <p className="mt-8 font-display text-[21px] leading-snug tracking-[-0.01em] text-ink">{p.problem}</p>
-      <p className="mt-5 text-[16px]">{p.built}</p>
-      <ul className="mt-8 border-t border-line">
-        {p.features.map((f) => (
-          <li key={f} className="border-b border-line py-2.5 text-[15px]">
-            {f}
+    <div className="tone-ink flex min-h-full flex-col justify-between gap-10 border border-line bg-paper p-6 sm:aspect-[16/9] sm:p-9">
+      <div className="flex items-center justify-between gap-4">
+        <p className="mono text-[12px] text-muted">
+          {p.status === "Ongoing" ? "Scope of the engagement" : "How it works"}
+        </p>
+        <p className="mono text-[12px] text-muted">{steps.length} steps</p>
+      </div>
+      <ol className={cn("grid grid-cols-2 border-t border-l border-line", cols)}>
+        {steps.map((s, i) => (
+          <li key={s} className="flex min-h-[112px] flex-col justify-between gap-6 border-r border-b border-line p-4">
+            <span className="flex items-center justify-between">
+              <span className="mono text-[12px] text-blue">{pad(i + 1)}</span>
+              {i < steps.length - 1 && (
+                <span aria-hidden className="text-muted">
+                  →
+                </span>
+              )}
+            </span>
+            <span className="text-[15px] font-medium leading-snug text-ink">{s}</span>
           </li>
         ))}
-      </ul>
-      {p.result && <p className="mt-6 text-[16px] font-semibold text-ink">{p.result}</p>}
-      {p.stack.length > 0 && <p className="mono mt-6 text-[12px] text-muted">{p.stack.join("  /  ")}</p>}
-      {p.links.length > 0 && (
-        <div className="mt-8 flex flex-wrap gap-x-7 gap-y-3">
-          {p.links.map((l) => (
-            <ArrowLink key={l.href} href={l.href} external>
-              {l.label}
-            </ArrowLink>
-          ))}
+      </ol>
+    </div>
+  );
+}
+
+function Media({ p, priority }: { p: Project; priority?: boolean }) {
+  return p.image ? (
+    <Shot project={p} sizes="(min-width: 1024px) 800px, 100vw" priority={priority} aspect="aspect-[16/9]" />
+  ) : (
+    <Cover p={p} />
+  );
+}
+
+/** One case study: the same structure for every project, so they can be
+ *  compared at a glance. Header, then screen beside the key facts, then
+ *  challenge, solution and highlights in three short columns. */
+function CaseStudy({ p, num, priority }: { p: Project; num: number; priority?: boolean }) {
+  const live = p.links.find((l) => l.label === "Live site");
+  const others = p.links.filter((l) => l !== live);
+  return (
+    <article id={p.id} aria-labelledby={`${p.id}-title`} className="scroll-mt-20 border-t border-line">
+      <div className="frame py-16 md:py-24">
+        {/* Header */}
+        <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-8">
+            <p className="mono text-muted">
+              {pad(num)} <span className="mx-1.5 text-line-strong">/</span> {p.kind}
+            </p>
+            <h2 id={`${p.id}-title`} className="t-2 mt-3">
+              {p.name}
+            </h2>
+            <p className="mt-4 max-w-[60ch] text-[17px] leading-relaxed">{p.summary}</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:col-span-4 lg:justify-end">
+            {live && (
+              <ButtonLink href={live.href} external>
+                Visit live site
+              </ButtonLink>
+            )}
+            {others.map((l) => (
+              <ArrowLink key={l.href} href={l.href} external>
+                {l.label}
+              </ArrowLink>
+            ))}
+          </div>
         </div>
-      )}
+
+        {/* Screen + facts */}
+        <div className="mt-10 grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <Reveal className="lg:col-span-8">
+            <Media p={p} priority={priority} />
+            {p.video && <p className="mt-3 text-[13px] text-muted">Screen recording of the live site.</p>}
+          </Reveal>
+          <dl className="grid content-start gap-x-8 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-1">
+            <Fact label="Status">
+              <span className="inline-flex items-center gap-2">
+                <span
+                  aria-hidden
+                  className={cn(
+                    "h-1.5 w-1.5 rounded-full",
+                    p.status === "Ongoing" ? "animate-pulse bg-signal motion-reduce:animate-none" : p.status === "Live" ? "bg-[#1f9d55]" : "bg-blue",
+                  )}
+                />
+                {p.status}
+                {p.url && <span className="truncate text-muted">· {p.url}</span>}
+              </span>
+            </Fact>
+            <Fact label="What we did">{p.services.join(", ")}</Fact>
+            {p.stack.length > 0 && (
+              <Fact label="Built with" className="sm:col-span-2 lg:col-span-1">
+                <span className="flex flex-wrap gap-x-4 gap-y-2">
+                  {p.stack.map((t) => (
+                    <TechLogo key={t} name={t} />
+                  ))}
+                </span>
+              </Fact>
+            )}
+          </dl>
+        </div>
+
+        {/* Story */}
+        <div className="mt-12 grid gap-10 border-t border-line pt-10 md:grid-cols-3 md:gap-10">
+          <div>
+            <h3 className="text-[13px] font-semibold text-muted">The challenge</h3>
+            <p className="mt-3 text-[16px] leading-relaxed text-ink">{p.problem}</p>
+          </div>
+          <div>
+            <h3 className="text-[13px] font-semibold text-muted">What we built</h3>
+            <p className="mt-3 text-[16px] leading-relaxed">{p.built}</p>
+          </div>
+          <div>
+            <h3 className="text-[13px] font-semibold text-muted">Highlights</h3>
+            <ol className="mt-3">
+              {p.features.map((f, i) => (
+                <li key={f} className="flex gap-3 border-b border-line py-2.5 text-[15px] first:pt-0 last:border-b-0">
+                  <span className="mono pt-0.5 text-[12px] text-blue">{pad(i + 1)}</span>
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ol>
+            {p.result && <p className="mt-5 text-[16px] font-semibold text-ink">{p.result}</p>}
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function Fact({ label, className, children }: { label: string; className?: string; children: React.ReactNode }) {
+  return (
+    <div className={cn("border-t border-line py-4", className)}>
+      <dt className="text-[13px] text-muted">{label}</dt>
+      <dd className="mt-1.5 text-[15px] text-ink">{children}</dd>
     </div>
   );
 }
 
 export default function WorkPage() {
-  const nexora = projectById("nexora")!;
-  const hirearn = projectById("hirearn")!;
-  const lumora = projectById("lumora")!;
-  const oye = projectById("oyeexpress")!;
-  const tools = [projectById("outreach")!, projectById("job-outreach")!];
-  const catering = projectById("catering")!;
-  const n = (p: Project) => PROJECTS.indexOf(p) + 1;
-
+  const live = PROJECTS.filter((p) => p.status === "Live").length;
   return (
     <>
       <SiteHeader />
-      <main id="main" className="tone-ink">
+      <main id="main">
         {/* Opening + index */}
-        <section className="frame grid gap-12 pt-16 pb-20 md:pt-24 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <h1 className="t-hero">Work we&apos;ve shipped.</h1>
-            <p className="t-lead mt-8 max-w-[44ch]">
-              Every project here started with a business problem. Below is the problem, what we built for it, and the
-              live product.
+        <section className="frame grid gap-12 pt-14 pb-16 md:pt-20 md:pb-20 lg:grid-cols-12">
+          <div className="lg:col-span-6">
+            <p className="kicker">Work</p>
+            <h1 className="t-1 mt-4">Software we&apos;ve shipped.</h1>
+            <p className="t-lead mt-6 max-w-[44ch]">
+              Every project started with a business problem. For each one: the challenge, what we built, and the product
+              itself.
+            </p>
+            <p className="mono mt-8 text-muted">
+              {PROJECTS.length} projects · {live} live
             </p>
           </div>
-          <nav aria-label="Projects" className="self-end lg:col-span-5">
+          <nav aria-label="Projects" className="self-end lg:col-span-6">
             <ol className="border-t border-ink">
               {PROJECTS.map((p, i) => (
                 <li key={p.id}>
-                  <a href={`#${p.id}`} className="group grid grid-cols-[32px_1fr_auto] items-baseline gap-3 border-b border-line py-3.5">
-                    <span className="mono text-muted">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="text-[17px] font-semibold text-ink transition-colors group-hover:text-blue">{p.name}</span>
-                    <span className="text-[13px] text-muted">{p.status}</span>
+                  <a
+                    href={`#${p.id}`}
+                    className="group grid grid-cols-[32px_1fr_auto] items-baseline gap-3 border-b border-line py-3 sm:grid-cols-[32px_1fr_1fr_auto]"
+                  >
+                    <span className="mono text-muted">{pad(i + 1)}</span>
+                    <span className="text-[16px] font-semibold text-ink transition-colors group-hover:text-blue">{p.name}</span>
+                    <span className="hidden text-[14px] text-muted sm:block">{p.kind}</span>
+                    <span aria-hidden className="text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-blue">
+                      ↓
+                    </span>
                   </a>
                 </li>
               ))}
@@ -96,86 +208,9 @@ export default function WorkPage() {
           </nav>
         </section>
 
-        {/* Nexora: the screen leads, full width; the story runs in three columns under it */}
-        <article id={nexora.id} aria-labelledby={`${nexora.id}-title`} className="border-t border-line">
-          <div className="frame py-20 md:py-28">
-            <Reveal>
-              <Shot project={nexora} sizes="(min-width: 1320px) 1210px, 100vw" priority />
-            </Reveal>
-            <Story p={nexora} num={n(nexora)} className="mt-14 lg:max-w-[760px]" />
-          </div>
-        </article>
-
-        {/* Hirearn: story left, screen right */}
-        <article id={hirearn.id} aria-labelledby={`${hirearn.id}-title`} className="border-t border-line">
-          <div className="frame grid gap-12 py-20 md:py-28 lg:grid-cols-12 lg:gap-10">
-            <Story p={hirearn} num={n(hirearn)} className="lg:col-span-4" />
-            <Reveal className="lg:col-span-8 lg:pt-14">
-              <Shot project={hirearn} sizes="(min-width: 1024px) 800px, 100vw" />
-            </Reveal>
-          </div>
-        </article>
-
-        {/* Lumora: a real scroll-through recording, then the story */}
-        <article id={lumora.id} aria-labelledby={`${lumora.id}-title`} className="border-t border-line">
-          <div className="frame grid gap-12 py-20 md:py-28 lg:grid-cols-12 lg:gap-10">
-            <Reveal className="lg:col-span-7">
-              <Shot project={lumora} sizes="(min-width: 1024px) 700px, 100vw" />
-              <p className="mt-3 text-[13px] text-muted">Screen recording of the live site.</p>
-            </Reveal>
-            <Story p={lumora} num={n(lumora)} className="lg:col-span-5" />
-          </div>
-        </article>
-
-        {/* OyeExpress: story left, screen right */}
-        <article id={oye.id} aria-labelledby={`${oye.id}-title`} className="border-t border-line">
-          <div className="frame grid gap-12 py-20 md:py-28 lg:grid-cols-12 lg:gap-10">
-            <Story p={oye} num={n(oye)} className="lg:col-span-4" />
-            <Reveal className="lg:col-span-8 lg:pt-14">
-              <Shot project={oye} sizes="(min-width: 1024px) 800px, 100vw" />
-            </Reveal>
-          </div>
-        </article>
-
-        {/* Open-source automations: no screens, so two stories side by side */}
-        <section aria-label="Open-source automations" className="border-t border-line">
-          <div className="frame grid gap-16 py-20 md:py-28 lg:grid-cols-2 lg:gap-10">
-            {tools.map((p) => (
-              <article key={p.id} id={p.id} aria-labelledby={`${p.id}-title`}>
-                <Story p={p} num={n(p)} />
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* Thailand: no public screens yet, so it's told as a short note */}
-        <article id={catering.id} aria-labelledby={`${catering.id}-title`} className="border-t border-line">
-          <div className="frame grid gap-10 py-20 md:py-28 lg:grid-cols-12">
-            <div className="lg:col-span-4">
-              <p className="mono text-muted">
-                {String(n(catering)).padStart(2, "0")} · {catering.kind}
-              </p>
-              <h2 id={`${catering.id}-title`} className="t-2 mt-4">
-                {catering.name}
-              </h2>
-              <p className="mt-3 inline-flex items-center gap-2 text-[14px] text-muted">
-                <span aria-hidden className="h-1.5 w-1.5 animate-pulse rounded-full bg-signal motion-reduce:animate-none" />
-                In progress
-              </p>
-            </div>
-            <div className="lg:col-span-7 lg:col-start-6">
-              <p className="t-2 font-medium">{catering.problem}</p>
-              <p className="mt-6 text-[17px]">{catering.built}</p>
-              <ul className={cn("mt-8 grid gap-x-8 border-t border-line sm:grid-cols-2")}>
-                {catering.features.map((f) => (
-                  <li key={f} className="border-b border-line py-3 text-[15px]">
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </article>
+        {PROJECTS.map((p, i) => (
+          <CaseStudy key={p.id} p={p} num={i + 1} priority={i === 0} />
+        ))}
       </main>
       <SiteFooter />
     </>

@@ -10,11 +10,14 @@ export function Shot({
   sizes,
   priority,
   className,
+  aspect = "aspect-[16/10]",
 }: {
   project: Project;
   sizes: string;
   priority?: boolean;
   className?: string;
+  /** Crop of the screen, from the top */
+  aspect?: string;
 }) {
   if (!p.image) return null;
   return (
@@ -25,7 +28,7 @@ export function Shot({
         <i />
         <span className="mono ml-2 truncate text-[11px] text-muted">{p.url}</span>
       </div>
-      <div className="relative aspect-[16/10] overflow-hidden bg-paper-2">
+      <div className={cn("relative overflow-hidden bg-paper-2", aspect)}>
         {p.video ? (
           <AutoVideo src={p.video} poster={p.image.src} label={`Screen recording of ${p.image.alt}`} />
         ) : (
