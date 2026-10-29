@@ -9,6 +9,7 @@ import { HeroWorkflow } from "@/components/home/HeroWorkflow";
 import { ProblemPicker } from "@/components/home/ProblemPicker";
 import { FOUNDER, HERO, HOME_FAQ, SERVICES, STACK, STANDARDS, TERMS } from "@/lib/content";
 import { projectById } from "@/lib/projects";
+import { AGENTS, DEPARTMENTS } from "@/lib/agents";
 
 /* Opening: who it's for, what we do, why it matters, and a working example */
 export function Hero() {
@@ -149,6 +150,50 @@ export function ServicesIndex() {
   );
 }
 
+/* Product: bigO Agents, by team, pointing to the full page */
+export function AgentsTeaser() {
+  return (
+    <section aria-labelledby="agents-home-title" className="border-t border-line bg-paper-2">
+      <div className="frame grid gap-12 py-20 md:py-28 lg:grid-cols-12 lg:gap-10">
+        <div className="lg:col-span-5">
+          <p className="kicker flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-signal" aria-hidden />
+            New · bigO Agents
+          </p>
+          <h2 id="agents-home-title" className="t-1 mt-4">
+            AI agents for your sales, support and operations teams.
+          </h2>
+          <p className="mt-6 max-w-[40ch] text-[17px]">
+            They reply, qualify, follow up and update your systems, on WhatsApp, web and phone.
+          </p>
+          <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
+            <ButtonLink href="/agents">Explore bigO Agents</ButtonLink>
+            <ArrowLink href="/agents#demo">Book a demo</ArrowLink>
+          </div>
+        </div>
+        <dl className="self-end border-t border-ink lg:col-span-7">
+          {DEPARTMENTS.map((d) => (
+            <div key={d.id} className="grid gap-3 border-b border-line py-5 sm:grid-cols-[150px_1fr] sm:gap-6">
+              <dt className="text-[15px] font-semibold text-ink">{d.label}</dt>
+              <dd className="flex flex-wrap gap-2">
+                {AGENTS.filter((a) => a.department === d.id).map((a) => (
+                  <Link
+                    key={a.id}
+                    href="/agents#agents"
+                    className="border border-line-strong bg-paper px-3 py-1.5 text-[14px] text-ink transition-colors hover:border-blue hover:text-blue"
+                  >
+                    {a.short}
+                  </Link>
+                ))}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
 /* Trust: how the work is engineered, and with what */
 export function HowWeBuild() {
   return (
@@ -159,8 +204,7 @@ export function HowWeBuild() {
             Built like it has to last. Because it does.
           </h2>
           <p className="t-lead self-end lg:col-span-6 lg:col-start-7">
-            Your business will depend on what we build, so every project gets the same engineering basics, from a small
-            automation to a full platform.
+            Every project gets the same engineering basics, from a small automation to a full platform.
           </p>
         </div>
         <ol className="mt-16 grid gap-x-10 border-t border-line sm:grid-cols-2 lg:grid-cols-3">

@@ -81,30 +81,12 @@ export const WORKFLOWS: Workflow[] = [
 
 /** How we build: the engineering standards behind every project */
 export const STANDARDS: [string, string][] = [
-  [
-    "Security from day one",
-    "Logins, role-based access, encrypted connections and secrets kept out of the code. People only see what their role needs.",
-  ],
-  [
-    "Tested before every launch",
-    "Forms, integrations, payments and permissions are checked end to end, on phones, tablets and desktops.",
-  ],
-  [
-    "Fast on real phones",
-    "Server-rendered pages, compressed images and lean code, so it stays quick on mobile data and older devices.",
-  ],
-  [
-    "Every change previewed",
-    "All code lives in Git. Each change gets its own preview link you can try before it goes live, and any release can be rolled back.",
-  ],
-  [
-    "AI with guardrails",
-    "Validation, fallbacks and a hand-off to a person where accuracy matters, with running costs kept visible.",
-  ],
-  [
-    "Yours to keep",
-    "Readable code, written documentation, and every account in your name, so any developer can pick it up later.",
-  ],
+  ["Security from day one", "Role-based access and encrypted connections."],
+  ["Tested before every launch", "Checked end to end on every device."],
+  ["Fast on real phones", "Quick on mobile data and older devices."],
+  ["Every change previewed", "Try each change before it goes live."],
+  ["AI with guardrails", "Checks, and a person where accuracy matters."],
+  ["Yours to keep", "Your code, your accounts, full documentation."],
 ];
 
 /** 01 — problems we solve. `service` is the matching id on /services;
