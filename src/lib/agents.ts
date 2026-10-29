@@ -430,8 +430,8 @@ export const BUILT_FOR: [string, string][] = [
     "Leads, tickets and summaries go to your own tools. We don't keep your customers' data for our own use, and nothing is shared between businesses.",
   ],
   [
-    "Calls with consent",
-    "Outbound calls go only to people who have contacted you or agreed to be called. You see every call's transcript and summary.",
+    "Calling done properly",
+    "Outbound calls follow telemarketing rules, and anyone who asks not to be called again is taken off the list. You see every call's transcript and summary.",
   ],
 ];
 
@@ -504,7 +504,7 @@ export const FAQ: [string, string][] = [
   ],
   [
     "How does the AI calling agent work?",
-    "It connects to a phone number, either a new one we set up or your existing line forwarded to it. It speaks English in a natural voice, follows the same knowledge and flow as your chat agent, and can transfer the call to your team. Outbound calls are made only to people who have contacted you or agreed to be called.",
+    "It connects to a phone number, either a new one we set up or your existing line forwarded to it. It speaks English in a natural voice, follows the same knowledge and flow as your chat agent, and can transfer the call to your team. Outbound, it can work through new enquiries or a whole lead list at the times you choose, following telemarketing rules, and stops calling anyone who asks it to.",
   ],
   [
     "How is it priced?",

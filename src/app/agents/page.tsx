@@ -223,9 +223,9 @@ export default function AgentsPage() {
                       <h3 className="text-[15px] font-semibold text-ink">Outbound</h3>
                       <ul className="mt-3 space-y-2 text-[15px]">
                         <li>Calls your leads and qualifies them</li>
+                        <li>Works through a whole lead list</li>
                         <li>Follows up on quotes and renewals</li>
                         <li>Confirms and reminds about bookings</li>
-                        <li>Only to people who agreed to a call</li>
                       </ul>
                     </div>
                   </div>
