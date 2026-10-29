@@ -7,27 +7,41 @@ interface LinkProps {
   href: string;
   external?: boolean;
   className?: string;
+  /** Only from client components; runs before the browser follows the link */
+  onClick?: () => void;
   children: ReactNode;
 }
 
-function Anchor({ href, external, className, children }: LinkProps) {
-  return external ? (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
-      {children}
-    </a>
-  ) : (
-    <Link href={href} className={className}>
+function Anchor({ href, external, className, onClick, children }: LinkProps) {
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className} onClick={onClick}>
+        {children}
+      </a>
+    );
+  }
+  // Same-page anchors stay plain links, so the browser scrolls and fires hashchange
+  if (href.startsWith("#")) {
+    return (
+      <a href={href} className={className} onClick={onClick}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link href={href} className={className} onClick={onClick}>
       {children}
     </Link>
   );
 }
 
 /** The one solid button: square ink block, arrow nudges on hover */
-export function ButtonLink({ href, external, className, children, tone = "ink" }: LinkProps & { tone?: "ink" | "blue" }) {
+export function ButtonLink({ href, external, className, onClick, children, tone = "ink" }: LinkProps & { tone?: "ink" | "blue" }) {
   return (
     <Anchor
       href={href}
       external={external}
+      onClick={onClick}
       className={cn(
         "group inline-flex h-12 items-center gap-3 px-5 text-[15px] font-semibold transition-colors duration-200",
         /* text-paper, not white: inside ink sections the colours invert, and
@@ -43,12 +57,13 @@ export function ButtonLink({ href, external, className, children, tone = "ink" }
 }
 
 /** Secondary action: text with a hairline underline and an arrow */
-export function ArrowLink({ href, external, className, children }: LinkProps) {
+export function ArrowLink({ href, external, className, onClick, children }: LinkProps) {
   const Icon = external ? ArrowUpRightIcon : ArrowRightIcon;
   return (
     <Anchor
       href={href}
       external={external}
+      onClick={onClick}
       className={cn(
         "group inline-flex items-center gap-2 border-b border-line-strong pb-1 text-[15px] font-semibold text-ink transition-colors hover:border-blue hover:text-blue",
         className,

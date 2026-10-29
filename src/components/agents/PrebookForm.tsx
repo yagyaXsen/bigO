@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { ArrowUpRightIcon, WhatsAppIcon } from "@/components/icons";
 import { EMAIL_RE, FIELD_LIMITS, type Enquiry } from "@/lib/contact";
 import { buildBrief, deliverEnquiry, mailtoUrlFor, whatsAppUrlFor } from "@/lib/delivery";
+import { AGENTS } from "@/lib/agents";
 
 type Errors = { name?: string; email?: string; company?: string; role?: string; consent?: string };
 
@@ -13,19 +14,7 @@ const ROLES = [
   { id: "agency", label: "Agency partner (white-label)" },
 ] as const;
 
-const AGENTS = [
-  "Customer support",
-  "Lead qualification",
-  "Appointment booking",
-  "AI calling agent",
-  "Sales and products",
-  "Follow-ups and reminders",
-  "Orders and enquiries",
-  "Recruitment screening",
-  "Feedback and reviews",
-  "Internal knowledge",
-  "Not sure yet",
-];
+const AGENT_OPTIONS = [...AGENTS.map((a) => a.short), "Not sure yet"];
 
 const CHANNELS = ["Website chat", "WhatsApp", "Phone calls", "Instagram / Messenger", "Not sure yet"];
 
@@ -92,14 +81,21 @@ function Chip({ on, onClick, children }: { on: boolean; onClick: () => void; chi
   );
 }
 
-export function PrebookForm() {
+/** `preselect` is the short name of an agent picked elsewhere on the page;
+ *  it is ticked when it arrives, and the visitor can still change it. */
+export function PrebookForm({ preselect }: { preselect?: string }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState<string>("");
   const [industry, setIndustry] = useState("");
-  const [agents, setAgents] = useState<string[]>([]);
+  const [agents, setAgents] = useState<string[]>(preselect ? [preselect] : []);
+  const [lastPreselect, setLastPreselect] = useState(preselect);
+  if (preselect !== lastPreselect) {
+    setLastPreselect(preselect);
+    if (preselect && !agents.includes(preselect)) setAgents([...agents.filter((a) => a !== "Not sure yet"), preselect]);
+  }
   const [channels, setChannels] = useState<string[]>([]);
   const [message, setMessage] = useState("");
   const [consent, setConsent] = useState(false);
@@ -323,7 +319,7 @@ export function PrebookForm() {
           Which agents interest you? <span className="font-normal text-muted">Choose any that apply</span>
         </legend>
         <div className="flex flex-wrap gap-2">
-          {AGENTS.map((a) => (
+          {AGENT_OPTIONS.map((a) => (
             <Chip key={a} on={agents.includes(a)} onClick={() => toggleAgent(a)}>
               {a}
             </Chip>
