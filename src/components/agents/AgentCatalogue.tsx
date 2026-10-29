@@ -163,7 +163,6 @@ export function AgentCatalogue() {
                       {a.name}
                       {agentId === a.id && <span className="mono ml-2 text-[11px] font-normal text-signal">picked</span>}
                     </span>
-                    <span className="mt-1 block text-[14px] leading-snug text-muted">{a.problem}</span>
                   </span>
                   <span aria-hidden className={cn("transition-transform", on ? "translate-x-0.5 text-blue" : "text-muted")}>
                     →
