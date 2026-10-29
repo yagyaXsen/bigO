@@ -66,17 +66,17 @@ export const AGENTS: Agent[] = [
     name: "AI calling agent",
     short: "AI calling agent",
     department: "sales",
-    problem: "Calls are missed after hours or when every line is busy, and new leads wait too long for a call back.",
-    today: ["Calls ring out after hours or go to voicemail", "Callers who don't get through try a competitor", "Call-backs depend on someone finding the time"],
+    problem: "Calls are missed after hours or when every line is busy, and your leads wait too long for someone to call them.",
+    today: ["Calls ring out after hours or go to voicemail", "Callers who don't get through try a competitor", "Lead lists wait until someone finds time to call"],
     automates: [
       "Answers every inbound call, including after hours and at peak times",
-      "Calls new leads back within minutes of their enquiry",
+      "Calls your leads, from a new enquiry to a whole lead list",
       "Answers questions, qualifies and books appointments on the call",
       "Sends a transcript and summary of every call to your team",
     ],
     team: "Your team takes the calls the agent transfers, and picks up from a written summary.",
     channels: ["Phone"],
-    connects: ["Phone line", "CRM", "Calendar"],
+    connects: ["Phone line", "CRM or lead sheet", "Calendar"],
     example: {
       label: "Phone call",
       lines: [
@@ -341,6 +341,7 @@ export const agentById = (id: string | null | undefined) => AGENTS.find((a) => a
 export const PROBLEM_FINDER: { problem: string; agent: string }[] = [
   { problem: "Leads wait hours for a first reply", agent: "leads" },
   { problem: "Calls are missed after hours or when lines are busy", agent: "calling" },
+  { problem: "We have leads to call but no time to call them all", agent: "calling" },
   { problem: "Support answers the same questions every day", agent: "support" },
   { problem: "Customers keep asking for order or delivery status", agent: "orders" },
   { problem: "Follow-ups and renewals fall through", agent: "followup" },

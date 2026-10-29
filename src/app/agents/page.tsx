@@ -206,7 +206,7 @@ export default function AgentsPage() {
                     Never miss a phone call again.
                   </h2>
                   <p className="t-lead mt-6">
-                    A voice agent that answers your business lines, calls new leads back, books appointments on the call
+                    A voice agent that answers your business lines, calls your leads, books appointments on the call
                     and sends your team a summary of every conversation. It speaks English in a natural voice.
                   </p>
                   <div className="mt-10 grid gap-8 border-t border-line pt-8 sm:grid-cols-2">
@@ -222,7 +222,7 @@ export default function AgentsPage() {
                     <div>
                       <h3 className="text-[15px] font-semibold text-ink">Outbound</h3>
                       <ul className="mt-3 space-y-2 text-[15px]">
-                        <li>Calls new leads back within minutes</li>
+                        <li>Calls your leads and qualifies them</li>
                         <li>Follows up on quotes and renewals</li>
                         <li>Confirms and reminds about bookings</li>
                         <li>Only to people who agreed to a call</li>
