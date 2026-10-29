@@ -396,30 +396,12 @@ export const ROLLOUT: { title: string; text: string }[] = [
 ];
 
 export const BUILT_FOR: [string, string][] = [
-  [
-    "Works with your systems",
-    "Connected to your CRM, helpdesk, calendars and order system, so nothing is typed twice.",
-  ],
-  [
-    "Several branches, one setup",
-    "One agent can serve every location and route each conversation to the right branch or team.",
-  ],
-  [
-    "A person is always one step away",
-    "Sensitive or uncertain conversations move to your team with the full history. Callers can ask for a person at any time.",
-  ],
-  [
-    "Access by role",
-    "Managers see across teams; each team sees its own conversations. Every answer and action can be reviewed.",
-  ],
-  [
-    "Your data stays in your systems",
-    "Leads, tickets and summaries go to your own tools. We don't keep your customers' data for our own use, and nothing is shared between businesses.",
-  ],
-  [
-    "Calling done properly",
-    "Outbound calls follow telemarketing rules, and anyone who asks not to be called again is taken off the list. You see every call's transcript and summary.",
-  ],
+  ["Works with your systems", "Connected to your CRM, helpdesk and ERP."],
+  ["Every branch, one setup", "Routed to the right branch or team."],
+  ["A person when needed", "Your team takes over with the full history."],
+  ["Access by role", "Each team sees only its own conversations."],
+  ["Your data, your tools", "Customer data stays in your systems."],
+  ["Calling done properly", "Follows telemarketing rules and opt-outs."],
 ];
 
 /** Types of system we connect to, with examples; not partnerships */

@@ -315,7 +315,7 @@ export default function AgentsPage() {
                 <div className="lg:col-span-3">
                   <h3 className="text-[15px] font-semibold text-ink">We connect to</h3>
                   <p className="mt-2 text-[14px] text-muted">
-                    And most systems with an API. Names belong to their owners; listing them doesn&apos;t mean a partnership.
+                    And most systems with an API. Names are for reference, not partnerships.
                   </p>
                 </div>
                 <dl className="grid gap-x-10 gap-y-6 sm:grid-cols-2 lg:col-span-9 lg:grid-cols-4">
