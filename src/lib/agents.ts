@@ -265,6 +265,35 @@ export const AGENTS: Agent[] = [
     },
   },
   {
+    id: "ops",
+    name: "Operations automation agent",
+    short: "Operations automation",
+    department: "operations",
+    problem: "Your team spends hours updating sheets, portals and systems by hand, and managers chase people for status.",
+    today: [
+      "Orders, leads and updates are re-typed into several systems",
+      "Dashboards and reports are out of date by the time they're read",
+      "People hear about changes late, or not at all",
+    ],
+    automates: [
+      "Reads orders, enquiries, emails and documents as they arrive",
+      "Updates your CRM, ERP, sheets and portals automatically",
+      "Keeps dashboards current and sends daily summaries to managers",
+      "Tells the right people on WhatsApp, email or Slack when something changes or runs late",
+    ],
+    team: "Your team works on exceptions and decisions, not data entry.",
+    channels: ["Email", "WhatsApp", "Slack or Teams"],
+    connects: ["CRM or ERP", "Sheets and portals", "Dashboards"],
+    example: {
+      label: "Team chat",
+      lines: [
+        { from: "agent", text: "Daily update: 18 new orders entered, 3 dispatches running late at the Pune warehouse.", note: "ERP and dashboard updated" },
+        { from: "customer", text: "Who's handling the Pune delays?" },
+        { from: "agent", text: "Ravi from dispatch. I've sent him the order list and will tell you when they're cleared.", note: "Ravi notified on WhatsApp" },
+      ],
+    },
+  },
+  {
     id: "knowledge",
     name: "Internal knowledge assistant",
     short: "Internal knowledge",
@@ -350,6 +379,8 @@ export const PROBLEM_FINDER: { problem: string; agent: string }[] = [
   { problem: "Customers keep asking for order or delivery status", agent: "orders" },
   { problem: "Follow-ups and renewals fall through", agent: "followup" },
   { problem: "Dealers and partners call all day for stock and prices", agent: "dealers" },
+  { problem: "Our team updates sheets, portals and systems by hand", agent: "ops" },
+  { problem: "Managers chase people for status updates", agent: "ops" },
   { problem: "Payment reminders eat up the accounts team's week", agent: "payments" },
   { problem: "Booking and rescheduling takes hours across branches", agent: "booking" },
   { problem: "High-volume hiring floods HR", agent: "recruitment" },
@@ -360,7 +391,7 @@ export const INDUSTRIES: { name: string; uses: string[]; agents: string[] }[] = 
   {
     name: "Manufacturing and distribution",
     uses: ["Dealer stock, price and order queries", "Repeat orders on WhatsApp", "Invoice and payment follow-ups"],
-    agents: ["dealers", "orders", "payments"],
+    agents: ["dealers", "orders", "ops", "payments"],
   },
   {
     name: "Real estate developers",
@@ -385,7 +416,7 @@ export const INDUSTRIES: { name: string; uses: string[]; agents: string[] }[] = 
   {
     name: "Logistics",
     uses: ["Shipment and delivery status", "Booking requests and quotes", "Delivery exceptions flagged to operations"],
-    agents: ["orders", "sales", "support"],
+    agents: ["orders", "ops", "sales", "support"],
   },
   {
     name: "Hospitality and travel",
