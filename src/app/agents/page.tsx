@@ -79,11 +79,11 @@ const SystemsIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const CALL_STEPS: { at: string; label: string; text: string }[] = [
-  { at: "0:00", label: "Ringing", text: "A new caller rings your sales line after hours." },
-  { at: "0:02", label: "Answered", text: "The agent picks up, greets them and asks how it can help." },
-  { at: "2:48", label: "Booked", text: "It checks your calendar and books a site visit on the call." },
-  { at: "3:12", label: "Summary sent", text: "Your team gets the transcript, a summary and the lead in the CRM." },
+const CALL_STEPS: { at: string; label: string }[] = [
+  { at: "0:00", label: "Ringing" },
+  { at: "0:02", label: "Answered" },
+  { at: "2:48", label: "Booked" },
+  { at: "3:12", label: "Summary sent" },
 ];
 
 const CALL_SUMMARY: [string, string][] = [
@@ -200,10 +200,6 @@ export default function AgentsPage() {
                   <h2 id="calling-title" className="t-1 mt-4 max-w-[13ch]">
                     Never miss a phone call again.
                   </h2>
-                  <p className="t-lead mt-6">
-                    A voice agent that answers your business lines, calls your leads, books appointments on the call
-                    and sends your team a summary of every conversation. It speaks English in a natural voice.
-                  </p>
                   <div className="mt-10 grid gap-8 border-t border-line pt-8 sm:grid-cols-2">
                     <div>
                       <h3 className="text-[15px] font-semibold text-ink">Inbound</h3>
@@ -243,7 +239,6 @@ export default function AgentsPage() {
                         />
                         <p className="mono text-[12px] text-muted">{s.at}</p>
                         <p className="mt-2 text-[16px] font-semibold text-ink">{s.label}</p>
-                        <p className="mt-1.5 text-[14px] leading-snug">{s.text}</p>
                       </Reveal>
                     ))}
                   </ol>
