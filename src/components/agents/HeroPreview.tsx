@@ -4,17 +4,17 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 const CHAT: { from: "customer" | "agent"; text: string; note?: string }[] = [
-  { from: "customer", text: "Hi, do you do teeth whitening? How much is it?" },
-  { from: "agent", text: "Yes, we offer in-clinic whitening. Would you like a free consultation first?", note: "From: Price list" },
-  { from: "customer", text: "Yes, sometime next week" },
-  { from: "agent", text: "Tuesday 11:00 or Thursday 16:30?" },
-  { from: "customer", text: "Thursday works" },
-  { from: "agent", text: "Booked for Thursday at 16:30. Confirmation sent on WhatsApp." },
+  { from: "customer", text: "Do you have 40 units of the 3HP pump in stock?" },
+  { from: "agent", text: "Yes, 40 units are available at the Pune warehouse. Shall I place the order on your dealer account?", note: "From: Stock levels" },
+  { from: "customer", text: "Yes, same delivery address as last time." },
+  { from: "agent", text: "Order placed for 40 units. Dispatch details will follow today." },
+  { from: "customer", text: "And the invoice for last month?" },
+  { from: "agent", text: "Here it is. It's due on the 30th.", note: "Invoice shared" },
 ];
 
 const CALL: { who: "Agent" | "Caller"; text: string }[] = [
   { who: "Agent", text: "Good evening, thanks for calling. How can I help?" },
-  { who: "Caller", text: "I saw the flat in Sector 15. Can I visit this weekend?" },
+  { who: "Caller", text: "I saw your Sector 62 project. Can I visit this weekend?" },
   { who: "Agent", text: "Saturday at 11:00 is free. Shall I book it for you?" },
   { who: "Caller", text: "Yes, please." },
 ];
@@ -63,7 +63,7 @@ export function HeroPreview() {
         <div id="preview-chat" role="tabpanel" aria-labelledby="preview-tab-chat" hidden={mode !== "chat"} className="space-y-2.5 p-5">
           <p className="mono mb-3 flex items-center gap-2 text-[12px] text-muted">
             <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#25d366]" />
-            WhatsApp · example: dental clinic
+            WhatsApp · example: industrial distributor
           </p>
           {CHAT.map((m, i) => (
             <div key={i} className={m.from === "customer" ? "flex justify-end" : "flex justify-start"}>
@@ -84,7 +84,7 @@ export function HeroPreview() {
         <div id="preview-call" role="tabpanel" aria-labelledby="preview-tab-call" hidden={mode !== "call"} className="p-5">
           <div className="flex items-center justify-between border-b border-line pb-4">
             <div>
-              <p className="mono text-[12px] text-muted">Inbound call · example: real estate</p>
+              <p className="mono text-[12px] text-muted">Inbound call · example: real estate developer</p>
               <p className="mt-1 text-[16px] font-semibold text-ink">+91 98xxx xxx45</p>
             </div>
             <p className="mono flex items-center gap-2 text-[12px] text-ink">
@@ -111,9 +111,9 @@ export function HeroPreview() {
       </div>
 
       <figcaption className="mono flex flex-wrap gap-x-5 gap-y-1 border-t border-line px-5 py-3 text-[12px] text-muted">
-        <span>✓ Lead saved</span>
-        <span>✓ Booked in your calendar</span>
+        <span>✓ Updated in your systems</span>
         <span>✓ Team notified</span>
+        <span>✓ Hand-over when needed</span>
       </figcaption>
     </figure>
   );

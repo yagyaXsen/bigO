@@ -6,7 +6,9 @@ import { ButtonLink } from "@/components/ui/Button";
 import { useBookAction } from "@/components/agents/AgentSelection";
 
 const LINKS = [
+  { id: "problems", label: "Find your agent" },
   { id: "agents", label: "Agents" },
+  { id: "industries", label: "Industries" },
   { id: "calling", label: "Calling" },
   { id: "how", label: "How it works" },
   { id: "pricing", label: "Pricing" },
@@ -36,8 +38,8 @@ export function PageBar() {
     <div className="sticky top-[72px] z-40 hidden border-b border-line bg-paper/95 backdrop-blur-sm md:block">
       <div className="frame flex h-14 items-center justify-between gap-6">
         <nav aria-label="bigO Agents" className="flex min-w-0 items-center gap-7">
-          <span className="mono shrink-0 text-ink">bigO Agents</span>
-          <ul className="flex items-center gap-6 overflow-x-auto">
+          <span className="mono hidden shrink-0 text-ink xl:inline">bigO Agents</span>
+          <ul className="flex items-center gap-5 overflow-x-auto lg:gap-6">
             {LINKS.map((l) => (
               <li key={l.id}>
                 <a

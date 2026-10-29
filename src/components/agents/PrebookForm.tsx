@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { ArrowUpRightIcon, WhatsAppIcon } from "@/components/icons";
 import { EMAIL_RE, FIELD_LIMITS, type Enquiry } from "@/lib/contact";
 import { buildBrief, deliverEnquiry, mailtoUrlFor, whatsAppUrlFor } from "@/lib/delivery";
-import { AGENTS } from "@/lib/agents";
+import { AGENTS, INDUSTRIES } from "@/lib/agents";
 
 type Errors = { name?: string; email?: string; company?: string; role?: string; consent?: string };
 
@@ -18,15 +18,7 @@ const AGENT_OPTIONS = [...AGENTS.map((a) => a.short), "Not sure yet"];
 
 const CHANNELS = ["Website chat", "WhatsApp", "Phone calls", "Instagram / Messenger", "Not sure yet"];
 
-const INDUSTRIES = [
-  "Clinic or healthcare",
-  "Real estate",
-  "Restaurant or catering",
-  "Education or coaching",
-  "E-commerce",
-  "Professional services",
-  "Other",
-];
+const INDUSTRY_OPTIONS = [...INDUSTRIES.map((i) => i.name), "Other"];
 
 const inputCls =
   "w-full rounded-[2px] border-0 border-b border-line-strong bg-transparent px-0 py-3 text-[17px] text-ink placeholder:text-muted/70 outline-none transition-colors focus:border-blue";
@@ -304,7 +296,7 @@ export function PrebookForm({ preselect }: { preselect?: string }) {
               className={cn(inputCls, "cursor-pointer", !industry && "text-muted")}
             >
               <option value="">Choose one</option>
-              {INDUSTRIES.map((i) => (
+              {INDUSTRY_OPTIONS.map((i) => (
                 <option key={i} value={i}>
                   {i}
                 </option>

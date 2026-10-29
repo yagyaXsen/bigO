@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SITE_NAME } from "@/lib/site";
-import { CONNECTIONS, FAQ, PLANS, PROBLEMS, STEPS, TRUST } from "@/lib/agents";
+import { AGENTS, BUILT_FOR, CONNECTIONS, FAQ, PLANS, ROLLOUT } from "@/lib/agents";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ArrowLink, ButtonLink } from "@/components/ui/Button";
@@ -10,13 +10,14 @@ import { WhatsAppIcon } from "@/components/icons";
 import { AgentSelectionProvider } from "@/components/agents/AgentSelection";
 import { MobileBookBar, PageBar } from "@/components/agents/PageBar";
 import { HeroPreview } from "@/components/agents/HeroPreview";
+import { IndustryGrid, ProblemFinder } from "@/components/agents/ProblemFinder";
 import { AgentCatalogue } from "@/components/agents/AgentCatalogue";
 import { BookPanel } from "@/components/agents/BookPanel";
 import { cn } from "@/lib/utils";
 
-const title = "bigO Agents — AI agents that answer, qualify and book, around the clock | bigO";
+const title = "bigO Agents — AI agents for sales, support and operations teams | bigO";
 const description =
-  "AI agents for your website, WhatsApp and phone: support, lead qualification, booking, sales, follow-ups and AI calling agents that answer and make calls. Early access: pre-book a founding-client slot.";
+  "AI agents for companies: they qualify leads, answer customers and partners, take orders, book appointments, chase payments and answer calls on your website, WhatsApp and phone, connected to your CRM and systems.";
 
 export const metadata: Metadata = {
   title,
@@ -72,20 +73,25 @@ const WebIcon = ({ className }: { className?: string }) => (
     <path d="M2 6h12" />
   </svg>
 );
+const SystemsIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 16 16" aria-hidden className={className} fill="none" stroke="currentColor" strokeWidth="1.4">
+    <path d="M3 4c0-1 2.2-1.5 5-1.5S13 3 13 4v8c0 1-2.2 1.5-5 1.5S3 13 3 12zM3 4c0 1 2.2 1.5 5 1.5S13 5 13 4M3 8c0 1 2.2 1.5 5 1.5S13 9 13 8" />
+  </svg>
+);
 
 const CALL_STEPS: { at: string; label: string; text: string }[] = [
-  { at: "0:00", label: "Ringing", text: "A new caller rings your business line after hours." },
+  { at: "0:00", label: "Ringing", text: "A new caller rings your sales line after hours." },
   { at: "0:02", label: "Answered", text: "The agent picks up, greets them and asks how it can help." },
   { at: "2:48", label: "Booked", text: "It checks your calendar and books a site visit on the call." },
-  { at: "3:12", label: "Summary sent", text: "You get the transcript, a summary and the lead details." },
+  { at: "3:12", label: "Summary sent", text: "Your team gets the transcript, a summary and the lead in the CRM." },
 ];
 
 const CALL_SUMMARY: [string, string][] = [
   ["Caller", "Rahul M., new enquiry"],
   ["Duration", "3 min 12 s"],
-  ["Wanted", "2 BHK to rent near Sector 15, budget agreed"],
+  ["Wanted", "3 BHK in the Sector 62 project, budget agreed"],
   ["Outcome", "Site visit booked, Saturday 11:00"],
-  ["Next step", "WhatsApp confirmation sent"],
+  ["Next step", "Lead created in CRM, WhatsApp confirmation sent"],
 ];
 
 export default function AgentsPage() {
@@ -103,24 +109,26 @@ export default function AgentsPage() {
                 <span className="h-1.5 w-1.5 rounded-full bg-signal" aria-hidden />
                 bigO Agents · Early access
               </p>
-              <h1 className="mt-5 font-display text-[clamp(40px,5.4vw,76px)] leading-[0.98] font-semibold tracking-[-0.04em] text-ink">
-                Every enquiry answered. Every lead captured.
+              <h1 className="mt-5 font-display text-[clamp(36px,4.3vw,62px)] leading-[1.02] font-semibold tracking-[-0.04em] text-ink">
+                AI agents that take the repetitive work off your sales, support and operations teams.
               </h1>
-              <p className="t-lead mt-7 max-w-[48ch]">
-                AI agents for your website, WhatsApp and phone. They answer customers in seconds, qualify them, book
-                appointments, make calls, and hand over to your team when a person is needed.
+              <p className="t-lead mt-7 max-w-[50ch]">
+                {AGENTS.length} agents for your website, WhatsApp and phone. They qualify leads, answer customers and
+                partners, take orders, book appointments and chase payments, update your systems, and hand over to your
+                people when it matters.
               </p>
               <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
                 <ButtonLink href="#demo">Book a demo</ButtonLink>
-                <ArrowLink href="#prebook">Pre-book your agent</ArrowLink>
+                <ArrowLink href="#problems">Find the agent you need</ArrowLink>
               </div>
-              <ul aria-label="Channels" className="mt-12 grid max-w-[520px] grid-cols-3 border-t border-line">
+              <ul aria-label="Where agents work" className="mt-12 grid max-w-[620px] grid-cols-2 border-t border-line sm:grid-cols-4">
                 {[
                   { label: "Web", text: "Chat on your site", icon: <WebIcon className="h-4 w-4" /> },
                   { label: "WhatsApp", text: "Your business number", icon: <WhatsAppIcon className="h-4 w-4" /> },
                   { label: "Phone", text: "Inbound and outbound", icon: <PhoneIcon className="h-4 w-4" /> },
+                  { label: "Your systems", text: "CRM, helpdesk, ERP", icon: <SystemsIcon className="h-4 w-4" /> },
                 ].map((c, i) => (
-                  <li key={c.label} className={cn("pt-4", i > 0 && "border-l border-line pl-4")}>
+                  <li key={c.label} className={cn("border-line pt-4 pb-2", i % 2 === 1 && "border-l pl-4", i > 1 && "sm:border-l sm:pl-4")}>
                     <p className="flex items-center gap-2 text-[15px] font-semibold text-ink">
                       {c.icon}
                       {c.label}
@@ -136,41 +144,31 @@ export default function AgentsPage() {
             </div>
           </section>
 
-          {/* 02 Problem */}
-          <section aria-labelledby="problem-title" className="border-t border-line bg-paper-2">
-            <div className="frame py-20 md:py-24">
+          {/* 02 Find your agent by problem */}
+          <section id="problems" aria-labelledby="problems-title" className={cn("border-t border-line bg-paper-2", ANCHOR)}>
+            <div className="frame py-20 md:py-28">
               <SectionHead
                 num="02"
-                kicker="The problem"
-                id="problem-title"
-                title="Customers message at 11 pm. Your team replies at 10 am."
+                kicker="Find your agent"
+                id="problems-title"
+                title="Which of these sounds like your company?"
+                lead="Pick the problem your team deals with most. We'll show you the agent for it and the work it takes off your team."
               />
-              <ol className="mt-12 grid border-t border-ink md:grid-cols-3">
-                {PROBLEMS.map(([name, text], i) => (
-                  <Reveal
-                    as="li"
-                    key={name}
-                    delay={i * 90}
-                    className="border-b border-line py-8 md:border-b-0 md:pr-10 md:[&:not(:first-child)]:border-l md:[&:not(:first-child)]:pl-10"
-                  >
-                    <p className="mono text-blue">{pad(i + 1)}</p>
-                    <h3 className="t-3 mt-3">{name}</h3>
-                    <p className="mt-3 text-[16px]">{text}</p>
-                  </Reveal>
-                ))}
-              </ol>
+              <div className="mt-12">
+                <ProblemFinder />
+              </div>
             </div>
           </section>
 
-          {/* 03 Catalogue */}
+          {/* 03 All agents, by team */}
           <section id="agents" aria-labelledby="agents-title" className={ANCHOR}>
             <div className="frame py-20 md:py-28">
               <SectionHead
                 num="03"
                 kicker="The agents"
                 id="agents-title"
-                title="Ten agents. Start with one."
-                lead="Pick the job your business needs done most, then add others as you grow. Choose an agent to see what it does."
+                title={`${AGENTS.length} agents. Start with one.`}
+                lead="Every agent does one job well. See the problem it solves, how that work is done today, and what changes with the agent."
               />
               <div className="mt-12">
                 <AgentCatalogue />
@@ -178,13 +176,29 @@ export default function AgentsPage() {
             </div>
           </section>
 
-          {/* 04 AI calling agent */}
+          {/* 04 Industries */}
+          <section id="industries" aria-labelledby="industries-title" className={cn("border-t border-line bg-paper-2", ANCHOR)}>
+            <div className="frame py-20 md:py-28">
+              <SectionHead
+                num="04"
+                kicker="By industry"
+                id="industries-title"
+                title="Built for companies with real enquiry volume."
+                lead="Where agents take the most work off teams in your industry. Choose an agent to see it in detail."
+              />
+              <div className="mt-12">
+                <IndustryGrid />
+              </div>
+            </div>
+          </section>
+
+          {/* 05 AI calling agent */}
           <section id="calling" aria-labelledby="calling-title" className={cn("tone-ink", ANCHOR)}>
             <div className="frame py-20 md:py-28">
               <div className="grid gap-14 lg:grid-cols-12 lg:gap-10">
                 <div className="lg:col-span-5">
                   <p className="kicker flex items-center gap-2">
-                    <span className="mono mr-1 text-muted">04</span>
+                    <span className="mono mr-1 text-muted">05</span>
                     <span className="h-1.5 w-1.5 rounded-full bg-signal" aria-hidden />
                     AI calling agent
                   </p>
@@ -192,15 +206,15 @@ export default function AgentsPage() {
                     Never miss a phone call again.
                   </h2>
                   <p className="t-lead mt-6">
-                    A voice agent that answers your business line, calls new leads back, books appointments on the call
-                    and sends you a summary of every conversation. English and Hindi to start.
+                    A voice agent that answers your business lines, calls new leads back, books appointments on the call
+                    and sends your team a summary of every conversation. It speaks English in a natural voice.
                   </p>
                   <div className="mt-10 grid gap-8 border-t border-line pt-8 sm:grid-cols-2">
                     <div>
                       <h3 className="text-[15px] font-semibold text-ink">Inbound</h3>
                       <ul className="mt-3 space-y-2 text-[15px]">
                         <li>Picks up every call, day or night</li>
-                        <li>Answers from your own knowledge</li>
+                        <li>Handles peaks when every line is busy</li>
                         <li>Books while on the call</li>
                         <li>Transfers to your team on request</li>
                       </ul>
@@ -208,8 +222,8 @@ export default function AgentsPage() {
                     <div>
                       <h3 className="text-[15px] font-semibold text-ink">Outbound</h3>
                       <ul className="mt-3 space-y-2 text-[15px]">
-                        <li>Calls new leads back quickly</li>
-                        <li>Follows up on open quotes</li>
+                        <li>Calls new leads back within minutes</li>
+                        <li>Follows up on quotes and renewals</li>
                         <li>Confirms and reminds about bookings</li>
                         <li>Only to people who agreed to a call</li>
                       </ul>
@@ -228,7 +242,10 @@ export default function AgentsPage() {
                         className="relative border-b border-line py-5 sm:border-b-0 sm:pr-4 sm:[&:not(:first-child)]:pl-4"
                       >
                         {/* The step marker sits on the top rule, like a point on a timeline */}
-                        <span aria-hidden className={cn("absolute -top-[5px] left-0 h-[9px] w-[9px] rounded-full", i === CALL_STEPS.length - 1 ? "bg-signal" : "bg-blue", i > 0 && "sm:left-4")} />
+                        <span
+                          aria-hidden
+                          className={cn("absolute -top-[5px] left-0 h-[9px] w-[9px] rounded-full", i === CALL_STEPS.length - 1 ? "bg-signal" : "bg-blue", i > 0 && "sm:left-4")}
+                        />
                         <p className="mono text-[12px] text-muted">{s.at}</p>
                         <p className="mt-2 text-[16px] font-semibold text-ink">{s.label}</p>
                         <p className="mt-1.5 text-[14px] leading-snug">{s.text}</p>
@@ -260,97 +277,84 @@ export default function AgentsPage() {
             </div>
           </section>
 
-          {/* 05 How it works */}
+          {/* 06 Rollout */}
           <section id="how" aria-labelledby="how-title" className={ANCHOR}>
             <div className="frame py-20 md:py-28">
               <SectionHead
-                num="05"
+                num="06"
                 kicker="How it works"
                 id="how-title"
-                title="Live in days, not months."
-                lead="We set it up with you. You don't configure anything yourself unless you want to."
+                title="Start with one team. Scale when it works."
+                lead="We run the setup with your team. Nobody on your side needs to configure anything."
               />
-              <ol className="mt-12 grid gap-10 border-t border-ink pt-10 md:grid-cols-3">
-                {STEPS.map((s, i) => (
-                  <Reveal as="li" key={s.title} delay={i * 100}>
+              <ol className="mt-12 grid gap-10 border-t border-ink pt-10 sm:grid-cols-2 lg:grid-cols-5 lg:gap-8">
+                {ROLLOUT.map((s, i) => (
+                  <Reveal as="li" key={s.title} delay={i * 90}>
                     <p className="flex items-center gap-3">
-                      <span className="mono flex h-8 w-8 items-center justify-center border border-line-strong text-[12px] text-blue">
+                      <span className="mono flex h-8 w-8 shrink-0 items-center justify-center border border-line-strong text-[12px] text-blue">
                         {pad(i + 1)}
                       </span>
-                      {i < STEPS.length - 1 && <span aria-hidden className="hidden h-px flex-1 bg-line md:block" />}
+                      {i < ROLLOUT.length - 1 && <span aria-hidden className="hidden h-px flex-1 bg-line lg:block" />}
                     </p>
                     <h3 className="t-3 mt-5">{s.title}</h3>
-                    <p className="mt-3 text-[16px]">{s.text}</p>
+                    <p className="mt-3 text-[15.5px]">{s.text}</p>
                   </Reveal>
                 ))}
               </ol>
             </div>
           </section>
 
-          {/* 06 Connections */}
-          <section aria-labelledby="connect-title" className="border-t border-line bg-paper-2">
-            <div className="frame py-20 md:py-24">
+          {/* 07 Built for larger teams */}
+          <section aria-labelledby="built-title" className="border-t border-line bg-paper-2">
+            <div className="frame py-20 md:py-28">
               <SectionHead
-                num="06"
-                kicker="Connects to your tools"
-                id="connect-title"
-                title="Works with what you already use."
-                lead="We connect your agent to your calendar, CRM, messaging and phone, so leads and bookings land where your team already works."
+                num="07"
+                kicker="Built for larger teams"
+                id="built-title"
+                title="Fits into how your company already works."
               />
-              <dl className="mt-12 grid gap-x-10 border-t border-ink sm:grid-cols-2 lg:grid-cols-4">
-                {CONNECTIONS.map(([group, tools]) => (
-                  <div key={group} className="border-b border-line py-7">
-                    <dt className="text-[13px] font-semibold text-muted">We connect to</dt>
-                    <dd>
-                      <p className="t-3 mt-1">{group}</p>
-                      <ul className="mt-4 space-y-2 text-[15px] text-ink">
-                        {tools.map((t) => (
-                          <li key={t}>{t}</li>
-                        ))}
-                      </ul>
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-              <p className="mt-6 max-w-[70ch] text-[14px] text-muted">
-                Using something else? If it has an API, we can usually connect it. Product names belong to their owners;
-                listing them doesn&apos;t mean a partnership.
-              </p>
-            </div>
-          </section>
-
-          {/* 07 Trust and data */}
-          <section aria-labelledby="trust-title">
-            <div className="frame grid gap-12 py-20 md:py-28 lg:grid-cols-12">
-              <div className="lg:col-span-4">
-                <p className="kicker">
-                  <span className="mono mr-2 text-muted">07</span>
-                  Trust and data
-                </p>
-                <h2 id="trust-title" className="t-1 mt-4">
-                  Safe to put in front of your customers.
-                </h2>
-              </div>
-              <dl className="grid border-t border-ink sm:grid-cols-2 lg:col-span-8">
-                {TRUST.map(([name, text], i) => (
-                  <Reveal key={name} delay={(i % 2) * 90} className="border-b border-line py-7 sm:odd:pr-8 sm:even:border-l sm:even:pl-8">
+              <dl className="mt-12 grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+                {BUILT_FOR.map(([name, text], i) => (
+                  <Reveal key={name} delay={(i % 3) * 80} className="bg-paper-2 p-6 md:p-8">
                     <dt className="t-3">{name}</dt>
                     <dd className="mt-3 text-[16px]">{text}</dd>
                   </Reveal>
                 ))}
               </dl>
+              <div className="mt-14 grid gap-8 lg:grid-cols-12">
+                <div className="lg:col-span-3">
+                  <h3 className="text-[15px] font-semibold text-ink">We connect to</h3>
+                  <p className="mt-2 text-[14px] text-muted">
+                    And most systems with an API. Names belong to their owners; listing them doesn&apos;t mean a partnership.
+                  </p>
+                </div>
+                <dl className="grid gap-x-10 gap-y-6 sm:grid-cols-2 lg:col-span-9 lg:grid-cols-4">
+                  {CONNECTIONS.map(([group, tools]) => (
+                    <div key={group}>
+                      <dt className="text-[13px] text-muted">{group}</dt>
+                      <dd>
+                        <ul className="mt-2 space-y-1.5 text-[15px] text-ink">
+                          {tools.map((t) => (
+                            <li key={t}>{t}</li>
+                          ))}
+                        </ul>
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
             </div>
           </section>
 
           {/* 08 Pricing */}
-          <section id="pricing" aria-labelledby="pricing-title" className={cn("border-t border-line", ANCHOR)}>
+          <section id="pricing" aria-labelledby="pricing-title" className={ANCHOR}>
             <div className="frame py-20 md:py-28">
               <SectionHead
                 num="08"
                 kicker="Pricing"
                 id="pricing-title"
-                title="One setup. One monthly plan."
-                lead="Every plan is a one-time setup and a monthly fee covering hosting, AI usage and improvements. We quote after a short call, based on your channels and volume."
+                title="Start with a pilot. Grow from there."
+                lead="Every plan is a one-time setup and a monthly fee covering hosting, AI usage and improvements. We quote after a short call, based on your teams, channels and volume."
               />
               <div className="mt-12 grid gap-px border border-line bg-line lg:grid-cols-3">
                 {PLANS.map((p) => (
@@ -373,24 +377,27 @@ export default function AgentsPage() {
                     <div className="mt-7">
                       <p className="mono text-[12px] text-muted">Setup + monthly</p>
                       <p className="mt-1 text-[17px] font-semibold text-ink">Price on a call</p>
-                      {p.name === "Agency" ? (
-                        <ArrowLink href="#prebook" className="mt-5">
-                          Apply as a partner
-                        </ArrowLink>
-                      ) : (
-                        <ArrowLink href="#demo" className="mt-5">
-                          Talk about {p.name}
-                        </ArrowLink>
-                      )}
+                      <ArrowLink href="#demo" className="mt-5">
+                        Talk about {p.name}
+                      </ArrowLink>
                     </div>
                   </div>
                 ))}
+              </div>
+              <div className="mt-px grid gap-4 border border-line bg-paper px-7 py-5 md:grid-cols-[1fr_auto] md:items-center md:px-8">
+                <p className="text-[15px]">
+                  <span className="font-semibold text-ink">Agency partners. </span>
+                  Offer bigO Agents to your clients under your own brand and pricing, with us running the technology.
+                </p>
+                <ArrowLink href="#prebook" className="w-fit">
+                  Apply as a partner
+                </ArrowLink>
               </div>
               <div className="mt-8 grid gap-6 border-l-2 border-signal bg-raised p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8">
                 <div>
                   <p className="t-3">Founding-client offer</p>
                   <p className="mt-2 max-w-[62ch] text-[16px]">
-                    The first businesses to join get a reduced setup fee in return for honest feedback and a short case
+                    The first companies to join get a reduced setup fee in return for honest feedback and a short case
                     study. Pre-booking holds your slot, with nothing to pay now.
                   </p>
                 </div>
