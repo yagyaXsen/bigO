@@ -143,7 +143,7 @@ export function AgentCatalogue() {
         ))}
       </div>
       <p className="mt-3 min-h-[1.5em] text-[14px] text-muted" aria-live="polite">
-        {DEPARTMENTS.find((d) => d.id === filter)?.text ?? "Each agent does one job well. They share one knowledge base and setup."}
+        {DEPARTMENTS.find((d) => d.id === filter)?.text ?? "Each agent does one job on your website, WhatsApp and email. The AI calling agent does the same work by phone."}
       </p>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-12 lg:gap-10">
