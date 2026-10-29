@@ -400,26 +400,11 @@ export const INDUSTRIES: { name: string; uses: string[]; agents: string[] }[] = 
 ];
 
 export const ROLLOUT: { title: string; text: string }[] = [
-  {
-    title: "Discovery workshop",
-    text: "We map where enquiries come from, what your teams answer most, and which systems hold the data the agent needs.",
-  },
-  {
-    title: "Pilot on one team",
-    text: "One agent on one team or channel, tested on real questions before customers see it.",
-  },
-  {
-    title: "Connect your systems",
-    text: "CRM, helpdesk, calendars and order systems, so leads, tickets and bookings land where your teams already work.",
-  },
-  {
-    title: "Scale across teams",
-    text: "Add agents, branches and channels once the pilot is working, on the same knowledge and setup.",
-  },
-  {
-    title: "Review every month",
-    text: "We go through conversations with you and keep improving answers, flows and hand-overs.",
-  },
+  { title: "Discovery", text: "We learn how your teams handle enquiries today." },
+  { title: "Pilot", text: "One agent on one team, tested on real questions." },
+  { title: "Connect", text: "Leads and bookings land in your CRM and tools." },
+  { title: "Scale", text: "Add agents, teams and branches once it works." },
+  { title: "Improve", text: "We review conversations with you every month." },
 ];
 
 export const BUILT_FOR: [string, string][] = [
