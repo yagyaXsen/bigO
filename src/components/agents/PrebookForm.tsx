@@ -13,7 +13,21 @@ const ROLES = [
   { id: "agency", label: "Agency partner (white-label)" },
 ] as const;
 
-const CHANNELS = ["Website chat", "WhatsApp", "Instagram / Messenger", "Not sure yet"];
+const AGENTS = [
+  "Customer support",
+  "Lead qualification",
+  "Appointment booking",
+  "AI calling agent",
+  "Sales and products",
+  "Follow-ups and reminders",
+  "Orders and enquiries",
+  "Recruitment screening",
+  "Feedback and reviews",
+  "Internal knowledge",
+  "Not sure yet",
+];
+
+const CHANNELS = ["Website chat", "WhatsApp", "Phone calls", "Instagram / Messenger", "Not sure yet"];
 
 const INDUSTRIES = [
   "Clinic or healthcare",
@@ -85,6 +99,7 @@ export function PrebookForm() {
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState<string>("");
   const [industry, setIndustry] = useState("");
+  const [agents, setAgents] = useState<string[]>([]);
   const [channels, setChannels] = useState<string[]>([]);
   const [message, setMessage] = useState("");
   const [consent, setConsent] = useState(false);
@@ -96,6 +111,9 @@ export function PrebookForm() {
   const [submitted, setSubmitted] = useState<Enquiry | null>(null);
 
   const roleLabel = ROLES.find((r) => r.id === role)?.label ?? "";
+
+  const toggleAgent = (a: string) =>
+    setAgents((cur) => (cur.includes(a) ? cur.filter((x) => x !== a) : [...cur, a]));
 
   const toggleChannel = (c: string) =>
     setChannels((cur) => (cur.includes(c) ? cur.filter((x) => x !== c) : [...cur, c]));
@@ -111,6 +129,7 @@ export function PrebookForm() {
       "bigO Agents — founding-client pre-book",
       `Type: ${roleLabel || "—"}`,
       `Industry: ${industry || "—"}`,
+      `Agents: ${agents.length ? agents.join(", ") : "—"}`,
       `Channels: ${channels.length ? channels.join(", ") : "—"}`,
       "",
       `What the agent should handle:`,
@@ -298,6 +317,19 @@ export function PrebookForm() {
           </Field>
         </div>
       </div>
+
+      <fieldset className="mt-8">
+        <legend className="mb-3 text-[14px] font-medium text-ink">
+          Which agents interest you? <span className="font-normal text-muted">Choose any that apply</span>
+        </legend>
+        <div className="flex flex-wrap gap-2">
+          {AGENTS.map((a) => (
+            <Chip key={a} on={agents.includes(a)} onClick={() => toggleAgent(a)}>
+              {a}
+            </Chip>
+          ))}
+        </div>
+      </fieldset>
 
       <fieldset className="mt-8">
         <legend className="mb-3 text-[14px] font-medium text-ink">

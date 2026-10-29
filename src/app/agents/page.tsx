@@ -10,7 +10,7 @@ import { PrebookForm } from "@/components/agents/PrebookForm";
 
 const title = "bigO Agents — AI agents that answer, qualify and book, around the clock | bigO";
 const description =
-  "bigO Agents answers your customers on your website and WhatsApp, qualifies every lead, books appointments and hands over to your team when a person is needed. Early access: pre-book a founding-client slot.";
+  "AI agents for your website, WhatsApp and phone: support, lead qualification, booking, sales, follow-ups and AI calling agents that answer and make calls. Early access: pre-book a founding-client slot.";
 
 export const metadata: Metadata = {
   title,
@@ -44,7 +44,7 @@ const CAPABILITIES: [string, string][] = [
   ],
   [
     "Works where your customers are",
-    "Website chat and WhatsApp to start. Instagram and Messenger are next. One agent behind all of them.",
+    "Website chat, WhatsApp and phone calls. Instagram and Messenger are next. One agent behind all of them.",
   ],
   [
     "Shows you what's working",
@@ -79,6 +79,69 @@ const INDUSTRIES: [string, string][] = [
   ["Professional services", "Screens enquiries and books discovery calls for your team."],
 ];
 
+/* The agents we build. Each one can run alone or alongside the others. */
+const AGENT_TYPES: { name: string; does: string; channels: string }[] = [
+  {
+    name: "Customer support agent",
+    does: "Answers FAQs, pricing, timings, policies and order questions from your own documents, around the clock.",
+    channels: "Web · WhatsApp · Phone",
+  },
+  {
+    name: "Lead qualification agent",
+    does: "Asks every new enquiry about need, budget and timing, scores the lead and sends the good ones to your team.",
+    channels: "Web · WhatsApp · Phone",
+  },
+  {
+    name: "Appointment booking agent",
+    does: "Finds a free slot, books it in your calendar, sends confirmations and handles rescheduling.",
+    channels: "Web · WhatsApp · Phone",
+  },
+  {
+    name: "AI calling agent",
+    does: "Picks up your phone calls, answers questions in a natural voice, books appointments and makes follow-up calls.",
+    channels: "Inbound and outbound calls",
+  },
+  {
+    name: "Sales and product agent",
+    does: "Recommends the right product or package, answers comparisons and shares payment or order links.",
+    channels: "Web · WhatsApp",
+  },
+  {
+    name: "Follow-up and reminder agent",
+    does: "Follows up on leads that went quiet and reminds customers about appointments, renewals and payments.",
+    channels: "WhatsApp · Phone · Email",
+  },
+  {
+    name: "Order and enquiry agent",
+    does: "Takes orders and event or catering enquiries, collects the details you need and confirms them back.",
+    channels: "Web · WhatsApp · Phone",
+  },
+  {
+    name: "Recruitment screening agent",
+    does: "Answers candidate questions, asks screening questions and books interviews with shortlisted people.",
+    channels: "Web · WhatsApp · Phone",
+  },
+  {
+    name: "Feedback and reviews agent",
+    does: "Checks in after a visit or purchase, collects feedback, and invites happy customers to leave a review.",
+    channels: "WhatsApp · Phone",
+  },
+  {
+    name: "Internal knowledge assistant",
+    does: "Lets your own team ask questions about your processes, policies and documents and get answers with sources.",
+    channels: "Web · Slack or Teams",
+  },
+];
+
+const CALL_FEATURES: [string, string][] = [
+  ["Answers inbound calls", "Every call is picked up, day or night, including when your line is busy or after hours."],
+  ["Makes outbound calls", "Calls new leads within minutes, follows up on quotes, and confirms or reminds about appointments."],
+  ["Books while on the call", "Checks your calendar and books the slot during the conversation."],
+  ["Transfers to a person", "Hands the call to your team when the caller asks or the question needs a human."],
+  ["Summary after every call", "You get the transcript, a short summary and the lead details, saved where you want them."],
+  ["Speaks your customers' language", "English and Hindi to start, with more languages set up for your market."],
+];
+
 const FAQ: [string, string][] = [
   [
     "Will it give my customers wrong answers?",
@@ -99,6 +162,14 @@ const FAQ: [string, string][] = [
   [
     "How is it priced?",
     "A one-time setup fee and a monthly plan. The monthly plan covers hosting, AI usage, your dashboard and ongoing improvements. We quote after the first call, because it depends on your channels and volume.",
+  ],
+  [
+    "How does the AI calling agent work?",
+    "It connects to a phone number, either a new one we set up or your existing line forwarded to it. It talks in a natural voice, follows the same knowledge and flow as your chat agent, and can transfer the call to your team. Outbound calls are made only to people who have contacted you or agreed to be called.",
+  ],
+  [
+    "Can one business use several agents?",
+    "Yes. Most businesses start with one, often support or lead qualification, and add booking, calling or follow-ups once it's working. They share the same knowledge and dashboard.",
   ],
   [
     "I run an agency. Can I offer this to my clients?",
@@ -180,8 +251,8 @@ export default function AgentsPage() {
           </div>
           <div className="flex flex-col justify-end gap-8 lg:col-span-4">
             <p className="t-lead">
-              An AI agent for your website and WhatsApp. It answers customers in seconds, qualifies them, books
-              appointments, and hands over to your team when a person is needed.
+              AI agents for your website, WhatsApp and phone. They answer customers in seconds, qualify them, book
+              appointments, make calls, and hand over to your team when a person is needed.
             </p>
             <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
               <ButtonLink href="#prebook">Pre-book your agent</ButtonLink>
@@ -229,6 +300,93 @@ export default function AgentsPage() {
                   </dt>
                   <dd className="mt-3 pl-9 text-[16px]">{text}</dd>
                 </Reveal>
+              ))}
+            </dl>
+          </div>
+        </section>
+
+        {/* Agent types */}
+        <section aria-labelledby="types-title">
+          <div className="frame py-20 md:py-24">
+            <div className="grid gap-6 lg:grid-cols-12">
+              <h2 id="types-title" className="t-1 lg:col-span-7">
+                Ten agents. Start with one.
+              </h2>
+              <p className="t-lead self-end lg:col-span-5">
+                Each agent does one job well. Pick the one your business needs most, then add others as you grow;
+                they share the same knowledge and dashboard.
+              </p>
+            </div>
+            <ul className="mt-12 grid border-t border-ink md:grid-cols-2">
+              {AGENT_TYPES.map((a, i) => (
+                <Reveal
+                  as="li"
+                  key={a.name}
+                  delay={(i % 2) * 80}
+                  className="border-b border-line py-7 md:odd:border-r md:odd:pr-10 md:even:pl-10"
+                >
+                  <div className="flex items-baseline gap-4">
+                    <span className="mono text-blue">{String(i + 1).padStart(2, "0")}</span>
+                    <h3 className="t-3">{a.name}</h3>
+                  </div>
+                  <p className="mt-3 pl-9 text-[16px]">{a.does}</p>
+                  <p className="mono mt-3 pl-9 text-muted">{a.channels}</p>
+                </Reveal>
+              ))}
+            </ul>
+            <div className="mt-10">
+              <ArrowLink href="#prebook">Not sure which you need? Tell us in the pre-book form</ArrowLink>
+            </div>
+          </div>
+        </section>
+
+        {/* AI calling agent */}
+        <section id="calling" aria-labelledby="calling-title" className="tone-ink">
+          <div className="frame grid gap-12 py-20 md:py-28 lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <p className="kicker flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-signal" aria-hidden />
+                AI calling agent
+              </p>
+              <h2 id="calling-title" className="t-1 mt-4 max-w-[13ch]">
+                Never miss a phone call again.
+              </h2>
+              <p className="t-lead mt-6">
+                A voice agent that answers your business line, calls new leads back within minutes, books
+                appointments on the call and sends you a summary of every conversation.
+              </p>
+              <figure className="browser mt-10">
+                <div className="browser-bar">
+                  <i />
+                  <i />
+                  <i />
+                  <span className="mono ml-3 flex items-center gap-2 text-muted">
+                    <span className="h-1.5 w-1.5 rounded-full bg-signal" aria-hidden />
+                    Example: call summary
+                  </span>
+                </div>
+                <dl className="space-y-2 p-5 text-[15px] md:p-6">
+                  {[
+                    ["Caller", "Rahul M., new enquiry"],
+                    ["Duration", "3 min 12 s"],
+                    ["Wanted", "2 BHK to rent near Sector 15, budget agreed"],
+                    ["Outcome", "Site visit booked, Saturday 11:00"],
+                    ["Next step", "WhatsApp confirmation sent"],
+                  ].map(([k, v]) => (
+                    <div key={k} className="grid grid-cols-[96px_1fr] gap-3">
+                      <dt className="mono text-muted">{k}</dt>
+                      <dd className="text-ink">{v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </figure>
+            </div>
+            <dl className="border-t border-line lg:col-span-6 lg:col-start-7">
+              {CALL_FEATURES.map(([name, text]) => (
+                <div key={name} className="border-b border-line py-5">
+                  <dt className="t-3">{name}</dt>
+                  <dd className="mt-2 text-[16px]">{text}</dd>
+                </div>
               ))}
             </dl>
           </div>
