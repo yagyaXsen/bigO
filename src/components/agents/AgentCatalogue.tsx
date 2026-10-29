@@ -6,7 +6,6 @@ import { AGENTS, DEPARTMENTS, type Agent, type Department } from "@/lib/agents";
 import { ArrowLink, ButtonLink } from "@/components/ui/Button";
 import { useAgentSelection, useBookAction } from "@/components/agents/AgentSelection";
 
-const pad = (n: number) => String(n).padStart(2, "0");
 const deptLabel = (d: Department) => DEPARTMENTS.find((x) => x.id === d)?.label ?? "";
 
 /** One agent, always in the same order: the problem, how it's done today,
@@ -140,9 +139,6 @@ export function AgentCatalogue() {
             )}
           >
             {d.label}
-            <span className={cn("mono text-[11px]", filter === d.id ? "text-paper/70" : "text-muted")}>
-              {d.id === "all" ? AGENTS.length : AGENTS.filter((a) => a.department === d.id).length}
-            </span>
           </button>
         ))}
       </div>
@@ -160,9 +156,8 @@ export function AgentCatalogue() {
                   type="button"
                   aria-expanded={on}
                   onClick={() => pick(a.id)}
-                  className="group grid w-full cursor-pointer grid-cols-[32px_1fr_auto] items-baseline gap-3 py-4 text-left"
+                  className="group grid w-full cursor-pointer grid-cols-[1fr_auto] items-baseline gap-3 py-4 text-left"
                 >
-                  <span className={cn("mono text-[12px]", on ? "text-blue" : "text-muted")}>{pad(AGENTS.indexOf(a) + 1)}</span>
                   <span>
                     <span className={cn("block text-[17px] font-semibold transition-colors", on ? "text-blue" : "text-ink group-hover:text-blue")}>
                       {a.name}

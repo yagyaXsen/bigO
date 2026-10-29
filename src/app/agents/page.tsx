@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SITE_NAME } from "@/lib/site";
-import { AGENTS, BUILT_FOR, CONNECTIONS, FAQ, PLANS, ROLLOUT } from "@/lib/agents";
+import { BUILT_FOR, CONNECTIONS, FAQ, PLANS, ROLLOUT } from "@/lib/agents";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ArrowLink, ButtonLink } from "@/components/ui/Button";
@@ -113,7 +113,7 @@ export default function AgentsPage() {
                 AI agents that take the repetitive work off your sales, support and operations teams.
               </h1>
               <p className="t-lead mt-7 max-w-[50ch]">
-                {AGENTS.length} agents for your website, WhatsApp and phone. They qualify leads, answer customers and
+                AI agents for your website, WhatsApp and phone. They qualify leads, answer customers and
                 partners, take orders, book appointments and chase payments, update your systems, and hand over to your
                 people when it matters.
               </p>
@@ -167,7 +167,7 @@ export default function AgentsPage() {
                 num="03"
                 kicker="The agents"
                 id="agents-title"
-                title={`${AGENTS.length} agents. Start with one.`}
+                title="One agent for every repetitive job. Start with one."
                 lead="Every agent does one job well. See the problem it solves, how that work is done today, and what changes with the agent."
               />
               <div className="mt-12">
