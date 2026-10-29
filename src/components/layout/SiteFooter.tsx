@@ -6,6 +6,7 @@ import { ButtonLink } from "@/components/ui/Button";
 const PAGES = [
   { label: "Work", href: "/work" },
   { label: "Services", href: "/services" },
+  { label: "AI Agents", href: "/agents" },
   { label: "Contact", href: "/contact" },
 ];
 

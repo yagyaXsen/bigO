@@ -4,110 +4,19 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ArrowUpRightIcon, WhatsAppIcon } from "@/components/icons";
 import { PROJECT_TYPES } from "@/lib/content";
-import {
-  CONTACT_EMAIL,
-  EMAIL_RE,
-  ENQUIRY_INBOX,
-  FIELD_LIMITS,
-  WEB3FORMS_ACCESS_KEY,
-  WHATSAPP_NUMBER,
-  type Enquiry,
-} from "@/lib/contact";
+import { EMAIL_RE, FIELD_LIMITS, type Enquiry } from "@/lib/contact";
+import { buildBrief as buildBriefFor, deliverEnquiry, mailtoUrlFor, whatsAppUrlFor } from "@/lib/delivery";
 
 type Errors = { name?: string; email?: string; message?: string };
 
-const REQUEST_TIMEOUT_MS = 12_000;
+const deliver = (data: Enquiry) => deliverEnquiry(data);
 
-/* ── delivery channels ─────────────────────────────────────────────
-   Tried in order; the first one that confirms delivery wins, so each
-   enquiry arrives exactly once. */
+const buildBrief = (d: Enquiry) => buildBriefFor(d);
 
-async function sendViaWeb3Forms(data: Enquiry): Promise<boolean> {
-  const body = new FormData();
-  body.append("access_key", WEB3FORMS_ACCESS_KEY);
-  body.append("name", data.name);
-  body.append("email", data.email);
-  body.append("phone", data.phone || "Not provided");
-  body.append("company", data.company || "Not provided");
-  body.append("message", data.message);
-  body.append("from_name", "bigO Studio Website");
-  body.append("subject", `New Project Inquiry from ${data.name}`);
-
-  const res = await fetch("https://api.web3forms.com/submit", {
-    method: "POST",
-    body,
-    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-  });
-  const json = await res.json().catch(() => null);
-  return res.ok && json?.success === true;
-}
-
-/* SMTP via our own route — only delivers when SMTP_* env vars are set */
-async function sendViaApi(data: Enquiry): Promise<boolean> {
-  const res = await fetch("/api/contact", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-  });
-  const json = await res.json().catch(() => null);
-  return res.ok && json?.delivered === true;
-}
-
-async function sendViaFormSubmit(data: Enquiry): Promise<boolean> {
-  const res = await fetch(`https://formsubmit.co/ajax/${ENQUIRY_INBOX}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({
-      _subject: `New Project Inquiry from ${data.name}`,
-      _template: "table",
-      name: data.name,
-      email: data.email,
-      phone: data.phone || "Not provided",
-      company: data.company || "Not provided",
-      message: data.message,
-    }),
-    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-  });
-  const json = await res.json().catch(() => null);
-  // FormSubmit returns success as the string "true"
-  return res.ok && String(json?.success) === "true";
-}
-
-const CHANNELS = [sendViaWeb3Forms, sendViaApi, sendViaFormSubmit];
-
-async function deliver(data: Enquiry): Promise<boolean> {
-  for (const send of CHANNELS) {
-    try {
-      if (await send(data)) return true;
-    } catch {
-      // network error, timeout or blocked request — try the next channel
-    }
-  }
-  return false;
-}
-
-function buildBrief(d: Enquiry) {
-  return [
-    "*New Project Inquiry — bigO*",
-    "",
-    `*Name:* ${d.name.trim() || "—"}`,
-    `*Email:* ${d.email.trim() || "—"}`,
-    `*Company:* ${d.company.trim() || "—"}`,
-    `*Phone:* ${d.phone.trim() || "—"}`,
-    "",
-    "*Project Details:*",
-    d.message.trim() || "—",
-  ].join("\n");
-}
-
-const whatsAppUrl = (d: Enquiry) =>
-  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildBrief(d))}`;
+const whatsAppUrl = (d: Enquiry) => whatsAppUrlFor(buildBrief(d));
 
 const mailtoUrl = (d: Enquiry) =>
-  `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
-    `New Project Inquiry from ${d.name.trim() || "bigO website"}`,
-  )}&body=${encodeURIComponent(buildBrief(d).replace(/\*/g, ""))}`;
+  mailtoUrlFor(`New Project Inquiry from ${d.name.trim() || "bigO website"}`, buildBrief(d));
 
 const inputCls =
   "w-full rounded-[2px] border-0 border-b border-line-strong bg-transparent px-0 py-3 text-[17px] text-ink placeholder:text-muted/70 outline-none transition-colors focus:border-blue";

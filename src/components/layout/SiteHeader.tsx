@@ -13,6 +13,7 @@ import { ArrowRightIcon, MoonIcon, SunIcon } from "@/components/icons";
 const NAV = [
   { label: "Work", href: "/work" },
   { label: "Services", href: "/services" },
+  { label: "AI Agents", href: "/agents" },
   { label: "Contact", href: "/contact" },
 ];
 
