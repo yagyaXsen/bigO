@@ -112,12 +112,7 @@ export default function AgentsPage() {
               <h1 className="mt-5 font-display text-[clamp(36px,4.3vw,62px)] leading-[1.02] font-semibold tracking-[-0.04em] text-ink">
                 AI agents that take the repetitive work off your sales, support and operations teams.
               </h1>
-              <p className="t-lead mt-7 max-w-[50ch]">
-                AI agents for your website, WhatsApp and phone. They qualify leads, answer customers and
-                partners, take orders, book appointments and chase payments, update your systems, and hand over to your
-                people when it matters.
-              </p>
-              <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
+              <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
                 <ButtonLink href="#demo">Book a demo</ButtonLink>
                 <ArrowLink href="#problems">Find the agent you need</ArrowLink>
               </div>
