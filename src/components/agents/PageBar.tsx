@@ -16,10 +16,9 @@ const LINKS = [
 ];
 
 /** Desktop: a sticky bar under the site header with the page's sections,
- *  the one being read marked, and a demo button always in reach. */
+ *  the one being read marked. */
 export function PageBar() {
   const [active, setActive] = useState<string | null>(null);
-  const book = useBookAction();
 
   useEffect(() => {
     const els = LINKS.map((l) => document.getElementById(l.id)).filter((e): e is HTMLElement => !!e);
@@ -57,9 +56,6 @@ export function PageBar() {
             ))}
           </ul>
         </nav>
-        <ButtonLink href="#demo" onClick={book("demo")} className="h-10 shrink-0 px-4 text-[14px]">
-          Book a demo
-        </ButtonLink>
       </div>
     </div>
   );
