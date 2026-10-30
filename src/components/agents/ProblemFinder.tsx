@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { INDUSTRIES, PROBLEM_FINDER, agentById } from "@/lib/agents";
+import { PROBLEM_FINDER, agentById } from "@/lib/agents";
 import { ArrowLink, ButtonLink } from "@/components/ui/Button";
 import { useAgentSelection, useBookAction } from "@/components/agents/AgentSelection";
 
@@ -76,46 +76,5 @@ export function ProblemFinder() {
         </div>
       </div>
     </div>
-  );
-}
-
-/** Larger industries, what the agents handle in each, and which agents.
- *  An agent name opens that agent in the catalogue. */
-export function IndustryGrid() {
-  const { setAgentId } = useAgentSelection();
-  return (
-    <ul className="grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
-      {INDUSTRIES.map((ind) => (
-        <li key={ind.name} className="flex flex-col bg-paper p-6 md:p-7">
-          <h3 className="t-3">{ind.name}</h3>
-          <ul className="mt-4 flex-1 space-y-2 text-[15px]">
-            {ind.uses.map((u) => (
-              <li key={u} className="flex gap-3">
-                <span aria-hidden className="text-blue">
-                  —
-                </span>
-                {u}
-              </li>
-            ))}
-          </ul>
-          <p className="mt-6 text-[12px] font-semibold text-muted">Agents</p>
-          <p className="mt-2 flex flex-wrap gap-2">
-            {ind.agents.map((id) => {
-              const a = agentById(id)!;
-              return (
-                <a
-                  key={id}
-                  href="#agents"
-                  onClick={() => setAgentId(id)}
-                  className="border border-line-strong px-2.5 py-1 text-[13px] text-ink transition-colors hover:border-blue hover:text-blue"
-                >
-                  {a.short}
-                </a>
-              );
-            })}
-          </p>
-        </li>
-      ))}
-    </ul>
   );
 }

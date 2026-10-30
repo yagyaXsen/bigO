@@ -98,7 +98,7 @@ export function AgentCatalogue() {
   const [filter, setFilter] = useState<Department | "all">("all");
   const [viewing, setViewing] = useState(AGENTS[0].id);
 
-  // An agent chosen elsewhere on the page (problem finder, industries,
+  // An agent chosen elsewhere on the page (problem finder or
   // booking section) opens here too
   const [lastPicked, setLastPicked] = useState(agentId);
   if (agentId !== lastPicked) {

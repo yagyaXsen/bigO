@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SITE_NAME } from "@/lib/site";
-import { BUILT_FOR, CONNECTIONS, FAQ, PLANS, ROLLOUT } from "@/lib/agents";
+import { BUILT_FOR, CONNECTIONS, FAQ, INDUSTRIES, PLANS, ROLLOUT } from "@/lib/agents";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ArrowLink, ButtonLink } from "@/components/ui/Button";
@@ -10,7 +10,7 @@ import { WhatsAppIcon } from "@/components/icons";
 import { AgentSelectionProvider } from "@/components/agents/AgentSelection";
 import { MobileBookBar, PageBar } from "@/components/agents/PageBar";
 import { HeroPreview } from "@/components/agents/HeroPreview";
-import { IndustryGrid, ProblemFinder } from "@/components/agents/ProblemFinder";
+import { ProblemFinder } from "@/components/agents/ProblemFinder";
 import { AgentCatalogue } from "@/components/agents/AgentCatalogue";
 import { BookPanel } from "@/components/agents/BookPanel";
 import { cn } from "@/lib/utils";
@@ -139,6 +139,25 @@ export default function AgentsPage() {
             </div>
           </section>
 
+          {/* Who it's for, at a glance */}
+          <section aria-label="Industries we build for" className="border-t border-line">
+            <div className="frame flex flex-col gap-3 py-6 md:flex-row md:items-baseline md:gap-8">
+              <p className="shrink-0 text-[13px] font-semibold text-muted">Built for</p>
+              <ul className="flex flex-wrap gap-x-2 gap-y-1 text-[15px] text-ink">
+                {INDUSTRIES.map((ind, i) => (
+                  <li key={ind.short} className="flex items-baseline gap-2">
+                    {ind.short}
+                    {i < INDUSTRIES.length - 1 && (
+                      <span aria-hidden className="text-line-strong">
+                        ·
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
           {/* 02 Find your agent by problem */}
           <section id="problems" aria-labelledby="problems-title" className={cn("border-t border-line bg-paper-2", ANCHOR)}>
             <div className="frame py-20 md:py-28">
@@ -171,29 +190,13 @@ export default function AgentsPage() {
             </div>
           </section>
 
-          {/* 04 Industries */}
-          <section id="industries" aria-labelledby="industries-title" className={cn("border-t border-line bg-paper-2", ANCHOR)}>
-            <div className="frame py-20 md:py-28">
-              <SectionHead
-                num="04"
-                kicker="By industry"
-                id="industries-title"
-                title="Built for companies with real enquiry volume."
-                lead="Where agents take the most work off teams in your industry. Choose an agent to see it in detail."
-              />
-              <div className="mt-12">
-                <IndustryGrid />
-              </div>
-            </div>
-          </section>
-
-          {/* 05 AI calling agent */}
+          {/* 04 AI calling agent */}
           <section id="calling" aria-labelledby="calling-title" className={cn("tone-ink", ANCHOR)}>
             <div className="frame py-20 md:py-28">
               <div className="grid gap-14 lg:grid-cols-12 lg:gap-10">
                 <div className="lg:col-span-5">
                   <p className="kicker flex items-center gap-2">
-                    <span className="mono mr-1 text-muted">05</span>
+                    <span className="mono mr-1 text-muted">04</span>
                     <span className="h-1.5 w-1.5 rounded-full bg-signal" aria-hidden />
                     AI calling agent
                   </p>
@@ -267,11 +270,11 @@ export default function AgentsPage() {
             </div>
           </section>
 
-          {/* 06 Rollout */}
+          {/* 05 Rollout */}
           <section id="how" aria-labelledby="how-title" className={ANCHOR}>
             <div className="frame py-20 md:py-28">
               <SectionHead
-                num="06"
+                num="05"
                 kicker="How it works"
                 id="how-title"
                 title="Start with one team. Scale when it works."
@@ -294,11 +297,11 @@ export default function AgentsPage() {
             </div>
           </section>
 
-          {/* 07 Built for larger teams */}
+          {/* 06 Built for larger teams */}
           <section aria-labelledby="built-title" className="border-t border-line bg-paper-2">
             <div className="frame py-20 md:py-28">
               <SectionHead
-                num="07"
+                num="06"
                 kicker="Built for larger teams"
                 id="built-title"
                 title="Fits into how your company already works."
@@ -336,11 +339,11 @@ export default function AgentsPage() {
             </div>
           </section>
 
-          {/* 08 Pricing */}
+          {/* 07 Pricing */}
           <section id="pricing" aria-labelledby="pricing-title" className={ANCHOR}>
             <div className="frame py-20 md:py-28">
               <SectionHead
-                num="08"
+                num="07"
                 kicker="Pricing"
                 id="pricing-title"
                 title="Start with a pilot. Grow from there."
@@ -398,14 +401,14 @@ export default function AgentsPage() {
             </div>
           </section>
 
-          {/* 09 Book */}
+          {/* 08 Book */}
           <section id="book" aria-labelledby="book-title" className={cn("bg-paper-2", ANCHOR)}>
             {/* Link targets for each tab; the tab opens from the hash */}
             <span id="demo" className={cn("block", ANCHOR)} aria-hidden />
             <span id="prebook" className={cn("block", ANCHOR)} aria-hidden />
             <div className="frame py-20 md:py-28">
               <SectionHead
-                num="09"
+                num="08"
                 kicker="Get started"
                 id="book-title"
                 title="See it on a call, or reserve your slot."
@@ -417,12 +420,12 @@ export default function AgentsPage() {
             </div>
           </section>
 
-          {/* 10 FAQ */}
+          {/* 09 FAQ */}
           <section aria-labelledby="faq-title" className="border-t border-line">
             <div className="frame grid gap-10 py-20 md:py-28 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="kicker">
-                  <span className="mono mr-2 text-muted">10</span>
+                  <span className="mono mr-2 text-muted">09</span>
                   FAQ
                 </p>
                 <h2 id="faq-title" className="t-1 mt-4">

@@ -8,7 +8,6 @@ import { useBookAction } from "@/components/agents/AgentSelection";
 const LINKS = [
   { id: "problems", label: "Find your agent" },
   { id: "agents", label: "Agents" },
-  { id: "industries", label: "Industries" },
   { id: "calling", label: "Calling" },
   { id: "how", label: "How it works" },
   { id: "pricing", label: "Pricing" },

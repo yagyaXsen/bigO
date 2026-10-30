@@ -339,52 +339,18 @@ export const PROBLEM_FINDER: { problem: string; agent: string }[] = [
   { problem: "Staff can't find answers in SOPs and policies", agent: "knowledge" },
 ];
 
-export const INDUSTRIES: { name: string; uses: string[]; agents: string[] }[] = [
-  {
-    name: "Manufacturing and distribution",
-    uses: ["Dealer stock, price and order queries", "Repeat orders on WhatsApp", "Invoice and payment follow-ups"],
-    agents: ["orders", "ops", "payments"],
-  },
-  {
-    name: "Real estate developers",
-    uses: ["Project enquiries from ads and portals", "Buyer qualification by budget and location", "Site visit bookings and follow-ups"],
-    agents: ["leads", "calling", "booking"],
-  },
-  {
-    name: "Hospitals and healthcare chains",
-    uses: ["Appointments across branches and doctors", "Report, billing and timing questions", "Reminders and post-visit feedback"],
-    agents: ["booking", "support", "feedback"],
-  },
-  {
-    name: "Education groups and edtech",
-    uses: ["Admission and course enquiries", "Counselling call bookings", "Fee reminders"],
-    agents: ["leads", "calling", "payments"],
-  },
-  {
-    name: "Banking, lending and insurance",
-    uses: ["Loan and policy enquiries", "Document checklists and collection", "Renewal and EMI reminders"],
-    agents: ["leads", "calling", "payments"],
-  },
-  {
-    name: "Logistics",
-    uses: ["Shipment and delivery status", "Booking requests and quotes", "Delivery exceptions flagged to operations"],
-    agents: ["orders", "ops", "sales", "support"],
-  },
-  {
-    name: "Hospitality and travel",
-    uses: ["Group, event and corporate enquiries", "Reservations and changes", "Guest feedback and reviews"],
-    agents: ["leads", "booking", "feedback"],
-  },
-  {
-    name: "Retail and D2C brands",
-    uses: ["Order status and returns", "Product questions and recommendations", "Reviews after delivery"],
-    agents: ["orders", "sales", "feedback"],
-  },
-  {
-    name: "IT, SaaS and professional services",
-    uses: ["Inbound lead qualification", "Demo and discovery call booking", "First-line support and internal knowledge"],
-    agents: ["leads", "support", "knowledge"],
-  },
+/** Industries we build for: a "Built for" strip on the page and the
+ *  industry choices in the pre-book form */
+export const INDUSTRIES: { name: string; short: string }[] = [
+  { name: "Manufacturing and distribution", short: "Manufacturing" },
+  { name: "Real estate developers", short: "Real estate" },
+  { name: "Hospitals and healthcare chains", short: "Healthcare" },
+  { name: "Education groups and edtech", short: "Education" },
+  { name: "Banking, lending and insurance", short: "Banking and insurance" },
+  { name: "Logistics", short: "Logistics" },
+  { name: "Hospitality and travel", short: "Hospitality" },
+  { name: "Retail and D2C brands", short: "Retail and D2C" },
+  { name: "IT, SaaS and professional services", short: "IT and SaaS" },
 ];
 
 export const ROLLOUT: { title: string; text: string }[] = [
